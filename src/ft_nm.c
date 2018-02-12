@@ -26,6 +26,8 @@ int     is_in_alpha_order(char *str, char *cmp)
     // printf("%c %c\n", str[i], cmp[i]);
     if (str[i] > cmp[i])
       return (1);
+    else if (str[i] < cmp[i])
+      return (0);
     i++;
   }
   return (0);
@@ -39,7 +41,7 @@ void	  tab_alpha_order(int *order, struct nlist_64 *array, char *strtab, int las
   int  tmp;
   cmp = strdup(strtab + array[last].n_un.n_strx);
 
-  printf("t=>%d last=>%d\n", order[t], order[last]);
+  // printf("t=>%d last=>%d\n", order[t], order[last]);
 
   while (t < last)
   {
@@ -65,7 +67,7 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
   int i;
   char *strtab;
   struct nlist_64 *array;
-  char *type = NULL;
+  char *type[nsyms];
   int  al_order[nsyms];
 
 
@@ -79,55 +81,49 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
   {
     // printf("N_TYPE %d\n", array[i].n_type & N_TYPE);
     if ((array[i].n_type & N_TYPE) == N_UNDF)
-      type = "N_UNDF";
+      type[i] = "N_UNDF";
     else if ((array[i].n_type & N_TYPE) == N_ABS)
-      type = "N_ABS";
+      type[i] = "N_ABS";
     else if ((array[i].n_type & N_TYPE) == N_SECT)
-      type = "N_SECT";
+      type[i] = "N_SECT";
     else if ((array[i].n_type & N_TYPE) == N_PBUD)
-       type = "N_PBUD";
+       type[i] = "N_PBUD";
     else if ((array[i].n_type & N_TYPE) == N_INDR)
-      type = "N_INDR";
+      type[i] = "N_INDR";
     else if ((array[i].n_type & N_TYPE) == N_STAB)
-      type = "N_STAB";
+      type[i] = "N_STAB";
     else if ((array[i].n_type & N_TYPE) == N_PEXT)
-      type = "N_PEXT";
+      type[i] = "N_PEXT";
     else if ((array[i].n_type & N_TYPE) == N_TYPE)
-      type = "N_TYPE";
+      type[i] = "N_TYPE";
     else if ((array[i].n_type & N_TYPE) == N_EXT)
-       type = "N_EXT";
+       type[i] = "N_EXT";
     // printf("\n=====struct nlist_64=======\n ");
-    if ((array[i].n_value))
-      printf(" 0000000%llx", array[i].n_value);
-    else
-      printf("                 ");
-
-    if (type)
-      printf(" %s ", type);
-    else
-      printf(" %d ", array[i].n_type);
-
-    printf("%s\n\n",strtab + array[i].n_un.n_strx);
     // int ti = -1;
     // while (++ti < nsyms)
     //   printf("[%d]", al_order[ti]);
     if (i > 0)
       tab_alpha_order(al_order, array, strtab, i);
-      int i = -1;
-      while (++i < 18)
-        printf("[%d]", al_order[i]);
-        printf("\n");
     // printf(" n_sect %hhu\n ",array[i].n_sect);
     // printf("n_desc %hu\n ",array[i].n_desc);
-
-    // if (strtab + array[i].n_type && !strcmp(strtab + array[i].n_type,  "assign_block"))
-    //   printf("T ");
-    // else if (!strcmp(strtab + array[i].n_type,  "_assign_block"))
-    // printf("d ");
-    // else
-    //   printf("U ");
   }
+  i = -1;
+  while (++i < 18)
+  {
+    if ((array[al_order[i]].n_value))
+      printf(" 0000000%llx", array[al_order[i]].n_value);
+    else
+      printf("                 ");
 
+    if (type[al_order[i]])
+      printf(" %s ", type[al_order[i]]);
+    else
+      printf(" %d ", array[al_order[i]].n_type);
+
+    printf("%s\n",strtab + array[al_order[i]].n_un.n_strx);
+  }
+    // printf("[%s]\n", strtab + array[al_order[i]].n_un.n_strx);
+    printf("\n");
 }
 
 
