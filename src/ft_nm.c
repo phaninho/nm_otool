@@ -61,9 +61,11 @@ void	  tab_alpha_order(int *order, struct nlist_64 *array, char *strtab, int las
     t++;
   }
 }
-
+void test(void)
+{}
 void    print_output(int nsyms, int symoff, int stroff, void *ptr)
 {
+  test();
   int i;
   char *strtab;
   struct nlist_64 *array;
@@ -108,17 +110,17 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
     // printf("n_desc %hu\n ",array[i].n_desc);
   }
   i = -1;
-  while (++i < 18)
+  while (++i < nsyms)
   {
-    if ((array[al_order[i]].n_value))
-      printf(" 0000000%llx", array[al_order[i]].n_value);
-    else
-      printf("                 ");
-
-    if (type[al_order[i]])
-      printf(" %s ", type[al_order[i]]);
-    else
-      printf(" %d ", array[al_order[i]].n_type);
+    // if ((array[al_order[i]].n_value))
+    //   printf(" 0000000%llx", array[al_order[i]].n_value);
+    // else
+    //   printf("                 ");
+    //
+    // if (type[al_order[i]])
+    //   printf(" %s ", type[al_order[i]]);
+    // else
+    //   printf(" %d ", array[al_order[i]].n_type);
 
     printf("%s\n",strtab + array[al_order[i]].n_un.n_strx);
   }
