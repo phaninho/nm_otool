@@ -111,9 +111,9 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
   while (++i < nsyms)
   {
     if ((array[al_order[i]].n_value))
-      printf(" 0000000%llx", array[al_order[i]].n_value);
+      printf("0000000%llx", array[al_order[i]].n_value);
     else
-      printf("                 ");
+      printf("                ");
 
     if (type[al_order[i]])
       printf(" %s ", type[al_order[i]]);
@@ -134,25 +134,35 @@ void handle_64(void *ptr)
   struct symtab_command   *sym;
   int   i;
   int ncmds;
+  void *limit;
 
   i = 0;
   header = (struct mach_header_64 *)ptr;
   ncmds = header->ncmds;
-  printf("\n====struct mach_header_64=====\n ncmds %d\n cpusubtype %d\n cputype %d\n filetype %d\n flags %d\n magic %d\n reserved %u\n sizeofcmds %d\n================================================\n", ncmds, header->cpusubtype, header->cputype, header->filetype, header->flags, header->magic, header->reserved, header->sizeofcmds);
+  limit = ptr + header->sizeofcmds;
   lc = ptr + sizeof(*header);
-  printf("\n=====struct load_command=======\n cmd %d\n cmdsize %d\n================================================\n", lc->cmd, lc->cmdsize);
+
+
+  // printf("\n====struct mach_header_64=====\n ncmds %d\n cpusubtype %d\n cputype %d\n filetype %d\n flags %d\n magic %d\n reserved %u\n sizeofcmds %d\n================================================\n", ncmds, header->cpusubtype, header->cputype, header->filetype, header->flags, header->magic, header->reserved, header->sizeofcmds);
+
+  // printf("\n=====struct load_command=======\n cmd %d\n cmdsize %d\n================================================\n", lc->cmd, lc->cmdsize);
+
   while (i++ < ncmds)
   {
     if (lc->cmd == LC_SYMTAB)
     {
       sym = (struct symtab_command *)lc;
       uint32_t cmd;
-   printf("\n====struct symtab_command=====\n cmdsize=%d\n symoff=%d\n nsyms=%d\n stroff=%d\n strsize=%d\n================================================\n\n",sym->cmdsize,  sym->symoff, sym->nsyms, sym->stroff,  sym->strsize);
+
+      // printf("\n====struct symtab_command=====\n cmdsize=%d\n symoff=%d\n nsyms=%d\n stroff=%d\n strsize=%d\n================================================\n\n",sym->cmdsize,  sym->symoff, sym->nsyms, sym->stroff,  sym->strsize);
       print_output(sym->nsyms, sym->symoff, sym->stroff, ptr);
       // printf("c'est le bon %d\n", sym->nsyms);
       break ;
     }
     lc = (void *)lc + lc->cmdsize;
+    if (lc > (struct load_command*)limit)
+      printf("limit is working\n");
+    printf("%p %p\n", lc, limit);
   }
 }
 
@@ -161,8 +171,11 @@ void  nm(void *ptr)
   int   magic_number;
 
   magic_number = *(int *)ptr;
+  // printf("%d\n", *(int *)ptr);
   if (magic_number == MH_MAGIC_64)
     handle_64(ptr);
+  else
+    printf("Not a 64 bit binary\n");
     // printf("binaire pour 64 bits\n");
   // printf("mh=>%d\n", MH_MAGIC_64);
 }
@@ -180,19 +193,19 @@ int main(int ac, char **av)
   while (++i < ac)
   {
     if (ac > 2)
-      printf("%s:\n", av[i]);
+      printf("\n%s:\n", av[i]);
     if ((fd = open(av[i], O_RDONLY)) < 0)
       return (printf("Open error\n"));
     if (fstat(fd, &buff) < 0)
       return (printf("fstat error\n"));
-      printf("\n====struct stat=====\n st_dev  %d\n", buff.st_dev);
-      printf(" st_ino  %llu\n", buff.st_ino);
-      printf(" st_mode  %d\n", buff.st_mode);
-      printf(" st_nlink %d\n", buff.st_nlink);
-      printf(" st_uid  %d\n", buff.st_uid);
-      printf(" st_gid  %d\n", buff.st_gid);
-      printf(" st_rdev %d\n", buff.st_rdev);
-      printf(" st_size %lld\n================================================\n", buff.st_size);
+    // printf("\n====struct stat=====\n st_dev  %d\n", buff.st_dev);
+    // printf(" st_ino  %llu\n", buff.st_ino);
+    // printf(" st_mode  %d\n", buff.st_mode);
+    // printf(" st_nlink %d\n", buff.st_nlink);
+    // printf(" st_uid  %d\n", buff.st_uid);
+    // printf(" st_gid  %d\n", buff.st_gid);
+    // printf(" st_rdev %d\n", buff.st_rdev);
+    // printf(" st_size %lld\n================================================\n", buff.st_size);
 
     if ((ptr = mmap(0, buff.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
       return (printf("mmap error\n"));
