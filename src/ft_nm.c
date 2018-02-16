@@ -160,7 +160,7 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
         printf(" %s ", type[al_order[i]]);
       else
         printf(" %d ", array[al_order[i]].n_type);
-      printf("%s %d\n",strtab + array[al_order[i]].n_un.n_strx , i);
+      printf("%s\n",strtab + array[al_order[i]].n_un.n_strx);
     }
     // printf("sort\n");
     if (str)
