@@ -16,8 +16,8 @@ int     is_in_alpha_order(char *str, char *cmp)
   int i;
 
   i = 0;
-  len_str = strlen(str);
-  len_cmp = strlen(cmp);
+  len_str = ft_strlen(str);
+  len_cmp = ft_strlen(cmp);
   // printf("str %s %s\n", str, cmp);
 
 
@@ -38,19 +38,19 @@ void	  tab_alpha_order(int *order, struct nlist_64 *array, char *strtab, int las
   int t = 0;
   char *str;
   char *cmp;
-  int  tmp;
-  cmp = strdup(strtab + array[last].n_un.n_strx);
+
+  cmp = ft_strdup(strtab + array[last].n_un.n_strx);
 
   // printf("t=>%d last=>%d\n", order[t], order[last]);
 
   while (t < last)
   {
-    str = strdup(strtab + array[order[t]].n_un.n_strx);
+    str = ft_strdup(strtab + array[order[t]].n_un.n_strx);
     // printf("str %s %s\n", str, cmp);
     if (is_in_alpha_order(str, cmp))
     {
       ft_swap(&order[t], &order[last]);
-      cmp = strdup(strtab + array[order[last]].n_un.n_strx);
+      cmp = ft_strdup(strtab + array[order[last]].n_un.n_strx);
       int i = -1;
       // while (++i < 17)
       //   printf("[%d]", order[i]);
@@ -70,7 +70,7 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
   char *type[nsyms];
   int  al_order[nsyms];
 
-
+// printf("\n\nns=%d\n\n", nsyms);
   array = ptr + symoff;
   strtab = ptr + stroff;
   i =-1;
@@ -110,17 +110,37 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
   i = -1;
   while (++i < nsyms)
   {
-    if ((array[al_order[i]].n_value))
-      printf("0000000%llx", array[al_order[i]].n_value);
-    else
-      printf("                ");
+    // printf("entre\n");
 
-    if (type[al_order[i]])
-      printf(" %s ", type[al_order[i]]);
-    else
-      printf(" %d ", array[al_order[i]].n_type);
+    char *str = ft_strdup(strtab + array[al_order[i]].n_un.n_strx);
+    // printf("assigne str\n");
 
-    printf("%s\n",strtab + array[al_order[i]].n_un.n_strx);
+    while (i < nsyms  && (!ft_strcmp("",strtab + array[al_order[i]].n_un.n_strx) || str[0] == '/' || (str[0] != '_'  && !(str[0] == 'd' && str[1] == 'y')) || !(ft_strcmp(strtab + array[al_order[i]].n_un.n_strx, strtab + array[al_order[i - 1]].n_un.n_strx))))
+    {
+      // printf("%d sur %d\n", i, nsyms);
+      i++;
+      if (i < nsyms)
+        str = ft_strdup(strtab + array[al_order[i]].n_un.n_strx);
+      else if (str)
+        free(str);
+      // printf("apres\n");
+    }
+    if (i >= nsyms)
+      break;
+    // if ((array[al_order[i]].n_value))
+    //   printf("0000000%llx", array[al_order[i]].n_value);
+    // else
+    //   printf("                ");
+    //
+    // if (type[al_order[i]])
+    //   printf(" %s ", type[al_order[i]]);
+    // else
+    //   printf(" %d ", array[al_order[i]].n_type);
+
+    printf("%s %d\n",strtab + array[al_order[i]].n_un.n_strx , i);
+    // printf("sort\n");
+    if (str)
+      free(str);
   }
     // printf("[%s]\n", strtab + array[al_order[i]].n_un.n_strx);
     // printf("\n");
@@ -145,24 +165,24 @@ void handle_64(void *ptr)
 
   // printf("\n====struct mach_header_64=====\n ncmds %d\n cpusubtype %d\n cputype %d\n filetype %d\n flags %d\n magic %d\n reserved %u\n sizeofcmds %d\n================================================\n", ncmds, header->cpusubtype, header->cputype, header->filetype, header->flags, header->magic, header->reserved, header->sizeofcmds);
 
-  // printf("\n=====struct load_command=======\n cmd %d\n cmdsize %d\n================================================\n", lc->cmd, lc->cmdsize);
+  // printf("\n=====struct load_command=======\n cmd %d\n cmdsize %d\n %d %d================================================\n", lc->cmd, lc->cmdsize, LC_SYMTAB,LC_SEGMENT_64);
 
   while (i++ < ncmds)
   {
+      // printf("\n=====struct load_command=======\n cmd %d\n cmdsize %d\n================================================\n", lc->cmd, lc->cmdsize);
     if (lc->cmd == LC_SYMTAB)
     {
       sym = (struct symtab_command *)lc;
-      uint32_t cmd;
-
       // printf("\n====struct symtab_command=====\n cmdsize=%d\n symoff=%d\n nsyms=%d\n stroff=%d\n strsize=%d\n================================================\n\n",sym->cmdsize,  sym->symoff, sym->nsyms, sym->stroff,  sym->strsize);
       print_output(sym->nsyms, sym->symoff, sym->stroff, ptr);
       // printf("c'est le bon %d\n", sym->nsyms);
       break ;
     }
     lc = (void *)lc + lc->cmdsize;
-    if (lc > (struct load_command*)limit)
-      printf("limit is working\n");
-    printf("%p %p\n", lc, limit);
+    // if (lc > (struct load_command*)limit)
+      // printf("limit is working\n");
+    // if (lc && limit)
+      // printf("%p %p\n", lc, limit);
   }
 }
 
