@@ -147,11 +147,7 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
     }
     if (i >= nsyms)
       break;
-    if (check_tab_doubl(strtab + array[al_order[i]].n_un.n_strx, strtab, array, al_order, i))
-    {
-      // printf("doublon\n");
-    }
-    else
+    if (!check_tab_doubl(strtab + array[al_order[i]].n_un.n_strx, strtab, array, al_order, i))
     {
       // if ((array[al_order[i]].n_value))
       //   printf("0000000%llx", array[al_order[i]].n_value);
