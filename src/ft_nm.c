@@ -85,7 +85,6 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
   char *str;
   int  al_order[nsyms];
 
-// printf("\n\nns=%d\n\n", nsyms);
   array = ptr + symoff;
   strtab = ptr + stroff;
   i =-1;
@@ -94,27 +93,73 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
   i = -1;
   while (++i < nsyms)
   {
-    // printf("N_TYPE %d\n", array[i].n_type & N_TYPE);
-    if ((array[i].n_type & N_TYPE) == N_UNDF)
-      type[i] = "N_UNDF";
-    else if ((array[i].n_type & N_TYPE) == N_ABS)
-      type[i] = "N_ABS";
-    else if ((array[i].n_type & N_TYPE) == N_SECT)
-      type[i] = "N_SECT";
-    else if ((array[i].n_type & N_TYPE) == N_PBUD)
-       type[i] = "N_PBUD";
-    else if ((array[i].n_type & N_TYPE) == N_INDR)
-      type[i] = "N_INDR";
-    else if ((array[i].n_type & N_TYPE) == N_STAB)
-      type[i] = "N_STAB";
-    else if ((array[i].n_type & N_TYPE) == N_PEXT)
-      type[i] = "N_PEXT";
-    else if ((array[i].n_type & N_TYPE) == N_TYPE)
-      type[i] = "N_TYPE";
-    else if ((array[i].n_type & N_TYPE) == N_EXT)
-       type[i] = "N_EXT";
+    //
+    // c = symbols[i].nl.n_type;
+		// if(c & N_STAB)
+		//     c = '-';
+		// else{
+		//     switch(c & N_TYPE){
+		//     case N_UNDF:
+		// 	c = 'u';
+		// 	if(symbols[i].nl.n_value != 0)
+		// 	    c = 'c';
+		// 	break;
+		  //   case N_PBUD:
+			// c = 'u';
+			// break;
+		  //   case N_ABS:
+			// c = 'a';
+			// break;
+
+
+
+		//     case N_SECT:
+		// 	if(symbols[i].nl.n_sect ==
+		// 	   process_flags->text_nsect)
+		// 	    c = 't';
+		// 	else if(symbols[i].nl.n_sect ==
+		// 		process_flags->data_nsect)
+		// 	    c = 'd';
+		// 	else if(symbols[i].nl.n_sect ==
+		// 		process_flags->bss_nsect)
+		// 	    c = 'b';
+		// 	else
+		// 	    c = 's';
+		// 	break;
+		//     case N_INDR:
+		// 	c = 'i';
+		// 	break;
+		//     default:
+		// 	c = '?';
+		// 	break;
+		//     }
+		// }
+		// if((symbols[i].nl.n_type & N_EXT) && c != '?')
+		//     c = toupper(c);
+		// printf("%c ", c);
+    //
+    // printf("N_TYPE %hhu\n", array[i].n_type);
+    if ((array[i].n_type & N_STAB))
+      type[i] = "-";
     else
-      type[i] = NULL;
+    {
+      if ((array[i].n_type & N_TYPE) == N_UNDF)
+      {
+        type[i] = "u";
+        if ((array[i].n_value) != 0)
+          type[i] = "c";
+      }
+      else if ((array[i].n_type & N_TYPE) == N_PBUD)
+         type[i] = "u";
+      else if ((array[i].n_type & N_TYPE) == N_ABS)
+        type[i] = "a";
+      else if ((array[i].n_type & N_TYPE) == N_SECT)
+      {
+        type[i] = "N_SECT";
+      }
+      else
+        type[i] = NULL;
+    }
     // printf("\n=====struct nlist_64=======\n ");
     // int ti = -1;
     // while (++ti < nsyms)
