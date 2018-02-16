@@ -62,12 +62,27 @@ void	  tab_alpha_order(int *order, struct nlist_64 *array, char *strtab, int las
   }
 }
 
+int     check_tab_doubl(char *str, char *strtab, struct nlist_64 *array, int *tab, int lim)
+{
+  int   i;
+
+  i = 0;
+  while (i < lim)
+  {
+    if (!ft_strcmp(str, strtab + array[tab[i]].n_un.n_strx))
+      return (1);
+    i++;
+  }
+  return (0);
+}
 void    print_output(int nsyms, int symoff, int stroff, void *ptr)
 {
   int i;
+  // int run;
   char *strtab;
   struct nlist_64 *array;
   char *type[nsyms];
+  char *str;
   int  al_order[nsyms];
 
 // printf("\n\nns=%d\n\n", nsyms);
@@ -111,11 +126,16 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
   while (++i < nsyms)
   {
     // printf("entre\n");
-
-    char *str = ft_strdup(strtab + array[al_order[i]].n_un.n_strx);
+    // run = 0;
+    str = ft_strdup(strtab + array[al_order[i]].n_un.n_strx);
     // printf("assigne str\n");
-
-    while (i < nsyms  && (!ft_strcmp("",strtab + array[al_order[i]].n_un.n_strx) || str[0] == '/' || (str[0] != '_'  && !(str[0] == 'd' && str[1] == 'y')) || !(ft_strcmp(strtab + array[al_order[i]].n_un.n_strx, strtab + array[al_order[i - 1]].n_un.n_strx))))
+    // while (run < i)
+    // {
+    //   printf("%d\n", run);
+    //   if (!(ft_strcmp(strtab + array[al_order[i]].n_un.n_strx, strtab + array[al_order[run]].n_un.n_strx)))
+    //   run++;
+    // }
+    while (i < nsyms  && (!ft_strcmp("",strtab + array[al_order[i]].n_un.n_strx) || str[0] == '/' || (str[0] != '_'  && !(str[0] == 'd' && str[1] == 'y'))))
     {
       // printf("%d sur %d\n", i, nsyms);
       i++;
@@ -127,17 +147,23 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
     }
     if (i >= nsyms)
       break;
-    // if ((array[al_order[i]].n_value))
-    //   printf("0000000%llx", array[al_order[i]].n_value);
-    // else
-    //   printf("                ");
-    //
-    // if (type[al_order[i]])
-    //   printf(" %s ", type[al_order[i]]);
-    // else
-    //   printf(" %d ", array[al_order[i]].n_type);
-
-    printf("%s %d\n",strtab + array[al_order[i]].n_un.n_strx , i);
+    if (check_tab_doubl(strtab + array[al_order[i]].n_un.n_strx, strtab, array, al_order, i))
+    {
+      // printf("doublon\n");
+    }
+    else
+    {
+      // if ((array[al_order[i]].n_value))
+      //   printf("0000000%llx", array[al_order[i]].n_value);
+      // else
+      //   printf("                ");
+      //
+      // if (type[al_order[i]])
+      //   printf(" %s ", type[al_order[i]]);
+      // else
+      //   printf(" %d ", array[al_order[i]].n_type);
+      printf("%s %d\n",strtab + array[al_order[i]].n_un.n_strx , i);
+    }
     // printf("sort\n");
     if (str)
       free(str);
