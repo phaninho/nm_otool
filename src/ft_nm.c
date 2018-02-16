@@ -113,6 +113,8 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
       type[i] = "N_TYPE";
     else if ((array[i].n_type & N_TYPE) == N_EXT)
        type[i] = "N_EXT";
+    else
+      type[i] = NULL;
     // printf("\n=====struct nlist_64=======\n ");
     // int ti = -1;
     // while (++ti < nsyms)
@@ -149,15 +151,15 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
       break;
     if (!check_tab_doubl(strtab + array[al_order[i]].n_un.n_strx, strtab, array, al_order, i))
     {
-      // if ((array[al_order[i]].n_value))
-      //   printf("0000000%llx", array[al_order[i]].n_value);
-      // else
-      //   printf("                ");
-      //
-      // if (type[al_order[i]])
-      //   printf(" %s ", type[al_order[i]]);
-      // else
-      //   printf(" %d ", array[al_order[i]].n_type);
+      if ((array[al_order[i]].n_value))
+        printf("0000000%llx", array[al_order[i]].n_value);
+      else
+        printf("                ");
+
+      if (type[al_order[i]])
+        printf(" %s ", type[al_order[i]]);
+      else
+        printf(" %d ", array[al_order[i]].n_type);
       printf("%s %d\n",strtab + array[al_order[i]].n_un.n_strx , i);
     }
     // printf("sort\n");
