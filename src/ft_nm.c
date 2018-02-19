@@ -81,7 +81,7 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
   // int run;
   char *strtab;
   struct nlist_64 *array;
-  char *type[nsyms];
+  char type[nsyms];
   char *str;
   int  al_order[nsyms];
 
@@ -93,72 +93,27 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
   i = -1;
   while (++i < nsyms)
   {
-    //
-    // c = symbols[i].nl.n_type;
-		// if(c & N_STAB)
-		//     c = '-';
-		// else{
-		//     switch(c & N_TYPE){
-		//     case N_UNDF:
-		// 	c = 'u';
-		// 	if(symbols[i].nl.n_value != 0)
-		// 	    c = 'c';
-		// 	break;
-		  //   case N_PBUD:
-			// c = 'u';
-			// break;
-		  //   case N_ABS:
-			// c = 'a';
-			// break;
+    printf("%hhu\n",array[i].n_sect);
 
-
-
-		//     case N_SECT:
-		// 	if(symbols[i].nl.n_sect ==
-		// 	   process_flags->text_nsect)
-		// 	    c = 't';
-		// 	else if(symbols[i].nl.n_sect ==
-		// 		process_flags->data_nsect)
-		// 	    c = 'd';
-		// 	else if(symbols[i].nl.n_sect ==
-		// 		process_flags->bss_nsect)
-		// 	    c = 'b';
-		// 	else
-		// 	    c = 's';
-		// 	break;
-		//     case N_INDR:
-		// 	c = 'i';
-		// 	break;
-		//     default:
-		// 	c = '?';
-		// 	break;
-		//     }
-		// }
-		// if((symbols[i].nl.n_type & N_EXT) && c != '?')
-		//     c = toupper(c);
-		// printf("%c ", c);
-    //
-    // printf("N_TYPE %hhu\n", array[i].n_type);
-    if ((array[i].n_type & N_STAB))
-      type[i] = "-";
+    type[i] = array[i].n_type;
+    if ((type[i] & N_STAB))
+      type[i] = '-';
     else
     {
-      if ((array[i].n_type & N_TYPE) == N_UNDF)
+      if ((type[i] & N_TYPE) == N_UNDF)
       {
-        type[i] = "u";
+        type[i] = 'u';
         if ((array[i].n_value) != 0)
-          type[i] = "c";
+          type[i] = 'c';
       }
-      else if ((array[i].n_type & N_TYPE) == N_PBUD)
-         type[i] = "u";
-      else if ((array[i].n_type & N_TYPE) == N_ABS)
-        type[i] = "a";
-      else if ((array[i].n_type & N_TYPE) == N_SECT)
+      else if ((type[i] & N_TYPE) == N_PBUD)
+         type[i] = 'u';
+      else if ((type[i] & N_TYPE) == N_ABS)
+        type[i] = 'a';
+      else if ((type[i] & N_TYPE) == N_SECT)
       {
-        type[i] = "N_SECT";
+        type[i] = '@';
       }
-      else
-        type[i] = NULL;
     }
     // printf("\n=====struct nlist_64=======\n ");
     // int ti = -1;
@@ -202,7 +157,7 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
         printf("                ");
 
       if (type[al_order[i]])
-        printf(" %s ", type[al_order[i]]);
+        printf(" %c ", type[al_order[i]]);
       else
         printf(" %d ", array[al_order[i]].n_type);
       printf("%s\n",strtab + array[al_order[i]].n_un.n_strx);
@@ -228,9 +183,7 @@ void handle_64(void *ptr)
   i = 0;
   header = (struct mach_header_64 *)ptr;
   ncmds = header->ncmds;
-  limit = ptr + header->sizeofcmds;
   lc = ptr + sizeof(*header);
-
 
   // printf("\n====struct mach_header_64=====\n ncmds %d\n cpusubtype %d\n cputype %d\n filetype %d\n flags %d\n magic %d\n reserved %u\n sizeofcmds %d\n================================================\n", ncmds, header->cpusubtype, header->cputype, header->filetype, header->flags, header->magic, header->reserved, header->sizeofcmds);
 
@@ -248,10 +201,6 @@ void handle_64(void *ptr)
       break ;
     }
     lc = (void *)lc + lc->cmdsize;
-    // if (lc > (struct load_command*)limit)
-      // printf("limit is working\n");
-    // if (lc && limit)
-      // printf("%p %p\n", lc, limit);
   }
 }
 
@@ -261,7 +210,7 @@ void  nm(void *ptr)
 
   magic_number = *(int *)ptr;
   // printf("%d\n", *(int *)ptr);
-  if (magic_number == MH_MAGIC_64)
+  if (magic_number == MH_MAGIC_64 || magic_number == MH_CIGAM_64)
     handle_64(ptr);
   else
     printf("Not a 64 bit binary\n");
@@ -276,6 +225,7 @@ int main(int ac, char **av)
   char  *ptr;
   struct stat buff;
 
+// printf("%s", SECT_TEXT);
   i = 0;
   if (ac < 2)
     return (printf("Nombre d'arguments insuffisant\n"));
