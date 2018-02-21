@@ -93,7 +93,7 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
   i = -1;
   while (++i < nsyms)
   {
-    printf("%hhu\n",array[i].n_sect);
+    printf("%s\n",array[i].n_desc);
 
     type[i] = array[i].n_type;
     if ((type[i] & N_STAB))
@@ -187,8 +187,6 @@ void handle_64(void *ptr)
 
   // printf("\n====struct mach_header_64=====\n ncmds %d\n cpusubtype %d\n cputype %d\n filetype %d\n flags %d\n magic %d\n reserved %u\n sizeofcmds %d\n================================================\n", ncmds, header->cpusubtype, header->cputype, header->filetype, header->flags, header->magic, header->reserved, header->sizeofcmds);
 
-  // printf("\n=====struct load_command=======\n cmd %d\n cmdsize %d\n %d %d================================================\n", lc->cmd, lc->cmdsize, LC_SYMTAB,LC_SEGMENT_64);
-
   while (i++ < ncmds)
   {
       // printf("\n=====struct load_command=======\n cmd %d\n cmdsize %d\n================================================\n", lc->cmd, lc->cmdsize);
@@ -197,7 +195,6 @@ void handle_64(void *ptr)
       sym = (struct symtab_command *)lc;
       // printf("\n====struct symtab_command=====\n cmdsize=%d\n symoff=%d\n nsyms=%d\n stroff=%d\n strsize=%d\n================================================\n\n",sym->cmdsize,  sym->symoff, sym->nsyms, sym->stroff,  sym->strsize);
       print_output(sym->nsyms, sym->symoff, sym->stroff, ptr);
-      // printf("c'est le bon %d\n", sym->nsyms);
       break ;
     }
     lc = (void *)lc + lc->cmdsize;
@@ -209,13 +206,10 @@ void  nm(void *ptr)
   int   magic_number;
 
   magic_number = *(int *)ptr;
-  // printf("%d\n", *(int *)ptr);
   if (magic_number == MH_MAGIC_64 || magic_number == MH_CIGAM_64)
     handle_64(ptr);
   else
     printf("Not a 64 bit binary\n");
-    // printf("binaire pour 64 bits\n");
-  // printf("mh=>%d\n", MH_MAGIC_64);
 }
 
 int main(int ac, char **av)
@@ -225,7 +219,7 @@ int main(int ac, char **av)
   char  *ptr;
   struct stat buff;
 
-// printf("%s", SECT_TEXT);
+// printf("[]%s[]\n", SECT_TEXT);
   i = 0;
   if (ac < 2)
     return (printf("Nombre d'arguments insuffisant\n"));
