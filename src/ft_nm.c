@@ -75,7 +75,8 @@ int     check_tab_doubl(char *str, char *strtab, struct nlist_64 *array, int *ta
   }
   return (0);
 }
-void    print_output(int nsyms, int symoff, int stroff, void *ptr)
+
+void    print_output(int nsyms, int symoff, int stroff, void *ptr, char **sgname, char **sctname)
 {
   int i;
   // int run;
@@ -112,9 +113,18 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
         type[i] = 'a';
       else if ((type[i] & N_TYPE) == N_SECT)
       {
+
         // printf("dans le n_SECT %hhu\n", array[i].n_sect);
-        // if (array[i].n_sect)
-        type[i] = '@';
+        // if (ft_strcmp(sctname[(int)array[i].n_sect], SECT_TEXT) == 0)
+        //   type[i] = 't';
+        // else if (ft_strcmp(sctname[(int)array[i].n_sect], SECT_DATA) == 0)
+        //   type[i] = 'd';
+        // else if (ft_strcmp(sctname[(int)array[i].n_sect], SECT_BSS) == 0)
+        //   type[i] = 'b';
+
+        // printf("i=%d nsect %d, %s\n",i,  array[i].n_sect, sctname[6]);
+        // type[i] = array[i].n_sect + '0';
+
       }
     }
 
@@ -183,11 +193,20 @@ void handle_64(void *ptr)
   struct symtab_command   *sym;
   struct section_64       *sct64;
   struct segment_command_64 *sg64;
+  char   **segname;
+  char   **sectname;
   int   i;
+  int   j;
+  int   k;
   int ncmds;
+  int len;
   void *limit;
 
   i = 0;
+  j = 0;
+  len = 0;
+  segname = NULL;
+  sectname = NULL;
   header = (struct mach_header_64 *)ptr;
   ncmds = header->ncmds;
   lc = ptr + sizeof(*header);
@@ -196,21 +215,54 @@ void handle_64(void *ptr)
   {
     if (lc->cmd == LC_SEGMENT_64)
     {
+
       sg64 = (struct segment_command_64 *)lc;
       sct64 = (struct section_64 *)((char *)sg64 + sizeof(struct segment_command_64));
-      int j = 0;
-      while (j < sg64->nsects)
+      len = len == 0 ? sg64->nsects : (len + sg64->nsects);
+      // printf("11111111111\n");
+
+      if (!segname && !sectname)
       {
-        printf("setcname: %s\n   segname: %s\n", (j + sct64)->sectname, (j + sct64)->segname);
+        // printf("ok\n");
+        segname = (char **)malloc(sizeof(char *) * (len + 1));
+        sectname = (char **)malloc(sizeof(char *) * (len + 1));
+
+      }
+      else if (len)
+      {
+        segname = (char **)realloc(segname, sizeof(char *) * (len + 1));
+        sectname = (char **)realloc(sectname, sizeof(char *) * (len + 1));
+        // printf("dans le realloc  len %d setcname: %s\n   segname: %s\n", (len + 1), segname[0], sectname[0]);
+      }
+      segname[len] = NULL;
+      sectname[len] = NULL;
+      k = 0;
+      while (j < len)
+      {
+        segname[j] = (char *)malloc(sizeof(char) * (ft_strlen((k + sct64)->segname) + 1));
+        segname[j][ft_strlen(sct64->segname)] = '\0';
+        ft_strcpy(segname[j], (k + sct64)->segname);
+        sectname[j] = (char *)malloc(sizeof(char) * (ft_strlen((k + sct64)->sectname) + 1));
+        sectname[j][ft_strlen(sct64->sectname)] = '\0';
+        ft_strcpy(sectname[j], (k + sct64)->sectname);
+        // printf("setcname: %s\n   segname: %s\n", segname[j], sectname[j]);
+        k++;
         j++;
+        // printf("%d / %d\n", j, len);
+        // if ((j + sct64)->sectname))
       }
     }
       // printf("\n=====struct load_command=======\n cmd %d\n cmdsize %d\n================================================\n", lc->cmd, lc->cmdsize);
     if (lc->cmd == LC_SYMTAB)
     {
+      // printf("222222222222\n");
+
       sym = (struct symtab_command *)lc;
       // printf("\n====struct symtab_command=====\n cmdsize=%d\n symoff=%d\n nsyms=%d\n stroff=%d\n strsize=%d\n================================================\n\n",sym->cmdsize,  sym->symoff, sym->nsyms, sym->stroff,  sym->strsize);
-      print_output(sym->nsyms, sym->symoff, sym->stroff, ptr);
+
+      // printf("setcname: %s\n   segname: %s\n", segname[1], sectname[1]);
+
+      print_output(sym->nsyms, sym->symoff, sym->stroff, ptr, segname, sectname);
       break ;
     }
     lc = (void *)lc + lc->cmdsize;
