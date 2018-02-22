@@ -93,7 +93,7 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
   i = -1;
   while (++i < nsyms)
   {
-    printf("%s\n",array[i].n_desc);
+    printf("%hu\n",array[i].n_desc);
 
     type[i] = array[i].n_type;
     if ((type[i] & N_STAB))
