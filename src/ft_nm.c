@@ -114,13 +114,13 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr, char **sgname
       else if ((type[i] & N_TYPE) == N_SECT)
       {
 
-        // printf("dans le n_SECT %hhu\n", array[i].n_sect);
-        // if (ft_strcmp(sctname[(int)array[i].n_sect], SECT_TEXT) == 0)
-        //   type[i] = 't';
-        // else if (ft_strcmp(sctname[(int)array[i].n_sect], SECT_DATA) == 0)
-        //   type[i] = 'd';
-        // else if (ft_strcmp(sctname[(int)array[i].n_sect], SECT_BSS) == 0)
-        //   type[i] = 'b';
+        // printf("dans le n_SECT %d\n", (int)array[i].n_sect);
+        if (ft_strcmp(sctname[(int)array[i].n_sect - 1], SECT_TEXT) == 0)
+          type[i] = 't';
+        else if (ft_strcmp(sctname[(int)array[i].n_sect - 1], SECT_DATA) == 0)
+          type[i] = 'd';
+        else if (ft_strcmp(sctname[(int)array[i].n_sect - 1], SECT_BSS) == 0)
+          type[i] = 'b';
 
         // printf("i=%d nsect %d, %s\n",i,  array[i].n_sect, sctname[6]);
         // type[i] = array[i].n_sect + '0';
