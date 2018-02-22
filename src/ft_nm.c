@@ -76,13 +76,53 @@ int     check_tab_doubl(char *str, char *strtab, struct nlist_64 *array, int *ta
   return (0);
 }
 
+char    find_type(char type, int i, char **sctname, char **sgname, struct nlist_64 *array, char *strtab)
+{
+  if ((type & N_STAB))
+    type = '-';
+  else
+  {
+    if ((type & N_TYPE) == N_UNDF)
+    {
+      type = 'u';
+      if ((array[i].n_value) != 0)
+        type = 'c';
+    }
+    else if ((type & N_TYPE) == N_PBUD)
+       type = 'u';
+    else if ((type & N_TYPE) == N_ABS)
+      type = 'a';
+    else if ((type & N_TYPE) == N_SECT)
+    {
+      // printf("debugg %s pour %s\n", sctname[(int)array[i].n_sect - 1], strtab + array[i].n_un.n_strx);
+      if (ft_strcmp(sctname[(int)array[i].n_sect - 1], SECT_TEXT) == 0 && ft_strcmp(sgname[(int)array[i].n_sect - 1], SEG_TEXT) == 0)
+        type = 't';
+      else if (ft_strcmp(sctname[(int)array[i].n_sect - 1], SECT_DATA) == 0 && ft_strcmp(sgname[(int)array[i].n_sect - 1], SEG_DATA) == 0)
+        type = 'd';
+      else if (ft_strcmp(sctname[(int)array[i].n_sect - 1], SECT_BSS) == 0 && ft_strcmp(sgname[(int)array[i].n_sect - 1], SEG_DATA) == 0)
+        type = 'b';
+      else
+        type = 's';
+    }
+    else if ((type & N_TYPE) == N_INDR)
+      type = 'i';
+    else
+      type = '?';
+  }
+  if ((array[i].n_type & N_EXT) && type != '?')
+    type = ft_toupper(type);
+  printf(" [%d] debugg pour %s vaux %c\n", i, strtab + array[i].n_un.n_strx, type);
+
+  return (type);
+}
+
 void    print_output(int nsyms, int symoff, int stroff, void *ptr, char **sgname, char **sctname)
 {
   int i;
   // int run;
   char *strtab;
   struct nlist_64 *array;
-  char type[nsyms];
+  // char type[nsyms];
   char *str;
   int  al_order[nsyms];
 
@@ -91,43 +131,46 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr, char **sgname
   i =-1;
   while (++i < nsyms)
     al_order[i] = i;
-  i = -1;
-  while (++i < nsyms)
+  i = 0;
+  while (i < nsyms)
   {
-    type[i] = array[i].n_type;
-    if ((type[i] & N_STAB))
-      type[i] = '-';
-    else
-    {
-      if ((type[i] & N_TYPE) == N_UNDF)
-      {
-        type[i] = 'u';
-        if ((array[i].n_value) != 0)
-          type[i] = 'c';
-      }
-      else if ((type[i] & N_TYPE) == N_PBUD)
-         type[i] = 'u';
-      else if ((type[i] & N_TYPE) == N_ABS)
-        type[i] = 'a';
-      else if ((type[i] & N_TYPE) == N_SECT)
-      {
-        if (ft_strcmp(sctname[(int)array[i].n_sect - 1], SECT_TEXT) == 0 && ft_strcmp(sgname[(int)array[i].n_sect - 1], SEG_TEXT) == 0)
-          type[i] = 't';
-        else if (ft_strcmp(sctname[(int)array[i].n_sect - 1], SECT_DATA) == 0 && ft_strcmp(sgname[(int)array[i].n_sect - 1], SEG_DATA) == 0)
-          type[i] = 'd';
-        else if (ft_strcmp(sctname[(int)array[i].n_sect - 1], SECT_BSS) == 0 && ft_strcmp(sgname[(int)array[i].n_sect - 1], SEG_DATA) == 0)
-          type[i] = 'b';
-        else
-          type[i] = 's';
-      }
-      else if ((type[i] & N_TYPE) == N_INDR)
-        type[i] = 'i';
-      else
-        type[i] = '?';
-    }
+  //   type[i] = array[i].n_type;
+  //   if ((type[i] & N_STAB))
+  //     type[i] = '-';
+  //   else
+  //   {
+  //     if ((type[i] & N_TYPE) == N_UNDF)
+  //     {
+  //       type[i] = 'u';
+  //       if ((array[i].n_value) != 0)
+  //         type[i] = 'c';
+  //     }
+  //     else if ((type[i] & N_TYPE) == N_PBUD)
+  //        type[i] = 'u';
+  //     else if ((type[i] & N_TYPE) == N_ABS)
+  //       type[i] = 'a';
+  //     else if ((type[i] & N_TYPE) == N_SECT)
+  //     {
+  //       // printf("debugg %s pour %s\n", sctname[(int)array[i].n_sect - 1], strtab + array[i].n_un.n_strx);
+  //       if (ft_strcmp(sctname[(int)array[i].n_sect - 1], SECT_TEXT) == 0 && ft_strcmp(sgname[(int)array[i].n_sect - 1], SEG_TEXT) == 0)
+  //         type[i] = 't';
+  //       else if (ft_strcmp(sctname[(int)array[i].n_sect - 1], SECT_DATA) == 0 && ft_strcmp(sgname[(int)array[i].n_sect - 1], SEG_DATA) == 0)
+  //         type[i] = 'd';
+  //       else if (ft_strcmp(sctname[(int)array[i].n_sect - 1], SECT_BSS) == 0 && ft_strcmp(sgname[(int)array[i].n_sect - 1], SEG_DATA) == 0)
+  //         type[i] = 'b';
+  //       else
+  //         type[i] = 's';
+  //     }
+  //     else if ((type[i] & N_TYPE) == N_INDR)
+  //       type[i] = 'i';
+  //     else
+  //       type[i] = '?';
+  //   }
 
-    if ((array[i].n_type & N_EXT) && type[i] != '?')
-      type[i] = ft_toupper(type[i]);
+    // if ((array[i].n_type & N_EXT) && type[i] != '?')
+    //   type[i] = ft_toupper(type[i]);
+    // printf("debugg pour %s vaux %c\n", strtab + array[i].n_un.n_strx, type[i]);
+
     // printf("\n=====struct nlist_64=======\n ");
     // int ti = -1;
     // while (++ti < nsyms)
@@ -136,6 +179,7 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr, char **sgname
       tab_alpha_order(al_order, array, strtab, i);
     // printf(" n_sect %hhu\n ",array[i].n_sect);
     // printf("n_desc %hu\n ",array[i].n_desc);
+    i++;
   }
   i = -1;
   while (++i < nsyms)
@@ -150,7 +194,7 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr, char **sgname
     //   if (!(ft_strcmp(strtab + array[al_order[i]].n_un.n_strx, strtab + array[al_order[run]].n_un.n_strx)))
     //   run++;
     // }
-    while (i < nsyms  && (!ft_strcmp("",strtab + array[al_order[i]].n_un.n_strx) || str[0] == '/' || (str[0] != '_'  && !(str[0] == 'd' && str[1] == 'y'))))
+    while (i < nsyms  && (!ft_strcmp("", str) || str[0] == '/' || (str[0] != '_'  && !(str[0] == 'd' && str[1] == 'y'))))
     {
       // printf("%d sur %d\n", i, nsyms);
       i++;
@@ -168,11 +212,10 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr, char **sgname
         printf("0000000%llx", array[al_order[i]].n_value);
       else
         printf("                ");
-
-      if (type[al_order[i]])
-        printf(" %c ", type[al_order[i]]);
-      else
-        printf(" %d ", array[al_order[i]].n_type);
+      // if (type[al_order[i]])
+        printf(" %c ", find_type(array[al_order[i]].n_type, al_order[i], sctname, sgname, array, strtab));
+      // else
+        // printf(" %d ", array[al_order[i]].n_type);
       printf("%s\n",strtab + array[al_order[i]].n_un.n_strx);
     }
     // printf("sort\n");
