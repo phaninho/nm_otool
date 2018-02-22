@@ -93,7 +93,7 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
   i = -1;
   while (++i < nsyms)
   {
-    printf("%hu\n",array[i].n_desc);
+    // printf("[]%hu[]\n",array[i].n_desc);
 
     type[i] = array[i].n_type;
     if ((type[i] & N_STAB))
@@ -112,9 +112,14 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr)
         type[i] = 'a';
       else if ((type[i] & N_TYPE) == N_SECT)
       {
+        // printf("dans le n_SECT %hhu\n", array[i].n_sect);
+        // if (array[i].n_sect)
         type[i] = '@';
       }
     }
+
+    if ((array[i].n_type & N_EXT) && type[i] != '?')
+      type[i] = ft_toupper(type[i]);
     // printf("\n=====struct nlist_64=======\n ");
     // int ti = -1;
     // while (++ti < nsyms)
@@ -176,6 +181,8 @@ void handle_64(void *ptr)
   struct mach_header_64 *header;
   struct load_command       *lc;
   struct symtab_command   *sym;
+  struct section_64       *sct64;
+  struct segment_command_64 *sg64;
   int   i;
   int ncmds;
   void *limit;
@@ -185,10 +192,19 @@ void handle_64(void *ptr)
   ncmds = header->ncmds;
   lc = ptr + sizeof(*header);
 
-  // printf("\n====struct mach_header_64=====\n ncmds %d\n cpusubtype %d\n cputype %d\n filetype %d\n flags %d\n magic %d\n reserved %u\n sizeofcmds %d\n================================================\n", ncmds, header->cpusubtype, header->cputype, header->filetype, header->flags, header->magic, header->reserved, header->sizeofcmds);
-
   while (i++ < ncmds)
   {
+    if (lc->cmd == LC_SEGMENT_64)
+    {
+      sg64 = (struct segment_command_64 *)lc;
+      sct64 = (struct section_64 *)((char *)sg64 + sizeof(struct segment_command_64));
+      int j = 0;
+      while (j < sg64->nsects)
+      {
+        printf("setcname: %s\n   segname: %s\n", (j + sct64)->sectname, (j + sct64)->segname);
+        j++;
+      }
+    }
       // printf("\n=====struct load_command=======\n cmd %d\n cmdsize %d\n================================================\n", lc->cmd, lc->cmdsize);
     if (lc->cmd == LC_SYMTAB)
     {
