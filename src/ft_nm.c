@@ -1,13 +1,4 @@
-#include <sys/mman.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <string.h>
-#include "../libft/libft.h"
-#include <mach-o/loader.h>
-#include <mach-o/nlist.h>
+#include "../include/nm_otool.h"
 
 int     is_in_alpha_order(char *str, char *cmp)
 {
@@ -18,12 +9,8 @@ int     is_in_alpha_order(char *str, char *cmp)
   i = 0;
   len_str = ft_strlen(str);
   len_cmp = ft_strlen(cmp);
-  // printf("str %s %s\n", str, cmp);
-
-
   while (i < len_str >= len_cmp ? len_cmp : len_str)
   {
-    // printf("%c %c\n", str[i], cmp[i]);
     if (str[i] > cmp[i])
       return (1);
     else if (str[i] < cmp[i])
@@ -40,23 +27,13 @@ void	  tab_alpha_order(int *order, struct nlist_64 *array, char *strtab, int las
   char *cmp;
 
   cmp = ft_strdup(strtab + array[last].n_un.n_strx);
-
-  // printf("t=>%d last=>%d\n", order[t], order[last]);
-
   while (t < last)
   {
     str = ft_strdup(strtab + array[order[t]].n_un.n_strx);
-    // printf("str %s %s\n", str, cmp);
     if (is_in_alpha_order(str, cmp))
     {
       ft_swap(&order[t], &order[last]);
       cmp = ft_strdup(strtab + array[order[last]].n_un.n_strx);
-      int i = -1;
-      // while (++i < 17)
-      //   printf("[%d]", order[i]);
-      //   printf("\n");
-      // printf("tab_order %d\n", order[t]);
-      // t = 0;
     }
     t++;
   }
@@ -111,7 +88,6 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr, char **sgname
         type[i] = 'a';
       else if ((type[i] & N_TYPE) == N_SECT)
       {
-        // printf("debugg %s pour %s\n", sctname[(int)array[i].n_sect - 1], strtab + array[i].n_un.n_strx);
         if (ft_strcmp(sctname[(int)array[i].n_sect - 1], SECT_TEXT) == 0 && ft_strcmp(sgname[(int)array[i].n_sect - 1], SEG_TEXT) == 0)
           type[i] = 't';
         else if (ft_strcmp(sctname[(int)array[i].n_sect - 1], SECT_DATA) == 0 && ft_strcmp(sgname[(int)array[i].n_sect - 1], SEG_DATA) == 0)
@@ -129,65 +105,40 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr, char **sgname
 
     if ((array[i].n_type & N_EXT) && type[i] != '?')
       type[i] = ft_toupper(type[i]);
-    // printf("[%d]debugg pour %s vaux %c\n", i, strtab + array[i].n_un.n_strx, type[i]);
-
-    // printf("\n=====struct nlist_64=======\n ");
-    // int ti = -1;
-    // while (++ti < nsyms)
-    //   printf("[%d]", al_order[ti]);
     if (i > 0)
       tab_alpha_order(al_order, array, strtab, i);
-    // printf(" n_sect %hhu\n ",array[i].n_sect);
-    // printf("n_desc %hu\n ",array[i].n_desc);
     i++;
   }
   i = -1;
   while (++i < nsyms)
   {
-    // printf("entre\n");
-    // run = 0;
     str = ft_strdup(strtab + array[al_order[i]].n_un.n_strx);
-    // printf("assigne str\n");
-    // while (run < i)
-    // {
-    //   printf("%d\n", run);
-    //   if (!(ft_strcmp(strtab + array[al_order[i]].n_un.n_strx, strtab + array[al_order[run]].n_un.n_strx)))
-    //   run++;
-    // }
     while (i < nsyms  && (!ft_strcmp("", str) || str[0] == '/' || (str[0] != '_'  && !(str[0] == 'd' && str[1] == 'y'))))
     {
-      // printf("%d sur %d\n", i, nsyms);
       i++;
       if (i < nsyms)
         str = ft_strdup(strtab + array[al_order[i]].n_un.n_strx);
       else if (str)
         free(str);
-      // printf("apres\n");
     }
     if (i >= nsyms)
       break;
-    // if (!check_tab_doubl(strtab + array[al_order[i]].n_un.n_strx, strtab, array, al_order, i))
     if (array[al_order[i]].n_type != 36 && array[al_order[i]].n_type != 38 && array[al_order[i]].n_type != 32)
     {
       if ((array[al_order[i]].n_value))
         printf("0000000%llx", array[al_order[i]].n_value);
       else
         printf("                ");
-
       if (type[al_order[i]])
         printf(" %c ", type[al_order[i]]);
       else
         printf(" %d ", array[al_order[i]].n_type);
       printf("%s\n",strtab + array[al_order[i]].n_un.n_strx);
     }
-    // printf("sort\n");
     if (str)
       free(str);
   }
-    // printf("[%s]\n", strtab + array[al_order[i]].n_un.n_strx);
-    // printf("\n");
 }
-
 
 void handle_64(void *ptr)
 {
@@ -203,7 +154,6 @@ void handle_64(void *ptr)
   int   k;
   int ncmds;
   int len;
-  void *limit;
 
   i = 0;
   j = 0;
@@ -243,21 +193,13 @@ void handle_64(void *ptr)
         sectname[j] = (char *)malloc(sizeof(char) * (ft_strlen((k + sct64)->sectname) + 1));
         sectname[j][ft_strlen(sct64->sectname)] = '\0';
         ft_strcpy(sectname[j], (k + sct64)->sectname);
-        // printf("setcname: %s\n   segname: %s\n", segname[j], sectname[j]);
         k++;
         j++;
-        // printf("%d / %d\n", j, len);
-        // if ((j + sct64)->sectname))
       }
     }
-      // printf("\n=====struct load_command=======\n cmd %d\n cmdsize %d\n================================================\n", lc->cmd, lc->cmdsize);
     if (lc->cmd == LC_SYMTAB)
     {
-      // printf("222222222222\n");
-
       sym = (struct symtab_command *)lc;
-      // printf("\n====struct symtab_command=====\n cmdsize=%d\n symoff=%d\n nsyms=%d\n stroff=%d\n strsize=%d\n================================================\n\n",sym->cmdsize,  sym->symoff, sym->nsyms, sym->stroff,  sym->strsize);
-      // printf("setcname: %s\n   segname: %s\n", segname[1], sectname[1]);
       print_output(sym->nsyms, sym->symoff, sym->stroff, ptr, segname, sectname);
       break ;
     }
@@ -270,7 +212,7 @@ void  nm(void *ptr)
   int   magic_number;
 
   magic_number = *(int *)ptr;
-  if (magic_number == MH_MAGIC_64 || magic_number == MH_CIGAM_64)
+  if (magic_number == (int)MH_MAGIC_64 || magic_number == (int)MH_CIGAM_64)
     handle_64(ptr);
   else
     printf("Not a 64 bit binary\n");
@@ -283,7 +225,6 @@ int main(int ac, char **av)
   char  *ptr;
   struct stat buff;
 
-// printf("[]%s[]\n", SECT_TEXT);
   i = 0;
   if (ac < 2)
     return (printf("Nombre d'arguments insuffisant\n"));
@@ -295,15 +236,6 @@ int main(int ac, char **av)
       return (printf("Open error\n"));
     if (fstat(fd, &buff) < 0)
       return (printf("fstat error\n"));
-    // printf("\n====struct stat=====\n st_dev  %d\n", buff.st_dev);
-    // printf(" st_ino  %llu\n", buff.st_ino);
-    // printf(" st_mode  %d\n", buff.st_mode);
-    // printf(" st_nlink %d\n", buff.st_nlink);
-    // printf(" st_uid  %d\n", buff.st_uid);
-    // printf(" st_gid  %d\n", buff.st_gid);
-    // printf(" st_rdev %d\n", buff.st_rdev);
-    // printf(" st_size %lld\n================================================\n", buff.st_size);
-
     if ((ptr = mmap(0, buff.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
       return (printf("mmap error\n"));
     nm(ptr);
