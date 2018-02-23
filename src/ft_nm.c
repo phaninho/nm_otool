@@ -215,7 +215,7 @@ void  nm(void *ptr)
   if (magic_number == (int)MH_MAGIC_64 || magic_number == (int)MH_CIGAM_64)
     handle_64(ptr);
   else
-    printf("Not a 64 bit binary\n");
+    ft_putendl("Not a 64 bit binary");
 }
 
 int main(int ac, char **av)
@@ -227,20 +227,39 @@ int main(int ac, char **av)
 
   i = 0;
   if (ac < 2)
-    return (printf("Nombre d'arguments insuffisant\n"));
+  {
+    ft_putendl("Nombre d'arguments insuffisant");
+    return (1);
+  }
   while (++i < ac)
   {
     if (ac > 2)
-      printf("\n%s:\n", av[i]);
+    {
+      ft_putstr("\n");
+      ft_putstr(av[i]);
+      ft_putendl(":");
+    }
     if ((fd = open(av[i], O_RDONLY)) < 0)
-      return (printf("Open error\n"));
+    {
+      ft_putendl("Open error");
+      return (1);
+    }
     if (fstat(fd, &buff) < 0)
-      return (printf("fstat error\n"));
+    {
+      ft_putendl("fstat error");
+      return (1);
+    }
     if ((ptr = mmap(0, buff.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
-      return (printf("mmap error\n"));
+    {
+      ft_putendl("mmap error");
+      return (1);
+    }
     nm(ptr);
     if (munmap(ptr, buff.st_size) < 0)
-      return (printf("munmap error\n"));
+    {
+      ft_putendl("munmap error");
+      return (1);
+    }
   }
   return (0);
 }
