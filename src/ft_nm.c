@@ -218,12 +218,39 @@ void  nm(void *ptr)
     ft_putendl("Not a 64 bit binary");
 }
 
-int main(int ac, char **av)
+int	 read_args(char *av)
 {
   int fd;
-  int i;
   char  *ptr;
   struct stat buff;
+
+  if ((fd = open(av, O_RDONLY)) < 0)
+  {
+    ft_putendl("Open error");
+    return (1);
+  }
+  if (fstat(fd, &buff) < 0)
+  {
+    ft_putendl("fstat error");
+    return (1);
+  }
+  if ((ptr = mmap(0, buff.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
+  {
+    ft_putendl("mmap error");
+    return (1);
+  }
+  nm(ptr);
+  if (munmap(ptr, buff.st_size) < 0)
+  {
+    ft_putendl("munmap error");
+    return (1);
+  }
+  return (0);
+}
+
+int main(int ac, char **av)
+{
+  int i;
 
   i = 0;
   if (ac < 2)
@@ -239,27 +266,7 @@ int main(int ac, char **av)
       ft_putstr(av[i]);
       ft_putendl(":");
     }
-    if ((fd = open(av[i], O_RDONLY)) < 0)
-    {
-      ft_putendl("Open error");
-      return (1);
-    }
-    if (fstat(fd, &buff) < 0)
-    {
-      ft_putendl("fstat error");
-      return (1);
-    }
-    if ((ptr = mmap(0, buff.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
-    {
-      ft_putendl("mmap error");
-      return (1);
-    }
-    nm(ptr);
-    if (munmap(ptr, buff.st_size) < 0)
-    {
-      ft_putendl("munmap error");
-      return (1);
-    }
+    return (read_args(av[i]));
   }
   return (0);
 }
