@@ -26,10 +26,18 @@ void	  tab_alpha_order(int *order, struct nlist_64 *array, char *strtab, int las
   char *str;
   char *cmp;
 
-  cmp = ft_strdup(strtab + array[last].n_un.n_strx);
+  cmp = NULL;
   while (t < last)
   {
+    cmp = ft_strdup(strtab + array[last].n_un.n_strx);
     str = ft_strdup(strtab + array[order[t]].n_un.n_strx);
+    if (!ft_strcmp(str, cmp))
+    {
+      cmp = ft_strdup(ft_lltoa(array[last].n_value, 16));
+      str = ft_strdup(ft_lltoa(array[order[t]].n_value, 16));
+    }
+    // if (!ft_strcmp(cmp, "_is_in_alpha_order"))
+      // printf("\n[%s][%s]\n", str,cmp);
     if (is_in_alpha_order(str, cmp))
     {
       ft_swap(&order[t], &order[last]);
@@ -37,21 +45,25 @@ void	  tab_alpha_order(int *order, struct nlist_64 *array, char *strtab, int las
     }
     t++;
   }
+  if (cmp)
+    free(cmp);
+  if (str)
+    free(str);
 }
 
-int     check_tab_doubl(char *str, char *strtab, struct nlist_64 *array, int *tab, int lim)
-{
-  int   i;
-
-  i = 0;
-  while (i < lim)
-  {
-    if (!ft_strcmp(str, strtab + array[tab[i]].n_un.n_strx))
-      return (1);
-    i++;
-  }
-  return (0);
-}
+// int     check_tab_doubl(char *str, char *strtab, struct nlist_64 *array, int *tab, int lim)
+// {
+//   int   i;
+//
+//   i = 0;
+//   while (i < lim)
+//   {
+//     if (!ft_strcmp(str, strtab + array[tab[i]].n_un.n_strx))
+//       return (1);
+//     i++;
+//   }
+//   return (0);
+// }
 
 char  *ft_lltoa(long long val, int base)
 {

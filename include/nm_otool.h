@@ -29,4 +29,6 @@ typedef struct s_env
 
 } t_env;
 
+char  *ft_lltoa(long long val, int base);
+
 #endif
