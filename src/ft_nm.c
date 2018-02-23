@@ -157,6 +157,7 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr, char **sgname
     }
     if (i >= nsyms)
       break;
+      
     if (array[al_order[i]].n_type != 36 && array[al_order[i]].n_type != 38 && array[al_order[i]].n_type != 32)
     {
       if ((array[al_order[i]].n_value))
