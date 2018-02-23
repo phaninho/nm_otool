@@ -5,16 +5,17 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/06 20:27:21 by stmartin          #+#    #+#             */
-/*   Updated: 2015/12/06 20:31:46 by stmartin         ###   ########.fr       */
+/*   Created: 2015/11/24 15:26:56 by rabougue          #+#    #+#             */
+/*   Updated: 2016/05/04 09:03:43 by rabougue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
-int		ft_isalpha(int c)
+int	ft_isalpha(int c)
 {
 	if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
 		return (1);
-	return (0);
+	else
+		return (0);
 }

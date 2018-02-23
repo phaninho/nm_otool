@@ -5,19 +5,28 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/02 13:39:08 by stmartin          #+#    #+#             */
-/*   Updated: 2015/12/12 23:18:50 by stmartin         ###   ########.fr       */
+/*   Created: 2015/12/02 16:30:28 by rabougue          #+#    #+#             */
+/*   Updated: 2016/05/04 09:18:59 by rabougue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
 char	*ft_strnew(size_t size)
 {
 	char	*str;
+	size_t	i;
 
-	if (!(str = (char *)malloc(sizeof(char) * (size + 1))))
+	i = 0;
+	str = NULL;
+	str = malloc(sizeof(char) * size + 1);
+	if (str == NULL)
 		return (NULL);
-	ft_bzero(str, (size + 1));
+	while (i < size)
+	{
+		str[i] = '\0';
+		i++;
+	}
+	str[i] = '\0';
 	return (str);
 }

@@ -5,17 +5,18 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/25 12:22:00 by stmartin          #+#    #+#             */
-/*   Updated: 2015/12/13 23:14:24 by stmartin         ###   ########.fr       */
+/*   Created: 2015/11/23 15:45:24 by rabougue          #+#    #+#             */
+/*   Updated: 2016/05/04 09:20:12 by rabougue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
-int		ft_toupper(int c)
+int	ft_toupper(int c)
 {
 	if (c >= 'a' && c <= 'z')
-		return (c - 32);
-	else
-		return (c);
+	{
+		c -= 32;
+	}
+	return (c);
 }

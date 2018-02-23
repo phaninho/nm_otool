@@ -5,19 +5,19 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/25 08:54:04 by stmartin          #+#    #+#             */
-/*   Updated: 2015/12/12 23:11:59 by stmartin         ###   ########.fr       */
+/*   Created: 2015/11/25 21:33:45 by rabougue          #+#    #+#             */
+/*   Updated: 2016/05/04 09:16:49 by rabougue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
 char	*ft_strcpy(char *dst, const char *src)
 {
-	int	i;
+	int i;
 
 	i = 0;
-	while (src[i])
+	while (src[i] != '\0')
 	{
 		dst[i] = src[i];
 		i++;

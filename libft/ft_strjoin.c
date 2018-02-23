@@ -5,26 +5,27 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/02 16:48:09 by stmartin          #+#    #+#             */
-/*   Updated: 2016/02/05 21:52:49 by stmartin         ###   ########.fr       */
+/*   Created: 2015/12/07 16:54:03 by rabougue          #+#    #+#             */
+/*   Updated: 2016/05/04 09:17:35 by rabougue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*str;
-	size_t	len;
+	int		i;
 
-	if (!s1 && !s2)
+	if (s1 == NULL && s2 == NULL)
 		return (NULL);
-	else if (!s1)
+	else if (s1 == NULL)
 		return (ft_strdup(s2));
-	else if (!s2)
+	else if (s2 == NULL)
 		return (ft_strdup(s1));
-	len = ft_strlen(s1) + ft_strlen(s2);
-	if (!(str = (char *)malloc(sizeof(char) * (len + 1))))
+	i = ft_strlen(s1) + ft_strlen(s2) + 1;
+	str = (char *)malloc(sizeof(char) * i);
+	if (str == NULL)
 		return (NULL);
 	ft_strcpy(str, s1);
 	ft_strcat(str, s2);

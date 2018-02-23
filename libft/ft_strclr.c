@@ -5,19 +5,23 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/02 14:00:13 by stmartin          #+#    #+#             */
-/*   Updated: 2015/12/13 00:01:37 by stmartin         ###   ########.fr       */
+/*   Created: 2015/11/29 11:47:32 by rabougue          #+#    #+#             */
+/*   Updated: 2016/05/04 09:16:30 by rabougue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
 void	ft_strclr(char *s)
 {
-	size_t	len;
+	int i;
 
-	if (!s)
+	i = 0;
+	if (s == NULL)
 		return ;
-	len = ft_strlen(s);
-	ft_bzero(s, len);
+	while (s[i] != '\0')
+	{
+		s[i] = '\0';
+		i++;
+	}
 }

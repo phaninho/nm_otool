@@ -5,34 +5,33 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/26 08:23:29 by stmartin          #+#    #+#             */
-/*   Updated: 2016/05/09 19:17:19 by stmartin         ###   ########.fr       */
+/*   Created: 2015/11/26 14:31:57 by rabougue          #+#    #+#             */
+/*   Updated: 2016/05/04 09:17:41 by rabougue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
 size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
-	size_t	len;
-	size_t	i;
+	int		i;
+	int		j;
+	size_t	len_d;
+	size_t	len_s;
+	int		stop;
 
-	len = 0;
-	while (len < size && *dst && *(dst++))
-		len++;
-	i = size - len;
-	if (i < 1)
-		return (len + ft_strlen((char *)src));
-	while (*src)
+	len_d = ft_strlen(dst);
+	len_s = ft_strlen(src);
+	stop = size - len_d - 1;
+	i = len_d;
+	j = 0;
+	while (src[j] && j < stop)
 	{
-		if (i > 1)
-		{
-			*dst++ = *src;
-			i--;
-		}
-		src++;
-		len++;
+		dst[i + j] = src[j];
+		j++;
 	}
-	*dst = '\0';
-	return (len);
+	dst[i + j] = '\0';
+	if (size <= len_d)
+		return (len_s + size);
+	return (len_s + len_d);
 }

@@ -5,30 +5,30 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/01 10:54:51 by stmartin          #+#    #+#             */
-/*   Updated: 2015/12/13 23:07:26 by stmartin         ###   ########.fr       */
+/*   Created: 2015/12/08 17:45:05 by rabougue          #+#    #+#             */
+/*   Updated: 2016/05/04 09:13:54 by rabougue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
-void	ft_putnbr_fd(int nb, int fd)
+void	ft_putnbr_fd(int n, int fd)
 {
-	if (nb == -2147483648)
+	if (n == -2147483648)
 	{
-		write(fd, "-2147483648", 11);
-		return ;
+		ft_putstr_fd("-2", fd);
+		n = 147483648;
 	}
-	if (nb < 0)
+	if (n < 0)
 	{
 		ft_putchar_fd('-', fd);
-		nb = -nb;
+		n = -n;
 	}
-	if (nb < 10)
-		ft_putchar_fd(nb + '0', fd);
-	else
+	if (n > 9)
 	{
-		ft_putnbr_fd(nb / 10, fd);
-		ft_putchar_fd((nb % 10) + '0', fd);
+		ft_putnbr_fd(n / 10, fd);
+		ft_putnbr_fd(n % 10, fd);
 	}
+	else
+		ft_putchar_fd('0' + n, fd);
 }

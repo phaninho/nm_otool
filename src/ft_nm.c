@@ -53,6 +53,28 @@ int     check_tab_doubl(char *str, char *strtab, struct nlist_64 *array, int *ta
   return (0);
 }
 
+char  *ft_lltoa(long long val, int base)
+{
+    char buf[64];
+    int i = 62;
+    int sign = (val < 0);
+
+    if (sign)
+      val = -val;
+    if(val == 0)
+      return "0";
+    while(val && i)
+    {
+      buf[i] = "0123456789abcdef"[val % base];
+      i--;
+      val /= base;
+    }
+    if(sign)
+        buf[i--] = '-';
+    return (ft_strdup(&buf[i + 1]));
+}
+
+
 void    print_output(int nsyms, int symoff, int stroff, void *ptr, char **sgname, char **sctname)
 {
   int i;
@@ -126,14 +148,14 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr, char **sgname
     if (array[al_order[i]].n_type != 36 && array[al_order[i]].n_type != 38 && array[al_order[i]].n_type != 32)
     {
       if ((array[al_order[i]].n_value))
-        printf("0000000%llx", array[al_order[i]].n_value);
+        ft_printf("0000000%s", ft_lltoa(array[al_order[i]].n_value, 16));
       else
-        printf("                ");
+        ft_printf("                ");
       if (type[al_order[i]])
-        printf(" %c ", type[al_order[i]]);
+        ft_printf(" %c ", type[al_order[i]]);
       else
-        printf(" %d ", array[al_order[i]].n_type);
-      printf("%s\n",strtab + array[al_order[i]].n_un.n_strx);
+        ft_printf(" %d ", array[al_order[i]].n_type);
+      ft_printf("%s\n",strtab + array[al_order[i]].n_un.n_strx);
     }
     if (str)
       free(str);
@@ -152,7 +174,6 @@ void handle_64(void *ptr)
   int   i;
   int   j;
   int   k;
-  int ncmds;
   int len;
 
   i = 0;
@@ -161,10 +182,9 @@ void handle_64(void *ptr)
   segname = NULL;
   sectname = NULL;
   header = (struct mach_header_64 *)ptr;
-  ncmds = header->ncmds;
   lc = ptr + sizeof(*header);
 
-  while (i++ < ncmds)
+  while (i++ < (int)header->ncmds)
   {
     if (lc->cmd == LC_SEGMENT_64)
     {
@@ -248,12 +268,8 @@ int main(int ac, char **av)
   while (++i < ac)
   {
     if (ac > 2)
-    {
-      ft_putstr("\n");
-      ft_putstr(av[i]);
-      ft_putendl(":");
-    }
-  read_args(av[i]);
+      ft_printf("\n%s:\n", av[i]);
+    read_args(av[i]);
   }
   return (0);
 }

@@ -5,27 +5,27 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/26 11:32:42 by stmartin          #+#    #+#             */
-/*   Updated: 2015/12/12 23:55:54 by stmartin         ###   ########.fr       */
+/*   Created: 2015/11/25 13:26:28 by rabougue          #+#    #+#             */
+/*   Updated: 2016/05/04 09:19:13 by rabougue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
 char	*ft_strrchr(const char *s, int c)
 {
-	size_t	i;
-	char	*cps;
+	int		i;
+	char	*s1;
 
 	i = 0;
-	cps = NULL;
+	s1 = NULL;
 	if (c == 0)
-		return ((char*)(s + ft_strlen(s)));
-	while (s && s[i])
+		return ((char *)(s + ft_strlen(s)));
+	while (s[i] != '\0')
 	{
-		if (s[i] == (char)c)
-			cps = ((char *)(s + i));
+		if (s[i] == c)
+			s1 = (char *)(s + i);
 		i++;
 	}
-	return (cps);
+	return (s1);
 }

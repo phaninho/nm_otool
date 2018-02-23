@@ -5,38 +5,68 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/06 17:04:04 by stmartin          #+#    #+#             */
-/*   Updated: 2015/12/13 23:12:37 by stmartin         ###   ########.fr       */
+/*   Created: 2015/12/11 13:39:24 by rabougue          #+#    #+#             */
+/*   Updated: 2016/08/06 22:09:36 by rabougue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
-char	**ft_strsplit(char const *s, char c)
+static void	ft_split_count(char const *s, char c, int *j)
 {
-	char	**split;
-	size_t	i;
-	size_t	j;
-	size_t	n;
-	size_t	word;
+	int i;
 
 	i = 0;
-	n = 0;
-	word = ft_countword_btwsign(s, c);
-	if (!(split = (char**)malloc(sizeof(char*) * (word + 1))))
+	while (s[i] != '\0')
+	{
+		while (s[i] == c)
+			i++;
+		if (s[i] != c && s[i] != '\0')
+		{
+			*j = *j + 1;
+			while (s[i] != c && s[i] != '\0')
+				i++;
+		}
+	}
+}
+
+static void	ft_split_tab(char const *s, char **str, char c, int *j)
+{
+	int len;
+	int i;
+
+	i = 0;
+	while (s[i] != '\0')
+	{
+		len = 0;
+		while (s[i] == c)
+			i++;
+		if (s[i] != c && s[i] != '\0')
+		{
+			while (s[i + len] != c && s[i + len] != '\0')
+				len++;
+			str[*j] = ft_strsub(s, i, len);
+			*j = *j + 1;
+		}
+		i = i + len;
+	}
+	str[*j] = NULL;
+}
+
+char		**ft_strsplit(char const *s, char c)
+{
+	char	**str;
+	int		j;
+
+	j = 1;
+	if (s == NULL)
 		return (NULL);
-	split[word] = NULL;
-	while (n < word)
+	ft_split_count(s, c, &j);
+	str = (char **)malloc(sizeof(char *) * j);
+	if (str != NULL)
 	{
 		j = 0;
-		while (s[i] && s[i] == c)
-			i++;
-		while (s[i] && s[i] != c)
-		{
-			i++;
-			j++;
-		}
-		split[n++] = ft_strsub(s, (i - j), j);
+		ft_split_tab(s, str, c, &j);
 	}
-	return (split);
+	return (str);
 }

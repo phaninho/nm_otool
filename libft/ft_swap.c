@@ -5,16 +5,18 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/03/26 23:31:29 by stmartin          #+#    #+#             */
-/*   Updated: 2016/03/26 23:36:31 by stmartin         ###   ########.fr       */
+/*   Created: 2015/12/16 16:31:06 by rabougue          #+#    #+#             */
+/*   Updated: 2016/05/04 09:19:57 by rabougue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-void		ft_swap(int *a, int *b)
-{
-	int		swap;
+#include "./includes/libft.h"
 
-	swap = *a;
+void	ft_swap(int *a, int *b)
+{
+	int save_a;
+
+	save_a = *a;
 	*a = *b;
-	*b = swap;
+	*b = save_a;
 }

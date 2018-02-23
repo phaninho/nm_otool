@@ -5,35 +5,46 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/02 17:55:20 by stmartin          #+#    #+#             */
-/*   Updated: 2016/05/09 19:16:57 by stmartin         ###   ########.fr       */
+/*   Created: 2015/12/03 10:34:14 by rabougue          #+#    #+#             */
+/*   Updated: 2016/05/04 09:19:49 by rabougue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
-static int	fk_isspace(int c)
+static void	skip_blank(const char *s, int *i, int *len)
 {
-	if (c == ' ' || c == '\n' || c == '\t')
-		return (1);
-	return (0);
+	while (s[*i] != '\0')
+	{
+		if (s[*i] != ' ' && s[*i] != '\n' && s[*i] != '\t')
+		{
+			*i += 1;
+			*len = *i;
+		}
+		else
+			*i += 1;
+	}
 }
 
 char		*ft_strtrim(char const *s)
 {
-	size_t	len;
 	char	*str;
+	int		start;
+	int		len;
+	int		i;
 
-	if (!s)
-		return (NULL);
-	while (*s && fk_isspace((int)*s) == 1)
-		s++;
-	if (!(len = ft_strlen(s)))
-		return (ft_strdup(s));
-	while (fk_isspace((int)s[len - 1]) == 1)
-		len--;
-	if (!(str = (char *)malloc(sizeof(char) * len)))
-		return (NULL);
-	str = ft_strsub(s, 0, len);
-	return (str);
+	if (s == NULL)
+		return (0);
+	start = 0;
+	len = 0;
+	i = 0;
+	while (s[start] == ' ' || s[start] == '\n' || s[start] == '\t')
+		start++;
+	skip_blank(s, &i, &len);
+	if (i == 0 || ft_strsub(s, start, len - start) == NULL)
+	{
+		str = ft_strdup("");
+		return (str);
+	}
+	return (ft_strsub(s, start, len - start));
 }

@@ -20,9 +20,13 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
-#include "../libft/libft.h"
+#include "../libft/includes/libft.h"
 #include <mach-o/loader.h>
 #include <mach-o/nlist.h>
 
+typedef struct s_env
+{
+
+} t_env;
 
 #endif

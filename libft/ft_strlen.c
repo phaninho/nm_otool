@@ -5,19 +5,21 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/25 08:05:10 by stmartin          #+#    #+#             */
-/*   Updated: 2015/12/12 23:10:14 by stmartin         ###   ########.fr       */
+/*   Created: 2015/11/25 21:47:55 by rabougue          #+#    #+#             */
+/*   Updated: 2016/08/10 17:23:15 by rabougue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
-size_t	ft_strlen(const char *s)
+int	ft_strlen(const char *s)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
-	while (s[i])
+	while (s[i] != '\0')
+	{
 		i++;
+	}
 	return (i);
 }

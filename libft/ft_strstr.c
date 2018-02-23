@@ -5,38 +5,33 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/30 17:07:49 by stmartin          #+#    #+#             */
-/*   Updated: 2015/12/14 16:26:23 by stmartin         ###   ########.fr       */
+/*   Created: 2015/11/25 09:44:46 by rabougue          #+#    #+#             */
+/*   Updated: 2016/05/04 09:19:36 by rabougue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
 char	*ft_strstr(const char *s1, const char *s2)
 {
-	size_t	i;
-	size_t	j;
-	size_t	last;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
-	last = 0;
-	if (*s2 == 0)
+	if (s1[0] == '\0' && s2[0] == '\0')
 		return ((char *)s1);
-	while (s1[i])
+	while (s1[i] != '\0')
 	{
-		if (s1[i] == s2[j])
-		{
-			if (s2[j + 1] == '\0')
-				return ((char*)&s1[i - j]);
+		while (s2[j] == s1[i + j] && s2[j] != '\0')
 			j++;
-		}
+		if (s2[j] == '\0')
+			return ((char *)s1 + i);
 		else
 		{
+			i++;
 			j = 0;
-			i = last++;
 		}
-		i++;
 	}
-	return (NULL);
+	return (0);
 }

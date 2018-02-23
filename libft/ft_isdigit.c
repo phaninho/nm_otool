@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/30 11:08:02 by stmartin          #+#    #+#             */
-/*   Updated: 2015/11/30 11:28:16 by stmartin         ###   ########.fr       */
+/*   Created: 2015/11/24 15:11:03 by rabougue          #+#    #+#             */
+/*   Updated: 2016/05/04 09:03:52 by rabougue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
-int		ft_isdigit(int c)
+int	ft_isdigit(int c)
 {
 	if (c >= '0' && c <= '9')
 		return (1);

@@ -5,23 +5,27 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/02 14:13:17 by stmartin          #+#    #+#             */
-/*   Updated: 2015/12/18 19:00:52 by stmartin         ###   ########.fr       */
+/*   Created: 2015/11/29 16:08:35 by rabougue          #+#    #+#             */
+/*   Updated: 2016/05/04 09:18:52 by rabougue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
-int		ft_strnequ(const char *s1, const char *s2, size_t n)
+int	ft_strnequ(char const *s1, char const *s2, size_t n)
 {
-	int		check;
+	size_t i;
 
-	if ((!s2 || !*s2) && n == 0)
-		return (1);
-	if (!s1 || !s2)
+	i = 0;
+	if (s1 == NULL || s2 == NULL)
 		return (0);
-	check = ft_strncmp(s1, s2, n);
-	if (check == 0)
-		return (1);
-	return (0);
+	while (i < n)
+	{
+		if (s1[i] != s2[i])
+			return (0);
+		else if (s1[i] == '\0' || s2[i] == '\0')
+			return (1);
+		i++;
+	}
+	return (1);
 }

@@ -5,24 +5,33 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/27 15:04:30 by stmartin          #+#    #+#             */
-/*   Updated: 2015/12/12 23:16:04 by stmartin         ###   ########.fr       */
+/*   Created: 2015/11/24 18:55:07 by rabougue          #+#    #+#             */
+/*   Updated: 2016/05/04 09:16:38 by rabougue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
-int		ft_strcmp(const char *s1, const char *s2)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	char	*cps1;
-	char	*cps2;
+	int				i;
+	unsigned char	*ss1;
+	unsigned char	*ss2;
 
-	cps1 = (char *)s1;
-	cps2 = (char *)s2;
-	while (*cps2 && (unsigned char)*cps1 == (unsigned char)*cps2)
+	ss1 = (unsigned char *)s1;
+	ss2 = (unsigned char *)s2;
+	i = 0;
+	if (ft_strlen(s1) > ft_strlen(s2))
+		return (1);
+	else if (ft_strlen(s1) < ft_strlen(s2))
+		return (-1);
+	while (ss1[i] != '\0')
 	{
-		cps1++;
-		cps2++;
+		if (ss2[i] != ss1[i])
+		{
+			return (ss1[i] - ss2[i]);
+		}
+		i++;
 	}
-	return ((unsigned char)*cps1 - (unsigned char)*cps2);
+	return (0);
 }

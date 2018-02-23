@@ -5,17 +5,18 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/02 13:37:04 by stmartin          #+#    #+#             */
-/*   Updated: 2015/12/02 16:11:32 by stmartin         ###   ########.fr       */
+/*   Created: 2015/12/02 17:03:16 by rabougue          #+#    #+#             */
+/*   Updated: 2016/05/04 09:16:59 by rabougue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
 void	ft_strdel(char **as)
 {
-	if (!as || !*as)
-		return ;
-	free(*as);
-	*as = NULL;
+	if (as != NULL)
+	{
+		free(*as);
+		*as = NULL;
+	}
 }

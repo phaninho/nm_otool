@@ -5,18 +5,16 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/30 11:20:21 by stmartin          #+#    #+#             */
-/*   Updated: 2015/12/13 22:53:08 by stmartin         ###   ########.fr       */
+/*   Created: 2015/11/24 13:59:50 by rabougue          #+#    #+#             */
+/*   Updated: 2016/05/04 09:03:32 by rabougue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
-int		ft_isalnum(int c)
+int	ft_isalnum(int c)
 {
-	if (ft_isalpha(c) == 1)
-		return (1);
-	if (ft_isdigit(c) == 1)
+	if ((c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122))
 		return (1);
 	else
 		return (0);
