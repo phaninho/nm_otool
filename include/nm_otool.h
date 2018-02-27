@@ -25,6 +25,15 @@
 #include <mach-o/nlist.h>
 
 typedef struct s_env64 t_env64;
+typedef struct s_ut t_ut;
+
+struct  s_ut
+{
+  int i;
+  int len;
+  char *strtab;
+  char *str;
+};
 
 struct  s_env64
 {
@@ -39,6 +48,7 @@ struct  s_env64
   struct symtab_command   *sym;
   struct section_64       *sct64;
   struct segment_command_64 *sg64;
+  struct nlist_64       *array;
 
 };
 char  *ft_lltoa(long long val, int base);

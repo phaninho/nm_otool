@@ -89,98 +89,96 @@ char  *ft_lltoa(long long val, int base)
 
 void    print_output(t_env64 e, void *ptr)
 {
-  // int nsyms, int symoff, int stroff, void *ptr, char **sgname, char **sctname
-
-  int i;
-  int len;
-  char *strtab;
-  struct nlist_64 *array;
+  // int i;
+  // int len;
+  // char *strtab;
+  t_ut u;
   char type[e.sym->nsyms];
-  char *str;
+  // char *str;
   int  al_order[e.sym->nsyms];
 
-  array = ptr + e.sym->symoff;
-  strtab = ptr + e.sym->stroff;
-  i =-1;
-  while (++i < (int)e.sym->nsyms)
-    al_order[i] = i;
-  i = 0;
-  while (i < (int)e.sym->nsyms)
+  e.array = ptr + e.sym->symoff;
+  u.strtab = ptr + e.sym->stroff;
+  u.i =-1;
+  while (++u.i < (int)e.sym->nsyms)
+    al_order[u.i] = u.i;
+  u.i = 0;
+  while (u.i < (int)e.sym->nsyms)
   {
-    type[i] = array[i].n_type;
-    if ((type[i] & N_STAB))
-      type[i] = '-';
+    type[u.i] = e.array[u.i].n_type;
+    if ((type[u.i] & N_STAB))
+      type[u.i] = '-';
     else
     {
-      if ((type[i] & N_TYPE) == N_UNDF)
+      if ((type[u.i] & N_TYPE) == N_UNDF)
       {
-        type[i] = 'u';
-        if ((array[i].n_value) != 0)
-          type[i] = 'c';
+        type[u.i] = 'u';
+        if ((e.array[u.i].n_value) != 0)
+          type[u.i] = 'c';
       }
-      else if ((type[i] & N_TYPE) == N_PBUD)
-         type[i] = 'u';
-      else if ((type[i] & N_TYPE) == N_ABS)
-        type[i] = 'a';
-      else if ((type[i] & N_TYPE) == N_SECT)
+      else if ((type[u.i] & N_TYPE) == N_PBUD)
+         type[u.i] = 'u';
+      else if ((type[u.i] & N_TYPE) == N_ABS)
+        type[u.i] = 'a';
+      else if ((type[u.i] & N_TYPE) == N_SECT)
       {
-        if (ft_strcmp(e.sectname[(int)array[i].n_sect - 1], SECT_TEXT) == 0 && ft_strcmp(e.segname[(int)array[i].n_sect - 1], SEG_TEXT) == 0)
-          type[i] = 't';
-        else if (ft_strcmp(e.sectname[(int)array[i].n_sect - 1], SECT_DATA) == 0 && ft_strcmp(e.segname[(int)array[i].n_sect - 1], SEG_DATA) == 0)
-          type[i] = 'd';
-        else if (ft_strcmp(e.sectname[(int)array[i].n_sect - 1], SECT_BSS) == 0 && ft_strcmp(e.segname[(int)array[i].n_sect - 1], SEG_DATA) == 0)
-          type[i] = 'b';
+        if (ft_strcmp(e.sectname[(int)e.array[u.i].n_sect - 1], SECT_TEXT) == 0 && ft_strcmp(e.segname[(int)e.array[u.i].n_sect - 1], SEG_TEXT) == 0)
+          type[u.i] = 't';
+        else if (ft_strcmp(e.sectname[(int)e.array[u.i].n_sect - 1], SECT_DATA) == 0 && ft_strcmp(e.segname[(int)e.array[u.i].n_sect - 1], SEG_DATA) == 0)
+          type[u.i] = 'd';
+        else if (ft_strcmp(e.sectname[(int)e.array[u.i].n_sect - 1], SECT_BSS) == 0 && ft_strcmp(e.segname[(int)e.array[u.i].n_sect - 1], SEG_DATA) == 0)
+          type[u.i] = 'b';
         else
-          type[i] = 's';
+          type[u.i] = 's';
       }
-      else if ((type[i] & N_TYPE) == N_INDR)
-        type[i] = 'i';
+      else if ((type[u.i] & N_TYPE) == N_INDR)
+        type[u.i] = 'i';
       else
-        type[i] = '?';
+        type[u.i] = '?';
     }
 
-    if ((array[i].n_type & N_EXT) && type[i] != '?')
-      type[i] = ft_toupper(type[i]);
-    if (i > 0)
-      tab_alpha_order(al_order, array, strtab, i);
-    i++;
+    if ((e.array[u.i].n_type & N_EXT) && type[u.i] != '?')
+      type[u.i] = ft_toupper(type[u.i]);
+    if (u.i > 0)
+      tab_alpha_order(al_order, e.array, u.strtab, u.i);
+    u.i++;
   }
-  i = -1;
-  while (++i < (int)e.sym->nsyms)
+  u.i = -1;
+  while (++u.i < (int)e.sym->nsyms)
   {
-    str = ft_strdup(strtab + array[al_order[i]].n_un.n_strx);
-    while (i < (int)e.sym->nsyms  && (!ft_strcmp("", str) || str[0] == '/' || \
-    (str[0] != '_'  && !(str[0] == 'G' && str[1] == 'C') && !(str[0] == 'd' && \
-    str[1] == 'y') && !(str[0] == '-' && str[1] == '[') && !(str[0] == '+' && str[1] == '['))))
+    u.str = ft_strdup(u.strtab + e.array[al_order[u.i]].n_un.n_strx);
+    while (u.i < (int)e.sym->nsyms  && (!ft_strcmp("", u.str) || u.str[0] == '/' || \
+    (u.str[0] != '_'  && !(u.str[0] == 'G' && u.str[1] == 'C') && !(u.str[0] == 'd' && \
+    u.str[1] == 'y') && !(u.str[0] == '-' && u.str[1] == '[') && !(u.str[0] == '+' && u.str[1] == '['))))
     {
-      i++;
-      if (i < (int)e.sym->nsyms)
-        str = ft_strdup(strtab + array[al_order[i]].n_un.n_strx);
-      else if (str)
-        free(str);
+      u.i++;
+      if (u.i < (int)e.sym->nsyms)
+        u.str = ft_strdup(u.strtab + e.array[al_order[u.i]].n_un.n_strx);
+      else if (u.str)
+        free(u.str);
     }
-    if (i >= (int)e.sym->nsyms)
+    if (u.i >= (int)e.sym->nsyms)
       break;
-    if (array[al_order[i]].n_type != 36 && array[al_order[i]].n_type != 38 && array[al_order[i]].n_type != 32)
+    if (e.array[al_order[u.i]].n_type != 36 && e.array[al_order[u.i]].n_type != 38 && e.array[al_order[u.i]].n_type != 32)
     {
-      if ((array[al_order[i]].n_value))
+      if ((e.array[al_order[u.i]].n_value))
       {
-        if ((len = ft_strlen(ft_lltoa(array[al_order[i]].n_value, 16))) < 16)
-        len = 16 - len;
-        while (len-- > 0)
+        if ((u.len = ft_strlen(ft_lltoa(e.array[al_order[u.i]].n_value, 16))) < 16)
+        u.len = 16 - u.len;
+        while (u.len-- > 0)
           ft_putchar('0');
-        ft_printf("%s", ft_lltoa(array[al_order[i]].n_value, 16));
+        ft_printf("%s", ft_lltoa(e.array[al_order[u.i]].n_value, 16));
       }
       else
         ft_printf("                ");
-      if (type[al_order[i]])
-        ft_printf(" %c ", type[al_order[i]]);
+      if (type[al_order[u.i]])
+        ft_printf(" %c ", type[al_order[u.i]]);
       else
-        ft_printf(" %d ", array[al_order[i]].n_type);
-      ft_printf("%s\n",strtab + array[al_order[i]].n_un.n_strx);
+        ft_printf(" %d ", e.array[al_order[u.i]].n_type);
+      ft_printf("%s\n",u.strtab + e.array[al_order[u.i]].n_un.n_strx);
     }
-    if (str)
-      free(str);
+    if (u.str)
+      free(u.str);
   }
 }
 
