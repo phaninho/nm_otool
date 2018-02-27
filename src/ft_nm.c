@@ -157,11 +157,13 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr, char **sgname
     }
     if (i >= nsyms)
       break;
-      
+
     if (array[al_order[i]].n_type != 36 && array[al_order[i]].n_type != 38 && array[al_order[i]].n_type != 32)
     {
       if ((array[al_order[i]].n_value))
+      {
         ft_printf("0000000%s", ft_lltoa(array[al_order[i]].n_value, 16));
+      }
       else
         ft_printf("                ");
       if (type[al_order[i]])
@@ -251,21 +253,34 @@ void  nm(void *ptr)
     ft_putendl("Not a 64 bit binary");
 }
 
-void	 read_args(char *av)
+int	 read_args(char *av)
 {
   int fd;
   char  *ptr;
   struct stat buff;
 
-  if ((fd = open(av, O_RDONLY)) < 0)
+  if ((fd = open(av, O_RDONLY)) <= 0)
+  {
     ft_putendl("Open error");
+    return (1);
+  }
   if (fstat(fd, &buff) < 0)
+  {
     ft_putendl("fstat error");
+    return (1);
+  }
   if ((ptr = mmap(0, buff.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
+  {
     ft_putendl("mmap error");
+    return (1);
+  }
   nm(ptr);
   if (munmap(ptr, buff.st_size) < 0)
+  {
     ft_putendl("munmap error");
+    return (1);
+  }
+  return (0);
 }
 
 int main(int ac, char **av)
