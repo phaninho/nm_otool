@@ -24,11 +24,23 @@
 #include <mach-o/loader.h>
 #include <mach-o/nlist.h>
 
-typedef struct s_env
+typedef struct s_env64 t_env64;
+
+struct  s_env64
 {
+  int   i;
+  int   j;
+  int   k;
+  int   len;
+  char   **segname;
+  char   **sectname;
+  struct mach_header_64 *header;
+  struct load_command       *lc;
+  struct symtab_command   *sym;
+  struct section_64       *sct64;
+  struct segment_command_64 *sg64;
 
-} t_env;
-
+};
 char  *ft_lltoa(long long val, int base);
 
 #endif

@@ -87,23 +87,25 @@ char  *ft_lltoa(long long val, int base)
 }
 
 
-void    print_output(int nsyms, int symoff, int stroff, void *ptr, char **sgname, char **sctname)
+void    print_output(t_env64 e, void *ptr)
 {
+  // int nsyms, int symoff, int stroff, void *ptr, char **sgname, char **sctname
+
   int i;
-  // int run;
+  int len;
   char *strtab;
   struct nlist_64 *array;
-  char type[nsyms];
+  char type[e.sym->nsyms];
   char *str;
-  int  al_order[nsyms];
+  int  al_order[e.sym->nsyms];
 
-  array = ptr + symoff;
-  strtab = ptr + stroff;
+  array = ptr + e.sym->symoff;
+  strtab = ptr + e.sym->stroff;
   i =-1;
-  while (++i < nsyms)
+  while (++i < (int)e.sym->nsyms)
     al_order[i] = i;
   i = 0;
-  while (i < nsyms)
+  while (i < (int)e.sym->nsyms)
   {
     type[i] = array[i].n_type;
     if ((type[i] & N_STAB))
@@ -122,11 +124,11 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr, char **sgname
         type[i] = 'a';
       else if ((type[i] & N_TYPE) == N_SECT)
       {
-        if (ft_strcmp(sctname[(int)array[i].n_sect - 1], SECT_TEXT) == 0 && ft_strcmp(sgname[(int)array[i].n_sect - 1], SEG_TEXT) == 0)
+        if (ft_strcmp(e.sectname[(int)array[i].n_sect - 1], SECT_TEXT) == 0 && ft_strcmp(e.segname[(int)array[i].n_sect - 1], SEG_TEXT) == 0)
           type[i] = 't';
-        else if (ft_strcmp(sctname[(int)array[i].n_sect - 1], SECT_DATA) == 0 && ft_strcmp(sgname[(int)array[i].n_sect - 1], SEG_DATA) == 0)
+        else if (ft_strcmp(e.sectname[(int)array[i].n_sect - 1], SECT_DATA) == 0 && ft_strcmp(e.segname[(int)array[i].n_sect - 1], SEG_DATA) == 0)
           type[i] = 'd';
-        else if (ft_strcmp(sctname[(int)array[i].n_sect - 1], SECT_BSS) == 0 && ft_strcmp(sgname[(int)array[i].n_sect - 1], SEG_DATA) == 0)
+        else if (ft_strcmp(e.sectname[(int)array[i].n_sect - 1], SECT_BSS) == 0 && ft_strcmp(e.segname[(int)array[i].n_sect - 1], SEG_DATA) == 0)
           type[i] = 'b';
         else
           type[i] = 's';
@@ -144,25 +146,30 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr, char **sgname
     i++;
   }
   i = -1;
-  while (++i < nsyms)
+  while (++i < (int)e.sym->nsyms)
   {
     str = ft_strdup(strtab + array[al_order[i]].n_un.n_strx);
-    while (i < nsyms  && (!ft_strcmp("", str) || str[0] == '/' || (str[0] != '_'  && !(str[0] == 'd' && str[1] == 'y'))))
+    while (i < (int)e.sym->nsyms  && (!ft_strcmp("", str) || str[0] == '/' || \
+    (str[0] != '_'  && !(str[0] == 'G' && str[1] == 'C') && !(str[0] == 'd' && \
+    str[1] == 'y') && !(str[0] == '-' && str[1] == '[') && !(str[0] == '+' && str[1] == '['))))
     {
       i++;
-      if (i < nsyms)
+      if (i < (int)e.sym->nsyms)
         str = ft_strdup(strtab + array[al_order[i]].n_un.n_strx);
       else if (str)
         free(str);
     }
-    if (i >= nsyms)
+    if (i >= (int)e.sym->nsyms)
       break;
-
     if (array[al_order[i]].n_type != 36 && array[al_order[i]].n_type != 38 && array[al_order[i]].n_type != 32)
     {
       if ((array[al_order[i]].n_value))
       {
-        ft_printf("0000000%s", ft_lltoa(array[al_order[i]].n_value, 16));
+        if ((len = ft_strlen(ft_lltoa(array[al_order[i]].n_value, 16))) < 16)
+        len = 16 - len;
+        while (len-- > 0)
+          ft_putchar('0');
+        ft_printf("%s", ft_lltoa(array[al_order[i]].n_value, 16));
       }
       else
         ft_printf("                ");
@@ -177,68 +184,65 @@ void    print_output(int nsyms, int symoff, int stroff, void *ptr, char **sgname
   }
 }
 
+t_env64   init_env64()
+{
+  t_env64 e;
+
+  e.i = 0;
+  e.j = 0;
+  e.len = 0;
+  e.segname = NULL;
+  e.sectname = NULL;
+  return (e);
+}
+
 void handle_64(void *ptr)
 {
-  struct mach_header_64 *header;
-  struct load_command       *lc;
-  struct symtab_command   *sym;
-  struct section_64       *sct64;
-  struct segment_command_64 *sg64;
-  char   **segname;
-  char   **sectname;
-  int   i;
-  int   j;
-  int   k;
-  int len;
+  t_env64 e;
 
-  i = 0;
-  j = 0;
-  len = 0;
-  segname = NULL;
-  sectname = NULL;
-  header = (struct mach_header_64 *)ptr;
-  lc = ptr + sizeof(*header);
-
-  while (i++ < (int)header->ncmds)
+  e = init_env64();
+  e.header = (struct mach_header_64 *)ptr;
+  e.lc = ptr + sizeof(struct mach_header_64);
+  while (e.i++ < (int)e.header->ncmds)
   {
-    if (lc->cmd == LC_SEGMENT_64)
+    if (e.lc->cmd == LC_SEGMENT_64)
     {
 
-      sg64 = (struct segment_command_64 *)lc;
-      sct64 = (struct section_64 *)((char *)sg64 + sizeof(struct segment_command_64));
-      len = len == 0 ? sg64->nsects : (len + sg64->nsects);
-      if (!segname && !sectname)
+      e.sg64 = (struct segment_command_64 *)e.lc;
+      e.sct64 = (struct section_64 *)((char *)e.sg64 + sizeof(struct segment_command_64));
+      e.len = e.len == 0 ? e.sg64->nsects : (e.len + e.sg64->nsects);
+      if (!e.segname && !e.sectname)
       {
-        segname = (char **)malloc(sizeof(char *) * (len + 1));
-        sectname = (char **)malloc(sizeof(char *) * (len + 1));
+        e.segname = (char **)malloc(sizeof(char *) * (e.len + 1));
+        e.sectname = (char **)malloc(sizeof(char *) * (e.len + 1));
       }
-      else if (len)
+      else if (e.len)
       {
-        segname = (char **)realloc(segname, sizeof(char *) * (len + 1));
-        sectname = (char **)realloc(sectname, sizeof(char *) * (len + 1));
+        e.segname = (char **)realloc(e.segname, sizeof(char *) * (e.len + 1));
+        e.sectname = (char **)realloc(e.sectname, sizeof(char *) * (e.len + 1));
       }
-      segname[len] = NULL;
-      sectname[len] = NULL;
-      k = 0;
-      while (j < len)
+      e.segname[e.len] = NULL;
+      e.sectname[e.len] = NULL;
+      e.k = 0;
+      while (e.j < e.len)
       {
-        segname[j] = (char *)malloc(sizeof(char) * (ft_strlen((k + sct64)->segname) + 1));
-        segname[j][ft_strlen(sct64->segname)] = '\0';
-        ft_strcpy(segname[j], (k + sct64)->segname);
-        sectname[j] = (char *)malloc(sizeof(char) * (ft_strlen((k + sct64)->sectname) + 1));
-        sectname[j][ft_strlen(sct64->sectname)] = '\0';
-        ft_strcpy(sectname[j], (k + sct64)->sectname);
-        k++;
-        j++;
+        e.segname[e.j] = (char *)malloc(sizeof(char) * (ft_strlen((e.k + e.sct64)->segname) + 1));
+        e.segname[e.j][ft_strlen(e.sct64->segname)] = '\0';
+        ft_strcpy(e.segname[e.j], (e.k + e.sct64)->segname);
+        e.sectname[e.j] = (char *)malloc(sizeof(char) * (ft_strlen((e.k + e.sct64)->sectname) + 1));
+        e.sectname[e.j][ft_strlen(e.sct64->sectname)] = '\0';
+        ft_strcpy(e.sectname[e.j], (e.k + e.sct64)->sectname);
+        e.k++;
+        e.j++;
       }
     }
-    if (lc->cmd == LC_SYMTAB)
+    if (e.lc->cmd == LC_SYMTAB)
     {
-      sym = (struct symtab_command *)lc;
-      print_output(sym->nsyms, sym->symoff, sym->stroff, ptr, segname, sectname);
+      e.sym = (struct symtab_command *)e.lc;
+      print_output(e, ptr);
       break ;
     }
-    lc = (void *)lc + lc->cmdsize;
+    e.lc = (void *)e.lc + e.lc->cmdsize;
   }
 }
 
