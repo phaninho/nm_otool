@@ -18,15 +18,16 @@ int  check_display_cond32(t_ut u)
   !(u.str[0] == 'G' && u.str[1] == 'C') && \
   !(u.str[0] == 'd' && u.str[1] == 'y') && \
   !(u.str[0] == '-' && u.str[1] == '[') && \
-  !(u.str[0] == '+' && u.str[1] == '[')))
+  !(u.str[0] == '+' && u.str[1] == '[') && \
+  !(u.str[0] == '.' && u.str[1] == 'o')))
     return (1);
   return (0);
 }
 
 void	display_addr32(t_env32 e, t_ut u, int *al_order)
 {
-  if ((u.len = ft_strlen(ft_lltoa(e.array[al_order[u.i]].n_value, 16))) < 16)
-    u.len = 16 - u.len;
+  if ((u.len = ft_strlen(ft_lltoa(e.array[al_order[u.i]].n_value, 16))) < 8)
+    u.len = 8 - u.len;
   while (u.len-- > 0)
     ft_putchar('0');
   ft_printf("%s", ft_lltoa(e.array[al_order[u.i]].n_value, 16));
@@ -50,7 +51,7 @@ int	 display_symbol_type32(t_env32 e, t_ut u, int *al_order, char *type)
     if ((e.array[al_order[u.i]].n_value) || (u.o == 1 && type[al_order[u.i]] == 'T'))
       display_addr32(e, u, al_order);
     else
-      ft_printf("                ");
+      ft_printf("        ");
     if (type[al_order[u.i]])
       ft_printf(" %c ", type[al_order[u.i]]);
     else
