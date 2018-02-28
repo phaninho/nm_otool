@@ -86,15 +86,78 @@ char  *ft_lltoa(long long val, int base)
     return (ft_strdup(&buf[i + 1]));
 }
 
+char    define_symbol_type(char c, int addr_value, char *sct, char *seg)
+{
+  if ((c & N_TYPE) == N_UNDF)
+  {
+    c = 'u';
+    if (addr_value != 0)
+      c = 'c';
+  }
+  else if ((c & N_TYPE) == N_PBUD)
+     c = 'u';
+  else if ((c & N_TYPE) == N_ABS)
+    c = 'a';
+  else if ((c & N_TYPE) == N_SECT)
+  {
+    if (ft_strcmp(sct, SECT_TEXT) == 0 && ft_strcmp(seg, SEG_TEXT) == 0)
+      c = 't';
+    else if (ft_strcmp(sct, SECT_DATA) == 0 && ft_strcmp(seg, SEG_DATA) == 0)
+      c = 'd';
+    else if (ft_strcmp(sct, SECT_BSS) == 0 && ft_strcmp(seg, SEG_DATA) == 0)
+      c = 'b';
+    else
+      c = 's';
+  }
+  else if ((c & N_TYPE) == N_INDR)
+    c = 'i';
+  else
+    c = '?';
+  return (c);
+}
+
+int	 display_symbol_type(t_env64 e, t_ut u, int *al_order, char *type)
+{
+  u.str = ft_strdup(u.strtab + e.array[al_order[u.i]].n_un.n_strx);
+  while (u.i < (int)e.sym->nsyms  && (!ft_strcmp("", u.str) || u.str[0] == '/' || \
+  (u.str[0] != '_'  && !(u.str[0] == 'G' && u.str[1] == 'C') && !(u.str[0] == 'd' && \
+  u.str[1] == 'y') && !(u.str[0] == '-' && u.str[1] == '[') && !(u.str[0] == '+' && u.str[1] == '['))))
+  {
+    u.i++;
+    if (u.i < (int)e.sym->nsyms)
+      u.str = ft_strdup(u.strtab + e.array[al_order[u.i]].n_un.n_strx);
+    else if (u.str)
+      free(u.str);
+  }
+  if (u.i >= (int)e.sym->nsyms)
+    return (u.i);
+  if (e.array[al_order[u.i]].n_type != 36 && e.array[al_order[u.i]].n_type != 38 && e.array[al_order[u.i]].n_type != 32)
+  {
+    if ((e.array[al_order[u.i]].n_value))
+    {
+      if ((u.len = ft_strlen(ft_lltoa(e.array[al_order[u.i]].n_value, 16))) < 16)
+      u.len = 16 - u.len;
+      while (u.len-- > 0)
+        ft_putchar('0');
+      ft_printf("%s", ft_lltoa(e.array[al_order[u.i]].n_value, 16));
+    }
+    else
+      ft_printf("                ");
+    if (type[al_order[u.i]])
+      ft_printf(" %c ", type[al_order[u.i]]);
+    else
+      ft_printf(" %d ", e.array[al_order[u.i]].n_type);
+    ft_printf("%s\n",u.strtab + e.array[al_order[u.i]].n_un.n_strx);
+  }
+  if (u.str)
+    free(u.str);
+  return (u.i);
+}
 
 void    print_output(t_env64 e, void *ptr)
 {
-  // int i;
-  // int len;
-  // char *strtab;
   t_ut u;
   char type[e.sym->nsyms];
-  // char *str;
   int  al_order[e.sym->nsyms];
 
   e.array = ptr + e.sym->symoff;
@@ -109,34 +172,9 @@ void    print_output(t_env64 e, void *ptr)
     if ((type[u.i] & N_STAB))
       type[u.i] = '-';
     else
-    {
-      if ((type[u.i] & N_TYPE) == N_UNDF)
-      {
-        type[u.i] = 'u';
-        if ((e.array[u.i].n_value) != 0)
-          type[u.i] = 'c';
-      }
-      else if ((type[u.i] & N_TYPE) == N_PBUD)
-         type[u.i] = 'u';
-      else if ((type[u.i] & N_TYPE) == N_ABS)
-        type[u.i] = 'a';
-      else if ((type[u.i] & N_TYPE) == N_SECT)
-      {
-        if (ft_strcmp(e.sectname[(int)e.array[u.i].n_sect - 1], SECT_TEXT) == 0 && ft_strcmp(e.segname[(int)e.array[u.i].n_sect - 1], SEG_TEXT) == 0)
-          type[u.i] = 't';
-        else if (ft_strcmp(e.sectname[(int)e.array[u.i].n_sect - 1], SECT_DATA) == 0 && ft_strcmp(e.segname[(int)e.array[u.i].n_sect - 1], SEG_DATA) == 0)
-          type[u.i] = 'd';
-        else if (ft_strcmp(e.sectname[(int)e.array[u.i].n_sect - 1], SECT_BSS) == 0 && ft_strcmp(e.segname[(int)e.array[u.i].n_sect - 1], SEG_DATA) == 0)
-          type[u.i] = 'b';
-        else
-          type[u.i] = 's';
-      }
-      else if ((type[u.i] & N_TYPE) == N_INDR)
-        type[u.i] = 'i';
-      else
-        type[u.i] = '?';
-    }
-
+      type[u.i] = define_symbol_type(type[u.i], e.array[u.i].n_value, \
+        e.sectname[(int)e.array[u.i].n_sect - 1], \
+        e.segname[(int)e.array[u.i].n_sect - 1]);
     if ((e.array[u.i].n_type & N_EXT) && type[u.i] != '?')
       type[u.i] = ft_toupper(type[u.i]);
     if (u.i > 0)
@@ -145,41 +183,7 @@ void    print_output(t_env64 e, void *ptr)
   }
   u.i = -1;
   while (++u.i < (int)e.sym->nsyms)
-  {
-    u.str = ft_strdup(u.strtab + e.array[al_order[u.i]].n_un.n_strx);
-    while (u.i < (int)e.sym->nsyms  && (!ft_strcmp("", u.str) || u.str[0] == '/' || \
-    (u.str[0] != '_'  && !(u.str[0] == 'G' && u.str[1] == 'C') && !(u.str[0] == 'd' && \
-    u.str[1] == 'y') && !(u.str[0] == '-' && u.str[1] == '[') && !(u.str[0] == '+' && u.str[1] == '['))))
-    {
-      u.i++;
-      if (u.i < (int)e.sym->nsyms)
-        u.str = ft_strdup(u.strtab + e.array[al_order[u.i]].n_un.n_strx);
-      else if (u.str)
-        free(u.str);
-    }
-    if (u.i >= (int)e.sym->nsyms)
-      break;
-    if (e.array[al_order[u.i]].n_type != 36 && e.array[al_order[u.i]].n_type != 38 && e.array[al_order[u.i]].n_type != 32)
-    {
-      if ((e.array[al_order[u.i]].n_value))
-      {
-        if ((u.len = ft_strlen(ft_lltoa(e.array[al_order[u.i]].n_value, 16))) < 16)
-        u.len = 16 - u.len;
-        while (u.len-- > 0)
-          ft_putchar('0');
-        ft_printf("%s", ft_lltoa(e.array[al_order[u.i]].n_value, 16));
-      }
-      else
-        ft_printf("                ");
-      if (type[al_order[u.i]])
-        ft_printf(" %c ", type[al_order[u.i]]);
-      else
-        ft_printf(" %d ", e.array[al_order[u.i]].n_type);
-      ft_printf("%s\n",u.strtab + e.array[al_order[u.i]].n_un.n_strx);
-    }
-    if (u.str)
-      free(u.str);
-  }
+    u.i = display_symbol_type(e, u, al_order, type);
 }
 
 t_env64   init_env64()
