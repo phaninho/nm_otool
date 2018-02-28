@@ -29,7 +29,7 @@ int	 read_args(char *av)
   char        *ptr;
   struct stat buf;
 
-  if ((fd = open(av, O_RDONLY)) <= 0 || (fstat(fd, &buff) < 0))
+  if ((fd = open(av, O_RDONLY)) <= 0 || (fstat(fd, &buf) < 0))
   {
     ft_putendl("Open or fstat error");
     return (1);
