@@ -27,6 +27,7 @@
 
 typedef struct s_env32 t_env32;
 typedef struct s_env64 t_env64;
+typedef struct s_envfat t_envfat;
 typedef struct s_ut t_ut;
 
 struct  s_ut
@@ -68,6 +69,22 @@ struct  s_env64
   struct section_64       *sct64;
   struct segment_command_64 *sg64;
   struct nlist_64       *array;
+};
+
+struct  s_envfat
+{
+  // int   i;
+  // int   j;
+  // int   k;
+  // int   len;
+  // char   **segname;
+  // char   **sectname;
+  struct fat_header *header;
+  struct fat_arch       *lc;
+  // struct symtab_command   *sym;
+  // struct section_64       *sct64;
+  // struct segment_command_64 *sg64;
+  // struct nlist_64       *array;
 };
 
 void    print_output_32(t_env32 e, void *ptr, int o);
