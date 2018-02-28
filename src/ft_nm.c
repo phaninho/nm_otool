@@ -154,6 +154,13 @@ int	 display_symbol_type(t_env64 e, t_ut u, int *al_order, char *type)
   return (u.i);
 }
 
+void	  display_loop(t_env64 e, t_ut u, int *al_order, char *type)
+{
+  u.i = -1;
+  while (++u.i < (int)e.sym->nsyms)
+    u.i = display_symbol_type(e, u, al_order, type);
+}
+
 void    print_output(t_env64 e, void *ptr)
 {
   t_ut u;
@@ -181,9 +188,10 @@ void    print_output(t_env64 e, void *ptr)
       tab_alpha_order(al_order, e.array, u.strtab, u.i);
     u.i++;
   }
-  u.i = -1;
-  while (++u.i < (int)e.sym->nsyms)
-    u.i = display_symbol_type(e, u, al_order, type);
+  display_loop(e, u, al_order, type);
+  // u.i = -1;
+  // while (++u.i < (int)e.sym->nsyms)
+  //   u.i = display_symbol_type(e, u, al_order, type);
 }
 
 t_env64   init_env64()
