@@ -23,6 +23,7 @@
 #include "../libft/includes/libft.h"
 #include <mach-o/loader.h>
 #include <mach-o/nlist.h>
+#include <mach-o/fat.h>
 
 typedef struct s_env32 t_env32;
 typedef struct s_env64 t_env64;
