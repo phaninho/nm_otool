@@ -34,7 +34,7 @@ void  nm(void *ptr, char *av)
   else if (magic_number == (int)MH_MAGIC || magic_number == (int)MH_CIGAM)
     handle_32(ptr, o);
   else if (magic_number == (int)FAT_MAGIC || magic_number == (int)FAT_CIGAM)
-    ft_printf("C'est un FAT bin\n");
+    handle_fat(ptr, o);
 }
 
 int	 read_args(char *av)
