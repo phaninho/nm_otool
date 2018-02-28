@@ -32,7 +32,36 @@ int     is_in_alpha_order(char *str, char *cmp)
   return (0);
 }
 
-void	  tab_alpha_order(int *order, struct nlist_64 *array, char *strtab, int last)
+void	  tab_alpha_order32(int *order, struct nlist *array, char *strtab, int last)
+{
+  int t = 0;
+  char *str;
+  char *cmp;
+
+  cmp = NULL;
+  while (t < last)
+  {
+    cmp = ft_strdup(strtab + array[last].n_un.n_strx);
+    str = ft_strdup(strtab + array[order[t]].n_un.n_strx);
+    if (!ft_strcmp(str, cmp))
+    {
+      cmp = ft_strdup(ft_lltoa(array[last].n_value, 16));
+      str = ft_strdup(ft_lltoa(array[order[t]].n_value, 16));
+    }
+    if (is_in_alpha_order(str, cmp))
+    {
+      ft_swap(&order[t], &order[last]);
+      cmp = ft_strdup(strtab + array[order[last]].n_un.n_strx);
+    }
+    t++;
+  }
+  if (cmp)
+    free(cmp);
+  if (str)
+    free(str);
+}
+
+void	  tab_alpha_order64(int *order, struct nlist_64 *array, char *strtab, int last)
 {
   int t = 0;
   char *str;

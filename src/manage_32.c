@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   manage_64.c                                        :+:      :+:    :+:   */
+/*   manage_32.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,9 +12,9 @@
 
 #include "../include/nm_otool.h"
 
-t_env64   init_env64()
+t_env32   init_env32()
 {
-  t_env64 e;
+  t_env32 e;
 
   e.i = 0;
   e.j = 0;
@@ -24,21 +24,21 @@ t_env64   init_env64()
   return (e);
 }
 
-void	    alloc_and_copy(t_env64 e)
+void	    alloc_and_copy32(t_env32 e)
 {
-  e.segname[e.j] = (char *)malloc(sizeof(char) * (ft_strlen((e.k + e.sct64)->segname) + 1));
-  e.segname[e.j][ft_strlen(e.sct64->segname)] = '\0';
-  ft_strcpy(e.segname[e.j], (e.k + e.sct64)->segname);
-  e.sectname[e.j] = (char *)malloc(sizeof(char) * (ft_strlen((e.k + e.sct64)->sectname) + 1));
-  e.sectname[e.j][ft_strlen(e.sct64->sectname)] = '\0';
-  ft_strcpy(e.sectname[e.j], (e.k + e.sct64)->sectname);
+  e.segname[e.j] = (char *)malloc(sizeof(char) * (ft_strlen((e.k + e.sct32)->segname) + 1));
+  e.segname[e.j][ft_strlen(e.sct32->segname)] = '\0';
+  ft_strcpy(e.segname[e.j], (e.k + e.sct32)->segname);
+  e.sectname[e.j] = (char *)malloc(sizeof(char) * (ft_strlen((e.k + e.sct32)->sectname) + 1));
+  e.sectname[e.j][ft_strlen(e.sct32->sectname)] = '\0';
+  ft_strcpy(e.sectname[e.j], (e.k + e.sct32)->sectname);
 }
 
-t_env64   lc_segment_64(t_env64 e)
+t_env32   lc_segment_32(t_env32 e)
 {
-  e.sg64 = (struct segment_command_64 *)e.lc;
-  e.sct64 = (struct section_64 *)((char *)e.sg64 + sizeof(struct segment_command_64));
-  e.len = e.len == 0 ? e.sg64->nsects : (e.len + e.sg64->nsects);
+  e.sg32 = (struct segment_command *)e.lc;
+  e.sct32 = (struct section *)((char *)e.sg32 + sizeof(struct segment_command));
+  e.len = e.len == 0 ? e.sg32->nsects : (e.len + e.sg32->nsects);
   if (!e.segname && !e.sectname)
   {
     e.segname = (char **)malloc(sizeof(char *) * (e.len + 1));
@@ -54,28 +54,28 @@ t_env64   lc_segment_64(t_env64 e)
   e.k = 0;
   while (e.j < e.len)
   {
-    alloc_and_copy(e);
+    alloc_and_copy32(e);
     e.k++;
     e.j++;
   }
   return (e);
 }
 
-void handle_64(void *ptr, int o)
+void handle_32(void *ptr, int o)
 {
-  t_env64 e;
+  t_env32 e;
 
-  e = init_env64();
-  e.header = (struct mach_header_64 *)ptr;
-  e.lc = ptr + sizeof(struct mach_header_64);
+  e = init_env32();
+  e.header = (struct mach_header *)ptr;
+  e.lc = ptr + sizeof(struct mach_header);
   while (e.i++ < (int)e.header->ncmds)
   {
-    if (e.lc->cmd == LC_SEGMENT_64)
-      e = lc_segment_64(e);
+    if (e.lc->cmd == LC_SEGMENT)
+      e = lc_segment_32(e);
     if (e.lc->cmd == LC_SYMTAB)
     {
       e.sym = (struct symtab_command *)e.lc;
-      print_output_64(e, ptr, o);
+      print_output_32(e, ptr, o);
       break ;
     }
     e.lc = (void *)e.lc + e.lc->cmdsize;

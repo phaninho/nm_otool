@@ -31,8 +31,10 @@ void  nm(void *ptr, char *av)
   magic_number = *(int *)ptr;
   if (magic_number == (int)MH_MAGIC_64 || magic_number == (int)MH_CIGAM_64)
     handle_64(ptr, o);
+  else if (magic_number == (int)MH_MAGIC || magic_number == (int)MH_CIGAM)
+    handle_32(ptr, o);
   else
-    ft_putendl("Not a 64 bit binary");
+    ft_printf("Not a 32 or 64 bit binary, value of magic number %d\n", magic_number);
 }
 
 int	 read_args(char *av)
