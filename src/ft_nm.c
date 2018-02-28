@@ -12,35 +12,35 @@
 
 #include "../include/nm_otool.h"
 
-char    define_symbol_type(char c, int addr_value, char *sct, char *seg)
-{
-  if ((c & N_TYPE) == N_UNDF)
-  {
-    c = 'u';
-    if (addr_value != 0)
-      c = 'c';
-  }
-  else if ((c & N_TYPE) == N_PBUD)
-     c = 'u';
-  else if ((c & N_TYPE) == N_ABS)
-    c = 'a';
-  else if ((c & N_TYPE) == N_SECT)
-  {
-    if (ft_strcmp(sct, SECT_TEXT) == 0 && ft_strcmp(seg, SEG_TEXT) == 0)
-      c = 't';
-    else if (ft_strcmp(sct, SECT_DATA) == 0 && ft_strcmp(seg, SEG_DATA) == 0)
-      c = 'd';
-    else if (ft_strcmp(sct, SECT_BSS) == 0 && ft_strcmp(seg, SEG_DATA) == 0)
-      c = 'b';
-    else
-      c = 's';
-  }
-  else if ((c & N_TYPE) == N_INDR)
-    c = 'i';
-  else
-    c = '?';
-  return (c);
-}
+// char    define_symbol_type(char c, int addr_value, char *sct, char *seg)
+// {
+//   if ((c & N_TYPE) == N_UNDF)
+//   {
+//     c = 'u';
+//     if (addr_value != 0)
+//       c = 'c';
+//   }
+//   else if ((c & N_TYPE) == N_PBUD)
+//      c = 'u';
+//   else if ((c & N_TYPE) == N_ABS)
+//     c = 'a';
+//   else if ((c & N_TYPE) == N_SECT)
+//   {
+//     if (ft_strcmp(sct, SECT_TEXT) == 0 && ft_strcmp(seg, SEG_TEXT) == 0)
+//       c = 't';
+//     else if (ft_strcmp(sct, SECT_DATA) == 0 && ft_strcmp(seg, SEG_DATA) == 0)
+//       c = 'd';
+//     else if (ft_strcmp(sct, SECT_BSS) == 0 && ft_strcmp(seg, SEG_DATA) == 0)
+//       c = 'b';
+//     else
+//       c = 's';
+//   }
+//   else if ((c & N_TYPE) == N_INDR)
+//     c = 'i';
+//   else
+//     c = '?';
+//   return (c);
+// }
 
 void  nm(void *ptr)
 {
@@ -55,8 +55,8 @@ void  nm(void *ptr)
 
 int	 read_args(char *av)
 {
-  int fd;
-  char  *ptr;
+  int         fd;
+  char        *ptr;
   struct stat buff;
 
   if ((fd = open(av, O_RDONLY)) <= 0)
