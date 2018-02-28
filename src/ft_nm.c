@@ -88,9 +88,17 @@ int  check_display_cond(t_ut u)
   return (0);
 }
 
+void	display_addr(t_env64 e, t_ut u, int *al_order)
+{
+  if ((u.len = ft_strlen(ft_lltoa(e.array[al_order[u.i]].n_value, 16))) < 16)
+  u.len = 16 - u.len;
+  while (u.len-- > 0)
+    ft_putchar('0');
+  ft_printf("%s", ft_lltoa(e.array[al_order[u.i]].n_value, 16));
+}
+
 int	 display_symbol_type(t_env64 e, t_ut u, int *al_order, char *type)
 {
-  u.str = ft_strdup(u.strtab + e.array[al_order[u.i]].n_un.n_strx);
   while (u.i < (int)e.sym->nsyms  && check_display_cond(u))
   {
     u.i++;
@@ -105,13 +113,7 @@ int	 display_symbol_type(t_env64 e, t_ut u, int *al_order, char *type)
     e.array[al_order[u.i]].n_type != 38 && e.array[al_order[u.i]].n_type != 32)
   {
     if ((e.array[al_order[u.i]].n_value))
-    {
-      if ((u.len = ft_strlen(ft_lltoa(e.array[al_order[u.i]].n_value, 16))) < 16)
-      u.len = 16 - u.len;
-      while (u.len-- > 0)
-        ft_putchar('0');
-      ft_printf("%s", ft_lltoa(e.array[al_order[u.i]].n_value, 16));
-    }
+      display_addr(e, u, al_order);
     else
       ft_printf("                ");
     if (type[al_order[u.i]])
@@ -129,7 +131,10 @@ void	  display_loop(t_env64 e, t_ut u, int *al_order, char *type)
 {
   u.i = -1;
   while (++u.i < (int)e.sym->nsyms)
+  {
+    u.str = ft_strdup(u.strtab + e.array[al_order[u.i]].n_un.n_strx);
     u.i = display_symbol_type(e, u, al_order, type);
+  }
 }
 
 void    print_output(t_env64 e, void *ptr)
