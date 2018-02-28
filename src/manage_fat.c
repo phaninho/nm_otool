@@ -37,7 +37,9 @@ int arch_n;
   // archn = swap_endian(e.lc->cputype);
   printf("cputype[%d] offset %d size %d\n", swap_endian(e.lc->cputype), swap_endian(e.lc->offset), swap_endian(e.lc->size));
   if (swap_endian(e.lc->cputype) == CPU_TYPE_I386)
-    printf("ok\n");
+    // printf("ok\n");
+    handle_32((void *)ptr + (sizeof(struct fat_header) + sizeof(struct fat_arch) + swap_endian(e.lc->offset)), o);
+
   e.lc = (void *)e.lc + sizeof(struct fat_arch);
   printf("cputype[%d] offset %d size %d\n", swap_endian(e.lc->cputype), swap_endian(e.lc->offset), swap_endian(e.lc->size));
   if (swap_endian(e.lc->cputype) == CPU_TYPE_X86_64)
