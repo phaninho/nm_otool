@@ -61,7 +61,7 @@ t_env64   lc_segment_64(t_env64 e)
   return (e);
 }
 
-void handle_64(void *ptr)
+void handle_64(void *ptr, int o)
 {
   t_env64 e;
 
@@ -75,7 +75,7 @@ void handle_64(void *ptr)
     if (e.lc->cmd == LC_SYMTAB)
     {
       e.sym = (struct symtab_command *)e.lc;
-      print_output(e, ptr);
+      print_output(e, ptr, o);
       break ;
     }
     e.lc = (void *)e.lc + e.lc->cmdsize;

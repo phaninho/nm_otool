@@ -31,6 +31,7 @@ struct  s_ut
 {
   int i;
   int len;
+  int o;
   char *strtab;
   char *str;
 };
@@ -52,9 +53,9 @@ struct  s_env64
 
 };
 
-void    print_output(t_env64 e, void *ptr);
+void    print_output(t_env64 e, void *ptr, int o);
 void	  tab_alpha_order(int *order, struct nlist_64 *array, char *strtb, int l);
-void    handle_64(void *ptr);
+void    handle_64(void *ptr, int o);
 char    define_symbol_type(char c, int addr_value, char *sct, char *seg);
 
 #endif

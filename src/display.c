@@ -27,7 +27,7 @@ int  check_display_cond(t_ut u)
 void	display_addr(t_env64 e, t_ut u, int *al_order)
 {
   if ((u.len = ft_strlen(ft_lltoa(e.array[al_order[u.i]].n_value, 16))) < 16)
-  u.len = 16 - u.len;
+    u.len = 16 - u.len;
   while (u.len-- > 0)
     ft_putchar('0');
   ft_printf("%s", ft_lltoa(e.array[al_order[u.i]].n_value, 16));
@@ -48,7 +48,7 @@ int	 display_symbol_type(t_env64 e, t_ut u, int *al_order, char *type)
   if (e.array[al_order[u.i]].n_type != 36 && \
     e.array[al_order[u.i]].n_type != 38 && e.array[al_order[u.i]].n_type != 32)
   {
-    if ((e.array[al_order[u.i]].n_value))
+    if ((e.array[al_order[u.i]].n_value) || (u.o == 1 && type[al_order[u.i]] == 'T'))
       display_addr(e, u, al_order);
     else
       ft_printf("                ");
@@ -73,12 +73,13 @@ void	  display_loop(t_env64 e, t_ut u, int *al_order, char *type)
   }
 }
 
-void    print_output(t_env64 e, void *ptr)
+void    print_output(t_env64 e, void *ptr, int o)
 {
   t_ut u;
   char type[e.sym->nsyms];
   int  al_order[e.sym->nsyms];
 
+  u.o = o;
   e.array = ptr + e.sym->symoff;
   u.strtab = ptr + e.sym->stroff;
   u.i =-1;

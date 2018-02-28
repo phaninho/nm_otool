@@ -12,13 +12,25 @@
 
 #include "../include/nm_otool.h"
 
-void  nm(void *ptr)
+void  nm(void *ptr, char *av)
 {
   int   magic_number;
+  int   i;
+  int   len;
+  int   o;
 
+  o = 0;
+  i = -1;
+  len = ft_strlen(av);
+  while (++i < len)
+  {
+    if (av[i] && av[i] == '.' && av[i + 1] && av[i + 1] == 'o' \
+    && av[i + 2] == '\0')
+      o = 1;
+  }
   magic_number = *(int *)ptr;
   if (magic_number == (int)MH_MAGIC_64 || magic_number == (int)MH_CIGAM_64)
-    handle_64(ptr);
+    handle_64(ptr, o);
   else
     ft_putendl("Not a 64 bit binary");
 }
@@ -39,7 +51,7 @@ int	 read_args(char *av)
     ft_putendl("mmap error");
     return (1);
   }
-  nm(ptr);
+  nm(ptr, av);
   if (munmap(ptr, buf.st_size) < 0)
   {
     ft_putendl("munmap error");
