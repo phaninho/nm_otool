@@ -116,12 +116,19 @@ char    define_symbol_type(char c, int addr_value, char *sct, char *seg)
   return (c);
 }
 
+int  check_cond(t_ut u)
+{
+  if (!ft_strcmp("", u.str) || u.str[0] == '/' || \
+  (u.str[0] != '_'  && !(u.str[0] == 'G' && u.str[1] == 'C') && !(u.str[0] == 'd' && \
+  u.str[1] == 'y') && !(u.str[0] == '-' && u.str[1] == '[') && !(u.str[0] == '+' && u.str[1] == '[')))
+    return (1);
+  return (0);
+}
+
 int	 display_symbol_type(t_env64 e, t_ut u, int *al_order, char *type)
 {
   u.str = ft_strdup(u.strtab + e.array[al_order[u.i]].n_un.n_strx);
-  while (u.i < (int)e.sym->nsyms  && (!ft_strcmp("", u.str) || u.str[0] == '/' || \
-  (u.str[0] != '_'  && !(u.str[0] == 'G' && u.str[1] == 'C') && !(u.str[0] == 'd' && \
-  u.str[1] == 'y') && !(u.str[0] == '-' && u.str[1] == '[') && !(u.str[0] == '+' && u.str[1] == '['))))
+  while (u.i < (int)e.sym->nsyms  && check_cond(u))
   {
     u.i++;
     if (u.i < (int)e.sym->nsyms)
@@ -189,9 +196,6 @@ void    print_output(t_env64 e, void *ptr)
     u.i++;
   }
   display_loop(e, u, al_order, type);
-  // u.i = -1;
-  // while (++u.i < (int)e.sym->nsyms)
-  //   u.i = display_symbol_type(e, u, al_order, type);
 }
 
 t_env64   init_env64()
