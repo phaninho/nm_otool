@@ -51,6 +51,9 @@ struct  s_env64
   struct nlist_64       *array;
 
 };
-char  *ft_lltoa(long long val, int base);
+
+void    print_output(t_env64 e, void *ptr);
+char    define_symbol_type(char c, int addr_value, char *sct, char *seg);
+void	  tab_alpha_order(int *order, struct nlist_64 *array, char *strtb, int l);
 
 #endif
