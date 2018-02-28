@@ -1,33 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_intsize.c                                       :+:      :+:    :+:   */
+/*   ft_lltoa.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/07 13:39:52 by stmartin          #+#    #+#             */
-/*   Updated: 2018/02/28 10:16:26 by stmartin         ###   ########.fr       */
+/*   Created: 2018/02/28 10:06:50 by stmartin          #+#    #+#             */
+/*   Updated: 2018/02/28 10:09:41 by stmartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./includes/libft.h"
 
-size_t		ft_intsize(int nb)
+char  *ft_lltoa(long long val, int base)
 {
-	size_t	intsize;
+    char buf[64];
+    int i = 62;
+    int sign = (val < 0);
 
-	if (nb == 0)
-		return (1);
-	intsize = 0;
-	if (nb < 0)
-	{
-		intsize++;
-		nb = -nb;
-	}
-	while (nb != 0)
-	{
-		nb = nb / 10;
-		intsize++;
-	}
-	return (intsize);
+    if (sign)
+      val = -val;
+    if(val == 0)
+      return "0";
+    while(val && i)
+    {
+      buf[i] = "0123456789abcdef"[val % base];
+      i--;
+      val /= base;
+    }
+    if(sign)
+        buf[i--] = '-';
+    return (ft_strdup(&buf[i + 1]));
 }

@@ -36,8 +36,6 @@ void	  tab_alpha_order(int *order, struct nlist_64 *array, char *strtab, int las
       cmp = ft_strdup(ft_lltoa(array[last].n_value, 16));
       str = ft_strdup(ft_lltoa(array[order[t]].n_value, 16));
     }
-    // if (!ft_strcmp(cmp, "_is_in_alpha_order"))
-      // printf("\n[%s][%s]\n", str,cmp);
     if (is_in_alpha_order(str, cmp))
     {
       ft_swap(&order[t], &order[last]);
@@ -49,41 +47,6 @@ void	  tab_alpha_order(int *order, struct nlist_64 *array, char *strtab, int las
     free(cmp);
   if (str)
     free(str);
-}
-
-// int     check_tab_doubl(char *str, char *strtab, struct nlist_64 *array, int *tab, int lim)
-// {
-//   int   i;
-//
-//   i = 0;
-//   while (i < lim)
-//   {
-//     if (!ft_strcmp(str, strtab + array[tab[i]].n_un.n_strx))
-//       return (1);
-//     i++;
-//   }
-//   return (0);
-// }
-
-char  *ft_lltoa(long long val, int base)
-{
-    char buf[64];
-    int i = 62;
-    int sign = (val < 0);
-
-    if (sign)
-      val = -val;
-    if(val == 0)
-      return "0";
-    while(val && i)
-    {
-      buf[i] = "0123456789abcdef"[val % base];
-      i--;
-      val /= base;
-    }
-    if(sign)
-        buf[i--] = '-';
-    return (ft_strdup(&buf[i + 1]));
 }
 
 char    define_symbol_type(char c, int addr_value, char *sct, char *seg)
@@ -116,7 +79,7 @@ char    define_symbol_type(char c, int addr_value, char *sct, char *seg)
   return (c);
 }
 
-int  check_cond(t_ut u)
+int  check_display_cond(t_ut u)
 {
   if (!ft_strcmp("", u.str) || u.str[0] == '/' || \
   (u.str[0] != '_'  && !(u.str[0] == 'G' && u.str[1] == 'C') && !(u.str[0] == 'd' && \
@@ -128,7 +91,7 @@ int  check_cond(t_ut u)
 int	 display_symbol_type(t_env64 e, t_ut u, int *al_order, char *type)
 {
   u.str = ft_strdup(u.strtab + e.array[al_order[u.i]].n_un.n_strx);
-  while (u.i < (int)e.sym->nsyms  && check_cond(u))
+  while (u.i < (int)e.sym->nsyms  && check_display_cond(u))
   {
     u.i++;
     if (u.i < (int)e.sym->nsyms)
@@ -138,7 +101,8 @@ int	 display_symbol_type(t_env64 e, t_ut u, int *al_order, char *type)
   }
   if (u.i >= (int)e.sym->nsyms)
     return (u.i);
-  if (e.array[al_order[u.i]].n_type != 36 && e.array[al_order[u.i]].n_type != 38 && e.array[al_order[u.i]].n_type != 32)
+  if (e.array[al_order[u.i]].n_type != 36 && \
+    e.array[al_order[u.i]].n_type != 38 && e.array[al_order[u.i]].n_type != 32)
   {
     if ((e.array[al_order[u.i]].n_value))
     {

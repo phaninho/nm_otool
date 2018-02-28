@@ -6,7 +6,7 @@
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/07 16:57:38 by stmartin          #+#    #+#             */
-/*   Updated: 2018/02/23 18:10:41 by stmartin         ###   ########.fr       */
+/*   Updated: 2018/02/28 10:29:34 by stmartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ char				*ft_strncpy(char *dst, const char *src, size_t n);
 char				*ft_strcat(char *s1, const char *s2);
 char				*ft_strncat(char *s1, const char *s2, size_t n);
 size_t				ft_strlcat(char *s1, const char *s2, size_t n);
+size_t				ft_countword_btwsign(const char *s, char c);
 char				*ft_strchr(const char *s, int c);
 char				*ft_strrchr(const char *s, int c);
 char				*ft_strstr(const char *s1, const char *s2);
@@ -121,7 +122,8 @@ void				ft_lstdel(t_list **alst, void (*del)(void *, size_t));
 void				ft_lstadd(t_list **alst, t_list *nev);
 void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
-
+double				ft_p2(double nb);
+void				ft_tabdel(char ***tab);
 void				ft_swap(int *a, int *b);
 char				*ft_strrev(char *str);
 char				*ft_crypt(char *str);
@@ -146,6 +148,11 @@ char				*ft_ultoa(unsigned long n);
 char				*ft_ultoa_base(unsigned long value, int base);
 size_t				ft_size_ttoa(size_t n);
 int					ft_printf(const char * format, ...);
+double				ft_double_abs(double nb);
+int					ft_abs(int nb);
+size_t				ft_intsize(int nb);
+int					ft_isspace(int c);
+size_t				ft_move_sign(const char *s, char c, size_t i);
 
 const char		*percent_percent(const char *format, t_printf *printf);
 const char		*percent_percent_neg(const char *format, t_printf *printf);
@@ -213,6 +220,7 @@ void			while_precision_space(t_printf *print);
 void			while_space_number_zero(t_printf *print);
 void			write_null(t_printf *print);
 void			space_number_inf(t_printf *print);
+char			*ft_lltoa(long long val, int base);
 /*
 ** space_or_zero.c
 */

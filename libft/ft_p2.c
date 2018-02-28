@@ -6,11 +6,11 @@
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/05/12 15:55:51 by stmartin          #+#    #+#             */
-/*   Updated: 2016/05/12 15:56:51 by stmartin         ###   ########.fr       */
+/*   Updated: 2018/02/28 10:20:22 by stmartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
 double			ft_p2(double nb)
 {

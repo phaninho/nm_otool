@@ -6,11 +6,11 @@
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/03 20:11:02 by stmartin          #+#    #+#             */
-/*   Updated: 2015/12/14 21:19:40 by stmartin         ###   ########.fr       */
+/*   Updated: 2018/02/28 10:17:57 by stmartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "./includes/libft.h"
 
 size_t	ft_countword_btwsign(const char *s, char c)
 {
