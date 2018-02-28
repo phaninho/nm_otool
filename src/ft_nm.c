@@ -174,6 +174,16 @@ t_env64   init_env64()
   return (e);
 }
 
+void	    alloc_and_copy(t_env64 e)
+{
+  e.segname[e.j] = (char *)malloc(sizeof(char) * (ft_strlen((e.k + e.sct64)->segname) + 1));
+  e.segname[e.j][ft_strlen(e.sct64->segname)] = '\0';
+  ft_strcpy(e.segname[e.j], (e.k + e.sct64)->segname);
+  e.sectname[e.j] = (char *)malloc(sizeof(char) * (ft_strlen((e.k + e.sct64)->sectname) + 1));
+  e.sectname[e.j][ft_strlen(e.sct64->sectname)] = '\0';
+  ft_strcpy(e.sectname[e.j], (e.k + e.sct64)->sectname);
+}
+
 t_env64   lc_segment_64(t_env64 e)
 {
   e.sg64 = (struct segment_command_64 *)e.lc;
@@ -194,12 +204,7 @@ t_env64   lc_segment_64(t_env64 e)
   e.k = 0;
   while (e.j < e.len)
   {
-    e.segname[e.j] = (char *)malloc(sizeof(char) * (ft_strlen((e.k + e.sct64)->segname) + 1));
-    e.segname[e.j][ft_strlen(e.sct64->segname)] = '\0';
-    ft_strcpy(e.segname[e.j], (e.k + e.sct64)->segname);
-    e.sectname[e.j] = (char *)malloc(sizeof(char) * (ft_strlen((e.k + e.sct64)->sectname) + 1));
-    e.sectname[e.j][ft_strlen(e.sct64->sectname)] = '\0';
-    ft_strcpy(e.sectname[e.j], (e.k + e.sct64)->sectname);
+    alloc_and_copy(e);
     e.k++;
     e.j++;
   }
