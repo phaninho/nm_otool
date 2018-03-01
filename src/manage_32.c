@@ -61,13 +61,15 @@ t_env32   lc_segment_32(t_env32 e)
   return (e);
 }
 
-void handle_32(void *ptr, int o)
+int   handle_32(void *ptr, int o)
 {
   t_env32 e;
 
   e = init_env32();
   e.header = (struct mach_header *)ptr;
   e.lc = ptr + sizeof(struct mach_header);
+  if (check_bin_limit(e.header) || check_bin_limit(e.lc))
+    return (ft_printf("Corrupted file\n"));
   while (e.i++ < (int)e.header->ncmds)
   {
     if (e.lc->cmd == LC_SEGMENT)
@@ -80,4 +82,5 @@ void handle_32(void *ptr, int o)
     }
     e.lc = (void *)e.lc + e.lc->cmdsize;
   }
+  return (0);
 }

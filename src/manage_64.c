@@ -61,13 +61,15 @@ t_env64   lc_segment_64(t_env64 e)
   return (e);
 }
 
-void handle_64(void *ptr, int o)
+int handle_64(void *ptr, int o)
 {
   t_env64 e;
 
   e = init_env64();
   e.header = (struct mach_header_64 *)ptr;
   e.lc = ptr + sizeof(struct mach_header_64);
+  if (check_bin_limit(e.header) || check_bin_limit(e.lc))
+    return (ft_printf("Corrupted file\n"));
   while (e.i++ < (int)e.header->ncmds)
   {
     if (e.lc->cmd == LC_SEGMENT_64)
@@ -80,4 +82,5 @@ void handle_64(void *ptr, int o)
     }
     e.lc = (void *)e.lc + e.lc->cmdsize;
   }
+  return (0);
 }

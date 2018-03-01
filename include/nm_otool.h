@@ -77,9 +77,10 @@ void    print_output_32(t_env32 e, void *ptr, int o);
 void    print_output_64(t_env64 e, void *ptr, int o);
 void	  tab_alpha_order32(int *order, struct nlist *array, char *strtb, int l);
 void	  tab_alpha_order64(int *order, struct nlist_64 *array, char *strtb, int l);
-void    handle_32(void *ptr, int o);
-void    handle_64(void *ptr, int o);
+int     handle_32(void *ptr, int o);
+int     handle_64(void *ptr, int o);
 int     handle_fat(void *ptr, char *av);
+int 		check_bin_limit(void *ptr);
 char    define_symbol_type(char c, int addr_value, char *sct, char *seg);
 
 #endif
