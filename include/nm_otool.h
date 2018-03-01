@@ -73,8 +73,8 @@ struct  s_env64
 };
 
 void    nm(void *ptr, char *av);
-void    print_output_32(t_env32 e, void *ptr, int o);
-void    print_output_64(t_env64 e, void *ptr, int o);
+int     print_output_32(t_env32 e, void *ptr, int o);
+int     print_output_64(t_env64 e, void *ptr, int o);
 void	  tab_alpha_order32(int *order, struct nlist *array, char *strtb, int l);
 void	  tab_alpha_order64(int *order, struct nlist_64 *array, char *strtb, int l);
 int     handle_32(void *ptr, int o);

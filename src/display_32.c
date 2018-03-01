@@ -73,7 +73,7 @@ void	  display_loop32(t_env32 e, t_ut u, int *al_order, char *type)
   }
 }
 
-void    print_output_32(t_env32 e, void *ptr, int o)
+int    print_output_32(t_env32 e, void *ptr, int o)
 {
   t_ut u;
   char type[e.sym->nsyms];
@@ -82,6 +82,8 @@ void    print_output_32(t_env32 e, void *ptr, int o)
   u.o = o;
   e.array = ptr + e.sym->symoff;
   u.strtab = ptr + e.sym->stroff;
+  if (check_bin_limit(e.array) || check_bin_limit(u.strtab))
+    return (1);
   u.i =-1;
   while (++u.i < (int)e.sym->nsyms)
     al_order[u.i] = u.i;
@@ -102,4 +104,5 @@ void    print_output_32(t_env32 e, void *ptr, int o)
     u.i++;
   }
   display_loop32(e, u, al_order, type);
+  return (0);
 }
