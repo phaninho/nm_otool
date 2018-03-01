@@ -25,10 +25,11 @@
 #include <mach-o/nlist.h>
 #include <mach-o/fat.h>
 
-typedef struct s_env32 t_env32;
-typedef struct s_env64 t_env64;
+void                    *g_buf_limit;
+typedef struct s_env32  t_env32;
+typedef struct s_env64  t_env64;
 typedef struct s_envfat t_envfat;
-typedef struct s_ut t_ut;
+typedef struct s_ut     t_ut;
 
 struct  s_ut
 {
@@ -78,7 +79,7 @@ void	  tab_alpha_order32(int *order, struct nlist *array, char *strtb, int l);
 void	  tab_alpha_order64(int *order, struct nlist_64 *array, char *strtb, int l);
 void    handle_32(void *ptr, int o);
 void    handle_64(void *ptr, int o);
-void    handle_fat(void *ptr, char *av);
+int     handle_fat(void *ptr, char *av);
 char    define_symbol_type(char c, int addr_value, char *sct, char *seg);
 
 #endif

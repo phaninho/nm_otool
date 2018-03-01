@@ -53,6 +53,7 @@ int	 read_args(char *av)
     ft_putendl("mmap error");
     return (1);
   }
+  g_buf_limit = ptr + buf.st_size;
   nm(ptr, av);
   if (munmap(ptr, buf.st_size) < 0)
   {
