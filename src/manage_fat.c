@@ -1,4 +1,4 @@
-#include "../include/nm_otool.h"
+#include "nm_otool.h"
 
 int		check_bin_limit(void *ptr)
 {

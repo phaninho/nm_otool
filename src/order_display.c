@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/nm_otool.h"
+#include "nm_otool.h"
 
 int     is_in_alpha_order(char *str, char *cmp)
 {

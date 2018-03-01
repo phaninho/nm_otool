@@ -40,7 +40,7 @@ all: lib
 	@make $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(INC) $^ -o $@ $(LIB) $(LIB_NAME)
+	$(CC) -I $(INC) $^ -o $@ $(LIB) $(LIB_NAME)
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c $(DEP)
 	@mkdir -p $(OBJ_PATH)

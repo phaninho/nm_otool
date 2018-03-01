@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/nm_otool.h"
+#include "nm_otool.h"
 
 void  nm(void *ptr, char *av)
 {

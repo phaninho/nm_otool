@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/nm_otool.h"
+#include "nm_otool.h"
 
 char    define_symbol_type(char c, int addr_value, char *sct, char *seg)
 {
