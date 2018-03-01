@@ -80,7 +80,7 @@ struct  s_envfat
   // char   **segname;
   // char   **sectname;
   struct fat_header *header;
-  struct fat_arch       *lc;
+  struct fat_arch   *arch;
   // struct symtab_command   *sym;
   // struct section_64       *sct64;
   // struct segment_command_64 *sg64;
