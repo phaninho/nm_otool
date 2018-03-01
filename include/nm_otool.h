@@ -71,29 +71,14 @@ struct  s_env64
   struct nlist_64       *array;
 };
 
-struct  s_envfat
-{
-  // int   i;
-  // int   j;
-  // int   k;
-  // int   len;
-  // char   **segname;
-  // char   **sectname;
-  struct fat_header *header;
-  struct fat_arch   *arch;
-  // struct symtab_command   *sym;
-  // struct section_64       *sct64;
-  // struct segment_command_64 *sg64;
-  // struct nlist_64       *array;
-};
-
+void    nm(void *ptr, char *av);
 void    print_output_32(t_env32 e, void *ptr, int o);
 void    print_output_64(t_env64 e, void *ptr, int o);
 void	  tab_alpha_order32(int *order, struct nlist *array, char *strtb, int l);
 void	  tab_alpha_order64(int *order, struct nlist_64 *array, char *strtb, int l);
 void    handle_32(void *ptr, int o);
 void    handle_64(void *ptr, int o);
-void    handle_fat(void *ptr, int o);
+void    handle_fat(void *ptr, char *av);
 char    define_symbol_type(char c, int addr_value, char *sct, char *seg);
 
 #endif

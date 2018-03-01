@@ -19,71 +19,41 @@
 //                   ((n<<24)&0xff000000));
 // }
 
-int		swap_bin(int val)
+int		swap_bin(int n, unsigned int magic_number)
 {
-	return (((val & 0xFF) << 24) | (((val >> 8) & 0xFF) << 16) |
-		(((val >> 16) & 0xFF) << 8) | ((val >> 24) & 0xFF));
+	if (magic_number == FAT_MAGIC || magic_number == MH_MAGIC || \
+		magic_number == MH_MAGIC_64)
+		return (n);
+	return (((n >> 24) & 0xff) | ((n << 8) & 0xff0000) | ((n >> 8) & 0xff00) | \
+	((n << 24) & 0xff000000));
 }
 
-void handle_fat(void *ptr, int o)
+void handle_fat(void *ptr, char *av)
 {
-//   t_envfat e;
-//   // struct fat_header *header;
-// int arch_n;
-// (void)o;
-//   // e = init_env_fat();
-//   e.header = (struct fat_header *)ptr;
-//   arch_n = e.header->nfat_arch;
-//   if (e.header->magic == FAT_CIGAM)
-//   {
-//     arch_n = swap_endian(e.header->nfat_arch);
-//     printf("sizeof(struct fat_arch) => [%lu]\n", sizeof(struct fat_arch));
-//   }
-//   e.arch = (void *)e.header + sizeof(struct fat_header);
-//   // archn = swap_endian(e.lc->cputype);
-//   printf("cputype[%d] offset %d size %d\n", swap_endian(e.arch->cputype), swap_endian(e.arch->offset), swap_endian(e.arch->size));
-//   if (swap_endian(e.arch->cputype) == CPU_TYPE_I386)
-//     printf("ok\n");
-
-struct fat_header		*fat_header;
+	struct fat_header		*fat_header;
 	struct fat_arch			*arch;
-	uint32_t				offset;
-	struct mach_header_64	*header;
+	int	offset;
+	t_env64		e;
 	int				i;
+	unsigned int   		magic_number;
 
+
+	magic_number = *(int *)ptr;
 	fat_header = (struct fat_header *)ptr;
 	arch = (void *)fat_header + sizeof(*fat_header);
-	offset = swap_bin(arch->offset);
+	offset = swap_bin(arch->offset, magic_number);
 	i = 0;
-	while (i < swap_bin(fat_header->nfat_arch))
+	while (i < swap_bin(fat_header->nfat_arch, magic_number))
 	{
-		offset = swap_bin(arch->offset);
-		header = (void *)ptr + offset;
-		if (swap_bin(arch->cputype) == CPU_TYPE_X86_64)
+		offset = swap_bin(arch->offset, magic_number);
+		e.header = (void *)ptr + offset;
+		if (swap_bin(arch->cputype, magic_number) == CPU_TYPE_X86_64)
 			break ;
 		arch = (void *)arch + sizeof(*arch);
 		// if (check_range_addr(arch) || check_range_addr(header))
 			// return (print_error("file", "truncated or malformed object"));
 		i++;
 	}
-	header = (void *)ptr + offset;
-  handle_64((void *)header, o);
-    // handle_32((void *)e.lc + sizeof(struct fat_arch) + swap_endian(e.lc->offset), o);
-
-  // e.lc = (void *)e.lc + sizeof(struct fat_arch);
-  // printf("cputype[%d] offset %d size %d\n", swap_endian(e.lc->cputype), swap_endian(e.lc->offset), swap_endian(e.lc->size));
-  // if (swap_endian(e.lc->cputype) == CPU_TYPE_X86_64)
-  //   printf("ok\n");
-  // while (e.i++ < (int)e.header->ncmds)
-  // {
-  //   if (e.lc->cmd == LC_SEGMENT)
-  //     e = lc_segment_fat(e);
-  //   if (e.lc->cmd == LC_SYMTAB)
-  //   {
-  //     e.sym = (struct symtab_command *)e.lc;
-  //     print_output_fat(e, ptr, o);
-  //     break ;
-  //   }
-  //   e.lc = (void *)e.lc + e.lc->cmdsize;
-  // }
+	e.header = (void *)ptr + offset;
+  nm((void *)e.header, av);
 }
