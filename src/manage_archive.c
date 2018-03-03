@@ -5,6 +5,21 @@ int   get_arch_len(char *file_info)
   return (ft_atoi(ft_strchr(file_info, '/') + 1));
 }
 
+int			remove_lst_doubl(t_arlst *lst, uint32_t off)
+{
+	t_arlst	*tmp;
+
+	tmp = lst;
+	while (tmp)
+	{
+		if (tmp->off == off)
+			return (1);
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
+
 t_arlst  *build_lst(uint32_t off, uint32_t strx, t_arlst *lst)
 {
   t_arlst  *new;
@@ -19,6 +34,8 @@ t_arlst  *build_lst(uint32_t off, uint32_t strx, t_arlst *lst)
   tmp = lst;
   while (tmp->next)
     tmp = tmp->next;
+  if (remove_lst_doubl(lst, off))
+    return (lst);
   tmp->next = new;
   return (lst);
 }
