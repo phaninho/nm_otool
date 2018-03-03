@@ -19,7 +19,9 @@ int  check_display_cond32(t_ut u)
   !(u.str[0] == 'd' && u.str[1] == 'y') && \
   !(u.str[0] == '-' && u.str[1] == '[') && \
   !(u.str[0] == '+' && u.str[1] == '[') && \
-  !(u.str[0] == '.' && u.str[1] == 'o')))
+  !(u.str[0] == '.' && u.str[1] == 'o') && \
+  !(u.str[0] == 'E' && u.str[1] == 'H') && \
+  !(u.str[0] == 'L' && u.str[1] == 'C')))
     return (1);
   return (0);
 }
