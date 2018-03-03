@@ -6,7 +6,7 @@
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/23 15:51:56 by stmartin          #+#    #+#             */
-/*   Updated: 2018/03/03 23:43:30 by stmartin         ###   ########.fr       */
+/*   Updated: 2018/03/04 00:27:49 by stmartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,9 @@ int								handle_archive(void *ptr, char *av);
 int								check_bin_limit(void *ptr);
 char							define_symbol_type(char c, int addr_value,
 		char *sct, char *seg);
+char							define_symbol_type_ut32(char *type,
+		t_env32 e, t_ut u, int *al_order);
+char							define_symbol_type_ut64(char *type,
+		t_env64 e, t_ut u, int *al_order);
 
 #endif

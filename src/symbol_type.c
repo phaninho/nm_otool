@@ -6,11 +6,42 @@
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 11:36:31 by stmartin          #+#    #+#             */
-/*   Updated: 2018/02/28 11:36:34 by stmartin         ###   ########.fr       */
+/*   Updated: 2018/03/04 00:29:47 by stmartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm_otool.h"
+
+char	define_symbol_type_ut32(char *type, t_env32 e, t_ut u, int *al_order)
+{
+	if ((type[u.i] & N_STAB))
+		type[u.i] = '-';
+	else
+		type[u.i] = define_symbol_type(type[u.i], e.array[u.i].n_value, \
+				e.sectname[(int)e.array[u.i].n_sect - 1], \
+				e.segname[(int)e.array[u.i].n_sect - 1]);
+	if ((e.array[u.i].n_type & N_EXT) && type[u.i] != '?')
+		type[u.i] = ft_toupper(type[u.i]);
+	if (u.i > 0)
+		tab_alpha_order32(al_order, e.array, u.strtab, u.i);
+	return (type[u.i]);
+}
+
+char	define_symbol_type_ut64(char *type, t_env64 e, t_ut u, int *al_order)
+{
+	if ((type[u.i] & N_STAB))
+		type[u.i] = '-';
+	else
+		type[u.i] = define_symbol_type(type[u.i], e.array[u.i].n_value, \
+				e.sectname[(int)e.array[u.i].n_sect - 1], \
+				e.segname[(int)e.array[u.i].n_sect - 1]);
+	if ((e.array[u.i].n_type & N_EXT) && type[u.i] != '?')
+		type[u.i] = ft_toupper(type[u.i]);
+	if (u.i > 0)
+		tab_alpha_order64(al_order, e.array, u.strtab, u.i);
+	return (type[u.i]);
+}
+
 
 char    define_symbol_type(char c, int addr_value, char *sct, char *seg)
 {

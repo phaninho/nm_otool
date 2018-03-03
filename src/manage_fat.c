@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   manage_fat.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/03/04 00:18:22 by stmartin          #+#    #+#             */
+/*   Updated: 2018/03/04 00:18:24 by stmartin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "nm_otool.h"
 
 int		check_bin_limit(void *ptr)
@@ -16,13 +28,13 @@ int		swap_bin(int n, unsigned int magic_number)
 	((n << 24) & 0xff000000));
 }
 
-int handle_fat(void *ptr, char *av)
+int		handle_fat(void *ptr, char *av)
 {
 	struct fat_header		*fat_header;
 	struct fat_arch			*arch;
-	int	offset;
-	t_env64		e;
-	int				i;
+	int						offset;
+	t_env64					e;
+	int						i;
 
 	fat_header = (struct fat_header *)ptr;
 	arch = (void *)fat_header + sizeof(*fat_header);
@@ -39,6 +51,6 @@ int handle_fat(void *ptr, char *av)
 			return (ft_printf("%s is a corrupted file\n", av));
 		i++;
 	}
-  nm((void *)ptr + offset, av);
+	nm((void *)ptr + offset, av);
 	return (0);
 }
