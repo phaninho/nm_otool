@@ -46,10 +46,8 @@ int     is_in_alpha_order(char *str, char *cmp, int check_addr)
   int len_str;
   int len_cmp;
   int i;
-  int j;
 
   i = 0;
-  j = 0;
   len_str = ft_strlen(str);
   len_cmp = ft_strlen(cmp);
   if (check_addr)
@@ -121,16 +119,9 @@ void	  tab_alpha_order64(int *order, struct nlist_64 *array, char *strtab, int l
       check_addr = 1;
       cmp = ft_strdup(ft_lltoa(array[last].n_value, 16));
       str = ft_strdup(ft_lltoa(array[order[t]].n_value, 16));
-      // if (!ft_strcmp(cmp, "120"))
-      // ft_printf("\n\n\n\n\n\n\n%s %s\n\n\n\n\n\n\n\n\n\n", cmp, str);
     }
     if (is_in_alpha_order(str, cmp, check_addr))
-    {
-      // ft_printf("t=>%s last=>%s ", ft_lltoa(array[order[t]].n_value, 16), ft_lltoa(array[order[last]].n_value, 16));
       ft_swap(&order[t], &order[last]);
-      // ft_printf("t=>%s last=>%s\n",ft_lltoa(array[order[t]].n_value, 16), ft_lltoa(array[order[last]].n_value, 16));
-      // cmp = ft_strdup(strtab + array[order[last]].n_un.n_strx);
-    }
   }
   if (cmp)
     free(cmp);
