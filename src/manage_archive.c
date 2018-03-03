@@ -53,7 +53,7 @@ void  display_archive(t_arlst *lst, void *ptr, char *av)
       ar = (void *)ptr + tmp->off;
       nmsize = get_arch_len(ar->ar_name);
       name = ft_strstr(ar->ar_name, ARFMAG) + ft_strlen(ARFMAG);
-      ft_printf("\n%s(%s):\n", av, name);
+      ft_printf("\n%s(%s):\n",  av, name);
       nm((void*)ar + sizeof(*ar) + nmsize, av);
       tmp = tmp->next;
     }
@@ -96,10 +96,9 @@ int   handle_archive(void *ptr, char *av)
 
   lst = NULL;
   len = get_arch_len((char *)ptr);
-  offset = ptr + sizeof(struct ar_hdr) + len + SARMAG;
-  ran = (void*)ptr + sizeof(struct ar_hdr) + SARMAG + len + sizeof(uint32_t);
-	size = (*((int *)offset)) / sizeof(ran);
-  // ft_printf("et len = %d\n", size);
+  offset = (void *)ptr + sizeof(struct ar_hdr) + len + SARMAG;
+  ran = (void *)ptr + sizeof(struct ar_hdr) + SARMAG + len + sizeof(uint32_t);
+	size = (*((int *)offset)) / sizeof(struct ranlib);
   len = -1;
 	while (++len < size)
 		lst = build_lst(ran[len].ran_off, ran[len].ran_un.ran_strx, lst);
