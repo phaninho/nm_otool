@@ -24,12 +24,16 @@
 #include <mach-o/loader.h>
 #include <mach-o/nlist.h>
 #include <mach-o/fat.h>
+#include <mach-o/ranlib.h>
+#include <ar.h>
 
 void                    *g_buf_limit;
 typedef struct s_env32  t_env32;
 typedef struct s_env64  t_env64;
 typedef struct s_envfat t_envfat;
 typedef struct s_ut     t_ut;
+typedef struct s_arlst  t_arlst;
+
 
 struct  s_ut
 {
@@ -38,6 +42,13 @@ struct  s_ut
   int o;
   char *strtab;
   char *str;
+};
+
+struct  s_arlst
+{
+  uint32_t    off;
+	uint32_t    strx;
+	struct s_arlst	*next;
 };
 
 struct  s_env32
@@ -80,6 +91,7 @@ void	  tab_alpha_order64(int *order, struct nlist_64 *array, char *strtb, int l)
 int     handle_32(void *ptr, int o);
 int     handle_64(void *ptr, int o);
 int     handle_fat(void *ptr, char *av);
+int     handle_archive(void *ptr);
 int 		check_bin_limit(void *ptr);
 char    define_symbol_type(char c, int addr_value, char *sct, char *seg);
 

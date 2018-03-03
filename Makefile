@@ -22,7 +22,7 @@ INC_PATH = ./include/ ./libft/
 LIB_PATH = ./libft/
 
 SRC_NAME = ft_nm.c display_64.c manage_64.c display_32.c manage_32.c \
-	order_display.c symbol_type.c manage_fat.c
+	order_display.c symbol_type.c manage_fat.c manage_archive.c
 OBJ_NAME = $(SRC_NAME:.c=.o)
 LIB_NAME = -lft
 DEP = ./include/nm_otool.h
