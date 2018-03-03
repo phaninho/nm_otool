@@ -51,7 +51,7 @@ void	  tab_alpha_order32(int *order, struct nlist *array, char *strtab, int last
     if (is_in_alpha_order(str, cmp))
     {
       ft_swap(&order[t], &order[last]);
-      cmp = ft_strdup(strtab + array[order[last]].n_un.n_strx);
+      // cmp = ft_strdup(strtab + array[order[last]].n_un.n_strx);
     }
     t++;
   }
@@ -80,7 +80,7 @@ void	  tab_alpha_order64(int *order, struct nlist_64 *array, char *strtab, int l
     if (is_in_alpha_order(str, cmp))
     {
       ft_swap(&order[t], &order[last]);
-      cmp = ft_strdup(strtab + array[order[last]].n_un.n_strx);
+      // cmp = ft_strdup(strtab + array[order[last]].n_un.n_strx);
     }
     t++;
   }
