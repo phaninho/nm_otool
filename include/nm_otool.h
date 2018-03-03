@@ -91,7 +91,7 @@ void	  tab_alpha_order64(int *order, struct nlist_64 *array, char *strtb, int l)
 int     handle_32(void *ptr, int o);
 int     handle_64(void *ptr, int o);
 int     handle_fat(void *ptr, char *av);
-int     handle_archive(void *ptr);
+int     handle_archive(void *ptr, char *av);
 int 		check_bin_limit(void *ptr);
 char    define_symbol_type(char c, int addr_value, char *sct, char *seg);
 
