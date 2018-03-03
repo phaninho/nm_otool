@@ -6,7 +6,7 @@
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/23 15:51:56 by stmartin          #+#    #+#             */
-/*   Updated: 2018/03/04 00:27:49 by stmartin         ###   ########.fr       */
+/*   Updated: 2018/03/04 00:51:52 by stmartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ struct							s_env64
 void							nm(void *ptr, char *av);
 int								print_output_32(t_env32 e, void *ptr, int o);
 int								print_output_64(t_env64 e, void *ptr, int o);
-void							tab_alpha_order32(int *order,
+void							al_ord32(int *order,
 		struct nlist *array, char *strtb, int l);
-void							tab_alpha_order64(int *order,
+void							al_ord64(int *order,
 		struct nlist_64 *arr, char *strtb, int l);
 int								handle_32(void *ptr, int o);
 int								handle_64(void *ptr, int o);
@@ -99,5 +99,6 @@ char							define_symbol_type_ut32(char *type,
 		t_env32 e, t_ut u, int *al_order);
 char							define_symbol_type_ut64(char *type,
 		t_env64 e, t_ut u, int *al_order);
+t_arlst							*offset_ascending_order(t_arlst *lst);
 
 #endif

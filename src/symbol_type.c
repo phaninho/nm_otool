@@ -6,7 +6,7 @@
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 11:36:31 by stmartin          #+#    #+#             */
-/*   Updated: 2018/03/04 00:29:47 by stmartin         ###   ########.fr       */
+/*   Updated: 2018/03/04 00:50:12 by stmartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	define_symbol_type_ut32(char *type, t_env32 e, t_ut u, int *al_order)
 	if ((e.array[u.i].n_type & N_EXT) && type[u.i] != '?')
 		type[u.i] = ft_toupper(type[u.i]);
 	if (u.i > 0)
-		tab_alpha_order32(al_order, e.array, u.strtab, u.i);
+		al_ord32(al_order, e.array, u.strtab, u.i);
 	return (type[u.i]);
 }
 
@@ -38,37 +38,32 @@ char	define_symbol_type_ut64(char *type, t_env64 e, t_ut u, int *al_order)
 	if ((e.array[u.i].n_type & N_EXT) && type[u.i] != '?')
 		type[u.i] = ft_toupper(type[u.i]);
 	if (u.i > 0)
-		tab_alpha_order64(al_order, e.array, u.strtab, u.i);
+		al_ord64(al_order, e.array, u.strtab, u.i);
 	return (type[u.i]);
 }
 
-
-char    define_symbol_type(char c, int addr_value, char *sct, char *seg)
+char	define_symbol_type(char c, int addr_value, char *sct, char *sg)
 {
-  if ((c & N_TYPE) == N_UNDF)
-  {
-    c = 'u';
-    if (addr_value != 0)
-      c = 'c';
-  }
-  else if ((c & N_TYPE) == N_PBUD)
-     c = 'u';
-  else if ((c & N_TYPE) == N_ABS)
-    c = 'a';
-  else if ((c & N_TYPE) == N_SECT)
-  {
-    if (ft_strcmp(sct, SECT_TEXT) == 0 && ft_strcmp(seg, SEG_TEXT) == 0)
-      c = 't';
-    else if (ft_strcmp(sct, SECT_DATA) == 0 && ft_strcmp(seg, SEG_DATA) == 0)
-      c = 'd';
-    else if (ft_strcmp(sct, SECT_BSS) == 0 && ft_strcmp(seg, SEG_DATA) == 0)
-      c = 'b';
-    else
-      c = 's';
-  }
-  else if ((c & N_TYPE) == N_INDR)
-    c = 'i';
-  else
-    c = '?';
-  return (c);
+	if ((c & N_TYPE) == N_UNDF)
+		c = (addr_value != 0) ? 'c' : 'u';
+	else if ((c & N_TYPE) == N_PBUD)
+		c = 'u';
+	else if ((c & N_TYPE) == N_ABS)
+		c = 'a';
+	else if ((c & N_TYPE) == N_SECT)
+	{
+		if (ft_strcmp(sct, SECT_TEXT) == 0 && ft_strcmp(sg, SEG_TEXT) == 0)
+			c = 't';
+		else if (ft_strcmp(sct, SECT_DATA) == 0 && ft_strcmp(sg, SEG_DATA) == 0)
+			c = 'd';
+		else if (ft_strcmp(sct, SECT_BSS) == 0 && ft_strcmp(sg, SEG_DATA) == 0)
+			c = 'b';
+		else
+			c = 's';
+	}
+	else if ((c & N_TYPE) == N_INDR)
+		c = 'i';
+	else
+		c = '?';
+	return (c);
 }
