@@ -22,18 +22,43 @@ t_arlst  *build_lst(uint32_t off, uint32_t strx, t_arlst *lst)
   tmp->next = new;
   return (lst);
 }
+// void			print_ar(t_offlist *lst, char *ptr, char *file)
+// {
+// 	t_offlist		*tmp;
+// 	int				size_name;
+// 	struct ar_hdr	*arch;
+// 	char			*name;
+//
+// 	tmp = lst;
+// 	while (tmp)
+// 	{
+// 		arch = (void*)ptr + tmp->off;
+// 		name = get_name(arch->ar_name);
+// 		size_name = get_size(arch->ar_name);
+// 		ft_printf("\n%s(%s):\n", file, name);
+// 		ft_nm((void*)arch + sizeof(*arch) + size_name, file);
+// 		tmp = tmp->next;
+// 	}
+// }
+// char			*get_name(char *name)
+// {
+// 	return (ft_strstr(ar->ar_name, ARFMAG) + ft_strlen(ARFMAG));
+// }
 
 void  display_archive(t_arlst *lst, void *ptr, char *av)
 {
     t_arlst *tmp;
     struct ar_hdr *ar;
     int nmsize;
+    char *name;
 
     tmp = lst;
     while (tmp)
     {
       ar = (void *)ptr + tmp->off;
       nmsize = get_arch_len(ar->ar_name);
+      name = ft_strstr(ar->ar_name, ARFMAG) + ft_strlen(ARFMAG);
+      ft_printf("\n%s(%s):\n", av, name);
       nm((void*)ar + sizeof(*ar) + nmsize, av);
       tmp = tmp->next;
     }
