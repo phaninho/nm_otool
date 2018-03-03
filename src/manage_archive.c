@@ -64,6 +64,33 @@ void  display_archive(t_arlst *lst, void *ptr, char *av)
     }
 }
 
+t_arlst			*offset_ascending_order(t_arlst *lst)
+{
+	t_arlst	*tmp;
+	uint32_t	off;
+	int			stop;
+
+	tmp = lst;
+	stop = 1;
+	while (tmp && stop)
+	{
+		stop = 0;
+		tmp = lst;
+		while (tmp->next)
+		{
+			if (tmp->off > tmp->next->off)
+			{
+				stop = 1;
+				off = tmp->off;
+				tmp->off = tmp->next->off;
+				tmp->next->off = off;
+			}
+			tmp = tmp->next;
+		}
+	}
+	return (lst);
+}
+
 int   handle_archive(void *ptr, char *av)
 {
   int len;
@@ -81,6 +108,6 @@ int   handle_archive(void *ptr, char *av)
   len = -1;
 	while (++len < size)
 		lst = build_lst(ran[len].ran_off, ran[len].ran_un.ran_strx, lst);
-  display_archive(lst, ptr, av);
+  display_archive(offset_ascending_order(lst), ptr, av);
   return (0);
 }

@@ -1,0 +1,254 @@
+
+./ar/libft32.a(ft_tolower.o):
+         T _ft_tolower
+
+./ar/libft32.a(ft_toupper.o):
+         T _ft_toupper
+
+./ar/libft32.a(ft_isprint.o):
+         T _ft_isprint
+
+./ar/libft32.a(ft_isascii.o):
+         T _ft_isascii
+
+./ar/libft32.a(ft_isalnum.o):
+         T _ft_isalnum
+
+./ar/libft32.a(ft_isdigit.o):
+         T _ft_isdigit
+
+./ar/libft32.a(ft_isalpha.o):
+         T _ft_isalpha
+
+./ar/libft32.a(ft_atoi.o):
+         T _ft_atoi
+
+./ar/libft32.a(ft_strncmp.o):
+         T _ft_strncmp
+
+./ar/libft32.a(ft_strcmp.o):
+         T _ft_strcmp
+
+./ar/libft32.a(ft_strlen.o):
+         T _ft_strlen
+
+./ar/libft32.a(ft_strnstr.o):
+         U _ft_strchr
+         U _ft_strlen
+         U _ft_strncmp
+         T _ft_strnstr
+
+./ar/libft32.a(ft_strstr.o):
+         U _ft_strlen
+         U _ft_strncmp
+         T _ft_strstr
+
+./ar/libft32.a(ft_strrchr.o):
+         T _ft_strrchr
+
+./ar/libft32.a(ft_strchr.o):
+         T _ft_strchr
+
+./ar/libft32.a(ft_strlcat.o):
+         U _ft_memcpy
+         T _ft_strlcat
+         U _ft_strlen
+
+./ar/libft32.a(ft_memset.o):
+         T _ft_memset
+
+./ar/libft32.a(ft_bzero.o):
+         T _ft_bzero
+
+./ar/libft32.a(ft_memcpy.o):
+         T _ft_memcpy
+
+./ar/libft32.a(ft_memccpy.o):
+         T _ft_memccpy
+
+./ar/libft32.a(ft_memmove.o):
+         T _ft_memmove
+
+./ar/libft32.a(ft_memcmp.o):
+         T _ft_memcmp
+
+./ar/libft32.a(ft_memchr.o):
+         T _ft_memchr
+
+./ar/libft32.a(ft_strdup.o):
+         U _ft_memcpy
+         T _ft_strdup
+         U _ft_strlen
+         U _malloc
+
+./ar/libft32.a(ft_strcpy.o):
+         U _ft_memcpy
+         T _ft_strcpy
+         U _ft_strlen
+
+./ar/libft32.a(ft_strncpy.o):
+         T _ft_strncpy
+
+./ar/libft32.a(ft_strcat.o):
+         U _ft_memcpy
+         T _ft_strcat
+         U _ft_strlen
+
+./ar/libft32.a(ft_strncat.o):
+         U _ft_memcpy
+         U _ft_strlen
+         T _ft_strncat
+
+./ar/libft32.a(ft_memalloc.o):
+         U _ft_bzero
+         T _ft_memalloc
+         U _malloc
+
+./ar/libft32.a(ft_memdel.o):
+         U _free
+         T _ft_memdel
+
+./ar/libft32.a(ft_strnew.o):
+         U _ft_memalloc
+         T _ft_strnew
+
+./ar/libft32.a(ft_strdel.o):
+         U _ft_memdel
+         T _ft_strdel
+
+./ar/libft32.a(ft_strclr.o):
+         U _ft_memset
+         T _ft_strclr
+         U _ft_strlen
+
+./ar/libft32.a(ft_striter.o):
+         T _ft_striter
+
+./ar/libft32.a(ft_striteri.o):
+         T _ft_striteri
+
+./ar/libft32.a(ft_strmap.o):
+         U _ft_strlen
+         T _ft_strmap
+         U _ft_strncpy
+         U _ft_strnew
+
+./ar/libft32.a(ft_strmapi.o):
+         U _ft_strlen
+         T _ft_strmapi
+         U _ft_strncpy
+         U _ft_strnew
+
+./ar/libft32.a(ft_strequ.o):
+         U _ft_strcmp
+         T _ft_strequ
+
+./ar/libft32.a(ft_strnequ.o):
+         U _ft_strncmp
+         T _ft_strnequ
+
+./ar/libft32.a(ft_strsub.o):
+         U _ft_memcpy
+         U _ft_strlen
+         U _ft_strnew
+         T _ft_strsub
+
+./ar/libft32.a(ft_strjoin.o):
+         U _ft_memcpy
+         T _ft_strjoin
+         U _ft_strlen
+         U _ft_strnew
+
+./ar/libft32.a(ft_strtrim.o):
+         U _ft_strlen
+         U _ft_strnew
+         T _ft_strtrim
+
+./ar/libft32.a(ft_strsplit.o):
+         t _count_parts
+00000097 T _ft_strsplit
+         U _ft_strsub
+         U _malloc
+0000005a t _word_length
+
+./ar/libft32.a(ft_itoa.o):
+000000ac T _ft_itoa
+         U _ft_strlen
+         U _ft_strnew
+         t _get_nb_digit
+0000004f t _rev
+
+./ar/libft32.a(ft_putchar.o):
+         T _ft_putchar
+         U _write$UNIX2003
+
+./ar/libft32.a(ft_putstr.o):
+         T _ft_putstr
+         U _ft_strlen
+         U _write$UNIX2003
+
+./ar/libft32.a(ft_putendl.o):
+00000048 S ___x86.get_pc_thunk.bx
+         T _ft_putendl
+         U _ft_strlen
+         U _write$UNIX2003
+
+./ar/libft32.a(ft_putendl.o):
+00000048 S ___x86.get_pc_thunk.bx
+         T _ft_putendl
+         U _ft_strlen
+         U _write$UNIX2003
+
+./ar/libft32.a(ft_putnbr.o):
+         U _ft_itoa
+         T _ft_putnbr
+         U _ft_putstr
+
+./ar/libft32.a(ft_putchar_fd.o):
+         T _ft_putchar_fd
+         U _write$UNIX2003
+
+./ar/libft32.a(ft_putstr_fd.o):
+         T _ft_putstr_fd
+         U _ft_strlen
+         U _write$UNIX2003
+
+./ar/libft32.a(ft_putendl_fd.o):
+0000004a S ___x86.get_pc_thunk.bx
+         T _ft_putendl_fd
+         U _ft_strlen
+         U _write$UNIX2003
+
+./ar/libft32.a(ft_putendl_fd.o):
+0000004a S ___x86.get_pc_thunk.bx
+         T _ft_putendl_fd
+         U _ft_strlen
+         U _write$UNIX2003
+
+./ar/libft32.a(ft_putnbr_fd.o):
+         U _ft_itoa
+         T _ft_putnbr_fd
+         U _ft_putstr_fd
+
+./ar/libft32.a(ft_lstnew.o):
+         T _ft_lstnew
+         U _ft_memcpy
+         U _malloc
+
+./ar/libft32.a(ft_lstdelone.o):
+         T _ft_lstdelone
+         U _ft_memdel
+
+./ar/libft32.a(ft_lstdel.o):
+         T _ft_lstdel
+         U _ft_lstdelone
+
+./ar/libft32.a(ft_lstadd.o):
+         T _ft_lstadd
+
+./ar/libft32.a(ft_lstiter.o):
+         T _ft_lstiter
+
+./ar/libft32.a(ft_lstmap.o):
+         U _ft_lstadd
+         T _ft_lstmap

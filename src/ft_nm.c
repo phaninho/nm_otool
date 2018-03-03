@@ -24,11 +24,11 @@ void  nm(void *ptr, char *av)
   len = ft_strlen(av);
   while (++i < len)
   {
-    if (av[i] && av[i] == '.' && av[i + 1] && av[i + 1] == 'o' \
-    && av[i + 2] == '\0')
+    if (av[i] && av[i] == '.' && av[i + 1] && av[i + 1] == 'o')
       o = 1;
   }
   magic_number = *(int *)ptr;
+  // ft_printf("[%d %p]\n", magic_number, magic_number);
   if (magic_number == (int)MH_MAGIC_64 || magic_number == (int)MH_CIGAM_64)
     handle_64(ptr, o);
   else if (magic_number == (int)MH_MAGIC || magic_number == (int)MH_CIGAM)
