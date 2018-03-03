@@ -48,7 +48,7 @@ int	 display_symbol_type32(t_env32 e, t_ut u, int *al_order, char *type)
   if (e.array[al_order[u.i]].n_type != 36 && \
     e.array[al_order[u.i]].n_type != 38 && e.array[al_order[u.i]].n_type != 32)
   {
-    if ((e.array[al_order[u.i]].n_value) || (u.o == 1 && type[al_order[u.i]] == 'T'))
+    if ((e.array[al_order[u.i]].n_value) || (u.o == 1 && (type[al_order[u.i]] == 'T' || type[al_order[u.i]] == 't')))
       display_addr32(e, u, al_order);
     else
       ft_printf("        ");

@@ -37,8 +37,8 @@ void  nm(void *ptr, char *av)
     handle_fat(ptr, av);
   else if (!ft_strncmp(ptr, ARMAG, SARMAG))
     handle_archive(ptr, av);
-  else
-    ft_printf("Not Supported file\n");
+  // else
+  //   ft_printf("Not Supported file\n");
 }
 
 int	 read_args(char *av)

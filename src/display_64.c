@@ -19,7 +19,9 @@ int  check_display_cond(t_ut u)
   !(u.str[0] == 'd' && u.str[1] == 'y') && \
   !(u.str[0] == '-' && u.str[1] == '[') && \
   !(u.str[0] == '+' && u.str[1] == '[') && \
-  !(u.str[0] == '.' && u.str[1] == 'o')))
+  !(u.str[0] == '.' && u.str[1] == 'o') && \
+  !(u.str[0] == 'E' && u.str[1] == 'H') && \
+  !(u.str[0] == 'L' && u.str[1] == 'C')))
     return (1);
   return (0);
 }
@@ -48,7 +50,7 @@ int	 display_symbol_type(t_env64 e, t_ut u, int *al_order, char *type)
   if (e.array[al_order[u.i]].n_type != 36 && \
     e.array[al_order[u.i]].n_type != 38 && e.array[al_order[u.i]].n_type != 32)
   {
-    if ((e.array[al_order[u.i]].n_value) || (u.o == 1 && type[al_order[u.i]] == 'T'))
+    if ((e.array[al_order[u.i]].n_value) || (u.o == 1 && (type[al_order[u.i]] == 'T' || type[al_order[u.i]] == 't')))
       display_addr(e, u, al_order);
     else
       ft_printf("                ");
