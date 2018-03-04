@@ -14,21 +14,29 @@ ifeq ($(HOSTTYPE),)
 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
 endif
 
-NAME = ft_nm
+NM_NAME = ft_nm
+OTOOL_NAME = ft_otool
 
-SRC_PATH = ./src/
+SRC_NM_PATH = ./src/ft_nm/
+SRC_OTOOL_PATH = ./src/ft_otool/
 OBJ_PATH = ./obj/
 INC_PATH = ./include/ ./libft/
 LIB_PATH = ./libft/
 
-SRC_NAME = ft_nm.c display_64.c manage_64.c display_32.c manage_32.c \
+SRC_NM_NAME = ft_nm.c display_64.c manage_64.c display_32.c manage_32.c \
 	order_display.c symbol_type.c manage_fat.c manage_archive.c
-OBJ_NAME = $(SRC_NAME:.c=.o)
+OBJ_NM_NAME = $(SRC_NM_NAME:.c=.o)
+
+SRC_OTOOL_NAME = ft_otool.c
+OBJ_OTOOL_NAME = $(SRC_OTOOL_NAME:.c=.o)
+
 LIB_NAME = -lft
 DEP = ./include/nm_otool.h
 
-SRC = $(addprefix $(SRC_PATH),$(SRC_NAME))
-OBJ = $(addprefix $(OBJ_PATH),$(OBJ_NAME))
+SRC_NM = $(addprefix $(SRC_NM_PATH),$(SRC_NM_NAME))
+SRC_OTOOL = $(addprefix $(SRC_OTOOL_PATH),$(SRC_OTOOL_NAME))
+OBJ_NM = $(addprefix $(OBJ_PATH),$(OBJ_NM_NAME))
+OBJ_OTOOL = $(addprefix $(OBJ_PATH),$(OBJ_OTOOL_NAME))
 INC = $(addprefix -I,$(INC_PATH))
 LIB = $(addprefix -L,$(LIB_PATH))
 
@@ -37,12 +45,20 @@ CFLAGS = -Wall -Wextra -Werror
 
 all: lib
 	@echo "\033[37;44m Make $(NAME) \033[0m"
-	@make $(NAME)
+	@make $(NM_NAME)
+	@make $(OTOOL_NAME)
 
-$(NAME): $(OBJ)
+$(NM_NAME): $(OBJ_NM)
 	$(CC) -I $(INC) $^ -o $@ $(LIB) $(LIB_NAME)
 
-$(OBJ_PATH)%.o: $(SRC_PATH)%.c $(DEP)
+$(OBJ_PATH)%.o: $(SRC_NM_PATH)%.c $(DEP)
+	@mkdir -p $(OBJ_PATH)
+	$(CC) $(CFLAGS) $(INC) -o $@ -c $<
+
+$(OTOOL_NAME): $(OBJ_OTOOL)
+	$(CC) -I $(INC) $^ -o $@ $(LIB) $(LIB_NAME)
+
+$(OBJ_PATH)%.o: $(SRC_OTOOL_PATH)%.c $(DEP)
 	@mkdir -p $(OBJ_PATH)
 	$(CC) $(CFLAGS) $(INC) -o $@ -c $<
 
@@ -53,11 +69,11 @@ lib:
 	@make -C $(LIB_PATH)
 
 clean:
-	rm -rf $(OBJ) $(OBJ_PATH)
+	rm -rf $(OBJ_NM) $(OBJ_OTOOL) $(OBJ_PATH)
 
 fclean: clean
 	@make -C $(LIB_PATH) fclean
-	rm -f $(NAME) $(LINK) $(TEST_NAME)
+	rm -f $(NM_NAME) $(OTOOL_NAME) $(LINK) $(TEST_NAME)
 
 
 re: fclean all
