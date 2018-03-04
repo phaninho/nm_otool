@@ -82,6 +82,8 @@ int			handle_archive(void *ptr, char *av)
 	len = get_arch_len((char *)ptr);
 	offset = (void *)ptr + sizeof(struct ar_hdr) + len + SARMAG;
 	ran = (void *)ptr + sizeof(struct ar_hdr) + SARMAG + len + sizeof(uint32_t);
+	if (check_bin_limit(ran))
+		return (ft_printf("Corrupted file\n"));
 	size = (*((int *)offset)) / sizeof(struct ranlib);
 	len = -1;
 	while (++len < size)
