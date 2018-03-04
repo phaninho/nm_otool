@@ -18,16 +18,16 @@ void			otool(void *ptr, char *av)
 			o = 1;
 	}
 	magic_number = *(int *)ptr;
-	// if (magic_number == (int)MH_MAGIC_64 || magic_number == (int)MH_CIGAM_64)
-	// 	handle_64(ptr, o);
-	// else if (magic_number == (int)MH_MAGIC || magic_number == (int)MH_CIGAM)
-	// 	handle_32(ptr, o);
-	// else if (magic_number == (int)FAT_MAGIC || magic_number == (int)FAT_CIGAM)
-	// 	handle_fat(ptr, av);
+	if (magic_number == (int)MH_MAGIC_64 || magic_number == (int)MH_CIGAM_64)
+		handle_64(ptr, o);
+	else if (magic_number == (int)MH_MAGIC || magic_number == (int)MH_CIGAM)
+		handle_32(ptr, o);
+	else if (magic_number == (int)FAT_MAGIC || magic_number == (int)FAT_CIGAM)
+		handle_fat(ptr, av);
 	// else if (!ft_strncmp(ptr, ARMAG, SARMAG))
 	// 	handle_archive(ptr, av);
-	// else
-	// 	ft_printf("Not Supported file\n");
+	else
+		ft_printf("Not Supported file\n");
 }
 
 int				read_otool_args(char *av)

@@ -82,6 +82,7 @@ struct							s_env64
 };
 
 void							nm(void *ptr, char *av);
+void							otool(void *ptr, char *av);
 int								print_output_32(t_env32 e, void *ptr, int o);
 int								print_output_64(t_env64 e, void *ptr, int o);
 void							al_ord32(int *order,
