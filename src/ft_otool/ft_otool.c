@@ -31,7 +31,7 @@ void			otool(void *ptr, char *av)
 	}
 	magic_number = *(int *)ptr;
 	if (magic_number == (int)MH_MAGIC_64 || magic_number == (int)MH_CIGAM_64)
-		handle_64(ptr, o);
+		handle_otool_64(ptr, o, av);
 	else if (magic_number == (int)MH_MAGIC || magic_number == (int)MH_CIGAM)
 		handle_32(ptr, o);
 	else if (magic_number == (int)FAT_MAGIC || magic_number == (int)FAT_CIGAM)

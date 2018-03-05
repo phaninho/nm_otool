@@ -74,6 +74,7 @@ struct							s_env64
 	int							print;
 	char						**segname;
 	char						**sectname;
+	char						*av;
 	struct mach_header_64		*header;
 	struct load_command			*lc;
 	struct symtab_command		*sym;
@@ -102,5 +103,6 @@ char							define_symbol_type_ut32(char *type,
 char							define_symbol_type_ut64(char *type,
 		t_env64 e, t_ut u, int *al_order);
 t_arlst							*offset_ascending_order(t_arlst *lst);
+int					handle_otool_64(void *ptr, int o, char *av);
 
 #endif

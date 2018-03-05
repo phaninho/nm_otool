@@ -119,16 +119,18 @@ int		display_loop(t_env64 e, t_ut u)
 	int	print;
 
 	print = 0;
-	u.i = -1;
+	(void)u;
+	// u.i = -1;
 	// e.sg64 = (struct segment_command_64 *)e.header + sizeof(struct mach_header_64);
 	// while (!(int)e.sg64->nsects)
 	// 	e.sg64 = (struct segment_command_64 *)e.header + sizeof(struct mach_header_64) + e.lc->cmdsize;
 
 	// ft_printf("ok %d\n", (int)e.sg64->nsects);
-	if (++u.i < (int)e.sg64->nsects)
+	if ((int)e.sg64->nsects)
 	{
 		// ft_printf("la %d \n", u.i);
 		// u.str = ft_strdup(u.strtab + e.array[u.i].n_un.n_strx);
+		ft_printf("%s:\n", e.av);
 		display_section64(e.sct64->addr, e.sct64->size, (char *)e.header + e.sct64->offset);
 		print = 1;
 		// e.sct64 = (void *)e.sct64 + sizeof(*e.sct64);

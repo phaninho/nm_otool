@@ -12,7 +12,7 @@
 
 #include "../include/nm_otool.h"
 
-t_env64				init_env64(void)
+t_env64				init_env64(char *av)
 {
 	t_env64			e;
 
@@ -22,6 +22,7 @@ t_env64				init_env64(void)
 	e.print = 0;
 	e.segname = NULL;
 	e.sectname = NULL;
+	e.av = ft_strdup(av);
 	return (e);
 }
 
@@ -68,11 +69,11 @@ t_env64				lc_segment_64(t_env64 e, void *ptr, int o)
 	return (e);
 }
 
-int					handle_64(void *ptr, int o)
+int					handle_otool_64(void *ptr, int o, char *av)
 {
 	t_env64			e;
 
-	e = init_env64();
+	e = init_env64(av);
 	e.header = (struct mach_header_64 *)ptr;
 	e.lc = ptr + sizeof(struct mach_header_64);
 	if (check_bin_limit(e.header) || check_bin_limit(e.lc))
