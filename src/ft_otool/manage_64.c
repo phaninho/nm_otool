@@ -6,7 +6,7 @@
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 11:11:58 by stmartin          #+#    #+#             */
-/*   Updated: 2018/03/05 16:09:35 by stmartin         ###   ########.fr       */
+/*   Updated: 2018/03/05 19:43:18 by stmartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ int					handle_otool_64(void *ptr, int o, char *av)
 	while (e.i++ < (int)e.header->ncmds)
 	{
 		if (e.lc->cmd == LC_SEGMENT_64)
-			e = lc_segment_64(e , ptr, o);
+			e = lc_segment_64(e, ptr, o);
 		if (e.print)
-			break;
+			break ;
 		e.lc = (void *)e.lc + e.lc->cmdsize;
 		if (check_bin_limit(e.lc))
 			return (ft_printf("Corrupted file\n"));

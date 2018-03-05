@@ -6,7 +6,7 @@
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/23 15:51:56 by stmartin          #+#    #+#             */
-/*   Updated: 2018/03/04 00:51:52 by stmartin         ###   ########.fr       */
+/*   Updated: 2018/03/05 19:40:14 by stmartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,6 @@ char							define_symbol_type_ut32(char *type,
 char							define_symbol_type_ut64(char *type,
 		t_env64 e, t_ut u, int *al_order);
 t_arlst							*offset_ascending_order(t_arlst *lst);
-int					handle_otool_64(void *ptr, int o, char *av);
+int								handle_otool_64(void *ptr, int o, char *av);
 
 #endif
