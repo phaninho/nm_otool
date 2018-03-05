@@ -36,10 +36,10 @@ void				alloc_and_copy(t_env64 e)
 	ft_strcpy(e.sectname[e.j], (e.k + e.sct64)->sectname);
 }
 
-t_env64				lc_segment_64(t_env64 e)
+t_env64				lc_segment_64(t_env64 e, void *ptr, int o)
 {
 	e.sg64 = (struct segment_command_64 *)e.lc;
-	ft_printf("ok %d\n", (int)e.sg64->nsects);
+	// ft_printf("ok %d\n", (int)e.sg64->nsects);
 
 	e.sct64 = (struct section_64 *)((char *)e.sg64 \
 			+ sizeof(struct segment_command_64));
@@ -63,6 +63,8 @@ t_env64				lc_segment_64(t_env64 e)
 		e.k++;
 		e.j++;
 	}
+	print_output_64(e, ptr, o);
+
 	return (e);
 }
 
@@ -78,13 +80,14 @@ int					handle_64(void *ptr, int o)
 	while (e.i++ < (int)e.header->ncmds)
 	{
 		if (e.lc->cmd == LC_SEGMENT_64)
-			e = lc_segment_64(e);
-		if (e.lc->cmd == LC_SYMTAB)
-		{
-			e.sym = (struct symtab_command *)e.lc;
-			print_output_64(e, ptr, o);
-			break ;
-		}
+			e = lc_segment_64(e , ptr, o);
+
+		// if (e.lc->cmd == LC_SYMTAB)
+		// {
+		// 	e.sym = (struct symtab_command *)e.lc;
+		// 	print_output_64(e, ptr, o);
+		// 	break ;
+		// }
 		e.lc = (void *)e.lc + e.lc->cmdsize;
 		if (check_bin_limit(e.lc))
 			return (ft_printf("Corrupted file\n"));
