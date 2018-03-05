@@ -35,8 +35,8 @@ void			otool(void *ptr, char *av)
 		handle_32(ptr, o);
 	else if (magic_number == (int)FAT_MAGIC || magic_number == (int)FAT_CIGAM)
 		handle_fat(ptr, av);
-	// else if (!ft_strncmp(ptr, ARMAG, SARMAG))
-	// 	handle_archive(ptr, av);
+	else if (!ft_strncmp(ptr, ARMAG, SARMAG))
+		handle_archive(ptr, av);
 	else
 		ft_printf("Not Supported file\n");
 }

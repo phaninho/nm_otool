@@ -6,7 +6,7 @@
 #    By: stmartin <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/27 18:56:34 by stmartin          #+#    #+#              #
-#    Updated: 2018/01/27 18:56:38 by stmartin         ###   ########.fr        #
+#    Updated: 2018/03/05 19:41:05 by stmartin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ SRC_NM_NAME = ft_nm.c display_64.c manage_64.c display_32.c manage_32.c \
 OBJ_NM_NAME = $(SRC_NM_NAME:.c=.o)
 
 SRC_OTOOL_NAME = ft_otool.c display_64.c manage_64.c display_32.c \
-manage_32.c manage_fat.c
+manage_32.c manage_fat.c manage_archive.c
 OBJ_OTOOL_NAME = $(SRC_OTOOL_NAME:.c=.o)
 
 LIB_NAME = -lft
@@ -88,6 +88,6 @@ norme :
 	@echo "\033[37;44m norme libft \033[0m"
 	@norminette ./libft/*[ch]
 	@echo "\033[37;44m norme src directory \033[0m"
-	@norminette ./src/*.c
+	@norminette ./src/ft_nm/*.c ./src/ft_otool/*.c
 	@echo "\033[37;44m norme include directory \033[0m"
 	@norminette ./include/*.h
