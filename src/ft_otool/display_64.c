@@ -41,7 +41,7 @@ void		display_addr(long unsigned int addr)
 	ft_printf("%s	", ft_lltoa(addr, 16));
 }
 
-char		*ft_itoa_base_and_sub(int val, int base, int output_size)
+char		*ft_itoa_base_and_dup(int val, int base, int output_size)
 {
 	char			buffer[output_size + 1];
 	char			*p;
@@ -85,7 +85,7 @@ void		display_section64(long unsigned int addr, unsigned int size,
 				addr += 16;
 			display_addr(addr);
 		}
-		str = ft_itoa_base_and_sub(ptr[i], 16, 2);
+		str = ft_itoa_base_and_dup(ptr[i], 16, 2);
 		ft_printf("%s ", str);
 		if ((i + 1) % 16 == 0 && i + 1 < size)
 			write(1, "\n", 1);
