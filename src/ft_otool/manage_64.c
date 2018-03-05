@@ -41,8 +41,6 @@ void				alloc_and_copy(t_env64 e)
 t_env64				lc_segment_64(t_env64 e, void *ptr, int o)
 {
 	e.sg64 = (struct segment_command_64 *)e.lc;
-	// ft_printf("ok %d\n", (int)e.sg64->nsects);
-
 	e.sct64 = (struct section_64 *)((char *)e.sg64 \
 			+ sizeof(struct segment_command_64));
 	e.len = e.len == 0 ? e.sg64->nsects : (e.len + e.sg64->nsects);
@@ -80,19 +78,10 @@ int					handle_otool_64(void *ptr, int o, char *av)
 		return (ft_printf("Corrupted file\n"));
 	while (e.i++ < (int)e.header->ncmds)
 	{
-		// ft_printf("===before lc_segment_64 %d=====\n", e.i);
 		if (e.lc->cmd == LC_SEGMENT_64)
 			e = lc_segment_64(e , ptr, o);
-		// ft_printf("====print vaux %d====\n", e.print);
-
 		if (e.print)
 			break;
-		// if (e.lc->cmd == LC_SYMTAB)
-		// {
-		// 	e.sym = (struct symtab_command *)e.lc;
-		// 	print_output_64(e, ptr, o);
-		// 	break ;
-		// }
 		e.lc = (void *)e.lc + e.lc->cmdsize;
 		if (check_bin_limit(e.lc))
 			return (ft_printf("Corrupted file\n"));

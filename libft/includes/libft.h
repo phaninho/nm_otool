@@ -207,6 +207,7 @@ void				while_space_number_zero(t_printf *print);
 void				write_null(t_printf *print);
 void				space_number_inf(t_printf *print);
 char				*ft_lltoa(long long val, int base);
+
 int					space_zero(t_printf *print, const char *format, int d);
 void				put_space_or_zero(t_printf *print, int d);
 void				decr_space_number(t_printf *print);

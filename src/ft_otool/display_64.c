@@ -41,32 +41,32 @@ void		display_addr(long unsigned int addr)
 	ft_printf("%s	", ft_lltoa(addr, 16));
 }
 
-int			display_symbol_type(t_env64 e, t_ut u)
+char			*ft_itoa_base_and_sub(int val, int base, int output_size)
 {
-	while (u.i < (int)e.sym->nsyms && check_display_cond(u))
+	char			buffer[output_size + 1];
+	char			*p;
+	unsigned int	unsigned_val;
+
+	unsigned_val = (unsigned int)val;
+	if (base > 36 || base < 2)
+		return (NULL);
+	buffer[output_size] = 0;
+	p = buffer + output_size - 1;
+	*p = '0';
+	if (unsigned_val > 0)
 	{
-		// if (++u.i < (int)e.sym->nsyms)
-		// 	u.str = ft_strdup(u.strtab + e.array[u.i].n_un.n_strx);
-		// else if (u.str)
-		// 	free(u.str);
+		while (unsigned_val > 0)
+		{
+			*p-- = "0123456789abcdef"[unsigned_val % base];
+			unsigned_val = unsigned_val / base;
+			if (p < buffer)
+				break ;
+		}
+		p++;
 	}
-	if (u.i >= (int)e.sym->nsyms)
-		return (u.i);
-	if (e.array[u.i].n_type != 36 && \
-	e.array[u.i].n_type != 38 && e.array[u.i].n_type != 32 && !ft_strcmp(e.segname[u.i], SEG_TEXT))
-	{
-		// if (e.array[u.i].n_value)
-		// 	display_addr(e, u);
-		// else
-		// 	ft_printf("                ");
-		// if (type[[u.i])
-		// 	ft_printf(" %c ", type[al_order[u.i]]);
-		// else
-		// 	ft_printf(" %d ", e.array[al_order[u.i]].n_type);
-		ft_printf("%s %s\n", u.strtab + e.array[u.i].n_un.n_strx, e.sectname[u.i]);
-	}
-	free(u.str ? u.str : 0);
-	return (u.i);
+	while (p > buffer)
+		*--p = '0';
+	return (ft_strdup(p));
 }
 
 void			display_section64(long unsigned int addr, unsigned int size,
@@ -79,40 +79,20 @@ void			display_section64(long unsigned int addr, unsigned int size,
 	ft_printf("%s\n", "Contents of (__TEXT,__text) section");
 	while (i < size)
 	{
-		// ft_printf("1\n");
 		if (i == 0 || i % 16 == 0)
 		{
 			if (i != 0)
 				addr += 16;
 			display_addr(addr);
-			// if (i != 0)
-			// 	addr += 16;
-			// ft_printf("%016llx\t", addr);
 		}
-		// ft_printf("2\n");
-		str = ft_lltoa(ptr[i], 16);
-		// ft_printf(" [%s]", str);
-			// ft_printf("3bis %s \n", str);
-			// if (str && str[0] != '0')
-			int len = ft_strlen(str);
-			str = ft_strsub(str, len % 2, 2);
-			// ft_printf("len =>[%d] ", len);
-			if (len < 2)
-				ft_printf("00 ");
-			else
-				ft_printf("%s ", str);
-		// ft_printf("5\n");
-		// free(str);
-		// ft_printf("6\n");
-		// ft_printf("6bis\n");
+		str = ft_itoa_base_and_sub(ptr[i], 16, 2);
+		ft_printf("%s ", str);
 		if ((i + 1) % 16 == 0 && i + 1 < size)
 			write(1, "\n", 1);
 		i++;
-		// ft_printf("7\n");
-		// ft_printf(" %d sur %d\n", i, size);
 	}
-	free(str);
-
+	if (str)
+		free(str);
 	write(1, "\n", 1);
 }
 
@@ -122,21 +102,11 @@ int		display_loop(t_env64 e, t_ut u)
 
 	print = 0;
 	(void)u;
-	// u.i = -1;
-	// e.sg64 = (struct segment_command_64 *)e.header + sizeof(struct mach_header_64);
-	// while (!(int)e.sg64->nsects)
-	// 	e.sg64 = (struct segment_command_64 *)e.header + sizeof(struct mach_header_64) + e.lc->cmdsize;
-
-	// ft_printf("ok %d\n", (int)e.sg64->nsects);
 	if ((int)e.sg64->nsects)
 	{
-		// ft_printf("la %d \n", u.i);
-		// u.str = ft_strdup(u.strtab + e.array[u.i].n_un.n_strx);
 		ft_printf("%s:\n", e.av);
 		display_section64(e.sct64->addr, e.sct64->size, (char *)e.header + e.sct64->offset);
 		print = 1;
-		// e.sct64 = (void *)e.sct64 + sizeof(*e.sct64);
-
 	}
 	return (print);
 }
@@ -144,27 +114,9 @@ int		display_loop(t_env64 e, t_ut u)
 int			print_output_64(t_env64 e, void *ptr, int o)
 {
 	t_ut	u;
-	// char	type[e.sym->nsyms];
-	// int		al_order[e.sym->nsyms];
+
 	u.o = o;
-
 	(void)ptr;
-	// e.array = ptr + e.sym->symoff;
-	// u.strtab = ptr + e.sym->stroff;
-
-	// if (check_bin_limit(e.array) || check_bin_limit(u.strtab))
-	// 	return (1);
-	// u.i = -1;
-	// while (++u.i < (int)e.sym->nsyms)
-	// 	al_order[u.i] = u.i;
-	// u.i = 0;
-	// while (u.i < (int)e.sym->nsyms)
-	// {
-	// 	type[u.i] = e.array[u.i].n_type;
-	// 	type[u.i] = define_symbol_type_ut64(type, e, u, al_order);
-	// 	u.i++;
-	// }
-
 	if (display_loop(e, u))
 		return (1);
 	return (0);
