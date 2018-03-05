@@ -91,13 +91,18 @@ void			display_section64(long unsigned int addr, unsigned int size,
 		}
 		// ft_printf("2\n");
 		str = ft_lltoa(ptr[i], 16);
-		// ft_printf("3\n");
+		// ft_printf(" [%s]", str);
 			// ft_printf("3bis %s \n", str);
-			str = ft_strsub(str, ft_strlen(str) - ft_strlen(str) == 2 ? 2 : 1, 2);
-			// ft_printf("4\n");
-			ft_printf("%s ", str ? str : "00");
+			// if (str && str[0] != '0')
+			int len = ft_strlen(str);
+			str = ft_strsub(str, len % 2, 2);
+			// ft_printf("len =>[%d] ", len);
+			if (len < 2)
+				ft_printf("00 ");
+			else
+				ft_printf("%s ", str);
 		// ft_printf("5\n");
-		free(str);
+		// free(str);
 		// ft_printf("6\n");
 		// ft_printf("6bis\n");
 		if ((i + 1) % 16 == 0 && i + 1 < size)
@@ -106,6 +111,8 @@ void			display_section64(long unsigned int addr, unsigned int size,
 		// ft_printf("7\n");
 		// ft_printf(" %d sur %d\n", i, size);
 	}
+	free(str);
+
 	write(1, "\n", 1);
 }
 
