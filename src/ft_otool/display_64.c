@@ -6,7 +6,7 @@
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 14:34:05 by stmartin          #+#    #+#             */
-/*   Updated: 2018/03/05 16:09:06 by stmartin         ###   ########.fr       */
+/*   Updated: 2018/03/05 20:00:56 by stmartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void		display_addr(long unsigned int addr)
 	ft_printf("%s	", ft_lltoa(addr, 16));
 }
 
-char			*ft_itoa_base_and_sub(int val, int base, int output_size)
+char		*ft_itoa_base_and_sub(int val, int base, int output_size)
 {
 	char			buffer[output_size + 1];
 	char			*p;
@@ -69,8 +69,8 @@ char			*ft_itoa_base_and_sub(int val, int base, int output_size)
 	return (ft_strdup(p));
 }
 
-void			display_section64(long unsigned int addr, unsigned int size,
-	char *ptr)
+void		display_section64(long unsigned int addr, unsigned int size,
+		char *ptr)
 {
 	unsigned int	i;
 	char			*str;
@@ -96,28 +96,19 @@ void			display_section64(long unsigned int addr, unsigned int size,
 	write(1, "\n", 1);
 }
 
-int		display_loop(t_env64 e, t_ut u)
+int			print_output_64(t_env64 e, void *ptr, int o)
 {
-	int	print;
+	int				print;
 
 	print = 0;
-	(void)u;
+	(void)ptr;
+	(void)o;
 	if ((int)e.sg64->nsects)
 	{
 		ft_printf("%s:\n", e.av);
-		display_section64(e.sct64->addr, e.sct64->size, (char *)e.header + e.sct64->offset);
+		display_section64(e.sct64->addr, e.sct64->size, \
+				(char *)e.header + e.sct64->offset);
 		print = 1;
 	}
 	return (print);
-}
-
-int			print_output_64(t_env64 e, void *ptr, int o)
-{
-	t_ut	u;
-
-	u.o = o;
-	(void)ptr;
-	if (display_loop(e, u))
-		return (1);
-	return (0);
 }
