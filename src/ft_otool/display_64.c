@@ -6,7 +6,7 @@
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 14:34:05 by stmartin          #+#    #+#             */
-/*   Updated: 2018/03/04 00:31:06 by stmartin         ###   ########.fr       */
+/*   Updated: 2018/03/05 16:09:06 by stmartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,22 +114,27 @@ void			display_section64(long unsigned int addr, unsigned int size,
 	write(1, "\n", 1);
 }
 
-void		display_loop(t_env64 e, t_ut u)
+int		display_loop(t_env64 e, t_ut u)
 {
+	int	print;
+
+	print = 0;
 	u.i = -1;
 	// e.sg64 = (struct segment_command_64 *)e.header + sizeof(struct mach_header_64);
 	// while (!(int)e.sg64->nsects)
 	// 	e.sg64 = (struct segment_command_64 *)e.header + sizeof(struct mach_header_64) + e.lc->cmdsize;
 
-	ft_printf("ok %d\n", (int)e.sg64->nsects);
-	while (++u.i < (int)e.sg64->nsects)
+	// ft_printf("ok %d\n", (int)e.sg64->nsects);
+	if (++u.i < (int)e.sg64->nsects)
 	{
-		ft_printf("la %d \n", u.i);
+		// ft_printf("la %d \n", u.i);
 		// u.str = ft_strdup(u.strtab + e.array[u.i].n_un.n_strx);
 		display_section64(e.sct64->addr, e.sct64->size, (char *)e.header + e.sct64->offset);
+		print = 1;
 		// e.sct64 = (void *)e.sct64 + sizeof(*e.sct64);
 
 	}
+	return (print);
 }
 
 int			print_output_64(t_env64 e, void *ptr, int o)
@@ -156,6 +161,7 @@ int			print_output_64(t_env64 e, void *ptr, int o)
 	// 	u.i++;
 	// }
 
-	display_loop(e, u);
+	if (display_loop(e, u))
+		return (1);
 	return (0);
 }

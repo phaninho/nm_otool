@@ -71,6 +71,7 @@ struct							s_env64
 	int							j;
 	int							k;
 	int							len;
+	int							print;
 	char						**segname;
 	char						**sectname;
 	struct mach_header_64		*header;

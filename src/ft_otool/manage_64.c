@@ -6,7 +6,7 @@
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 11:11:58 by stmartin          #+#    #+#             */
-/*   Updated: 2018/03/03 23:55:04 by stmartin         ###   ########.fr       */
+/*   Updated: 2018/03/05 16:09:35 by stmartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_env64				init_env64(void)
 	e.i = 0;
 	e.j = 0;
 	e.len = 0;
+	e.print = 0;
 	e.segname = NULL;
 	e.sectname = NULL;
 	return (e);
@@ -63,8 +64,7 @@ t_env64				lc_segment_64(t_env64 e, void *ptr, int o)
 		e.k++;
 		e.j++;
 	}
-	print_output_64(e, ptr, o);
-
+	e.print = print_output_64(e, ptr, o);
 	return (e);
 }
 
@@ -79,9 +79,13 @@ int					handle_64(void *ptr, int o)
 		return (ft_printf("Corrupted file\n"));
 	while (e.i++ < (int)e.header->ncmds)
 	{
+		// ft_printf("===before lc_segment_64 %d=====\n", e.i);
 		if (e.lc->cmd == LC_SEGMENT_64)
 			e = lc_segment_64(e , ptr, o);
+		// ft_printf("====print vaux %d====\n", e.print);
 
+		if (e.print)
+			break;
 		// if (e.lc->cmd == LC_SYMTAB)
 		// {
 		// 	e.sym = (struct symtab_command *)e.lc;
