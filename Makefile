@@ -30,7 +30,7 @@ SRC_NM_NAME = ft_nm.c display_64.c manage_64.c display_32.c manage_32.c \
 OBJ_NM_NAME = $(SRC_NM_NAME:.c=.o)
 
 SRC_OTOOL_NAME = ft_otool.c display_64.c manage_64.c display_32.c \
-manage_32.c manage_fat.c manage_archive.c
+manage_32.c manage_fat.c manage_archive.c order_display.c
 OBJ_OTOOL_NAME = $(SRC_OTOOL_NAME:.c=.o)
 
 LIB_NAME = -lft

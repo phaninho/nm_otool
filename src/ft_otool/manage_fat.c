@@ -51,6 +51,6 @@ int		handle_fat(void *ptr, char *av)
 			return (ft_printf("%s is a corrupted file\n", av));
 		i++;
 	}
-	otool((void *)ptr + offset, av);
+	otool((void *)ptr + offset, av, 0);
 	return (0);
 }

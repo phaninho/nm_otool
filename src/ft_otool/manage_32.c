@@ -25,7 +25,7 @@ t_env32				init_env32(char *av)
 	return (e);
 }
 
-int					handle_otool_32(void *ptr, char *av)
+int					handle_otool_32(void *ptr, char *av, int title)
 {
 	t_env32			e;
 
@@ -37,7 +37,7 @@ int					handle_otool_32(void *ptr, char *av)
 	while (e.i++ < (int)e.header->ncmds)
 	{
 		if (e.lc->cmd == LC_SEGMENT)
-			if (print_output_otool_32(e))
+			if (print_output_otool_32(e, title))
 				break ;
 		e.lc = (void *)e.lc + e.lc->cmdsize;
 		if (check_bin_limit(e.lc))

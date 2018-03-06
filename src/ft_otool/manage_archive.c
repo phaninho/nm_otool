@@ -59,13 +59,14 @@ void		display_archive(t_arlst *lst, void *ptr, char *av)
 	char			*name;
 
 	tmp = lst;
+	ft_printf("Archive : %s\n", av);
 	while (tmp)
 	{
 		ar = (void *)ptr + tmp->off;
 		nmsize = get_arch_len(ar->ar_name);
 		name = ft_strstr(ar->ar_name, ARFMAG) + ft_strlen(ARFMAG);
-		ft_printf("\n%s(%s):\n", av, name);
-		// nm((void*)ar + sizeof(*ar) + nmsize, av);
+		ft_printf("%s(%s):\n", av, name);
+		otool((void*)ar + sizeof(*ar) + nmsize, av, 1);
 		tmp = tmp->next;
 	}
 }
@@ -88,6 +89,6 @@ int			handle_archive(void *ptr, char *av)
 	len = -1;
 	while (++len < size)
 		lst = build_lst(ran[len].ran_off, ran[len].ran_un.ran_strx, lst);
-	// display_archive(offset_ascending_order(lst), ptr, av);
+	display_archive(offset_ascending_order(lst), ptr, av);
 	return (0);
 }

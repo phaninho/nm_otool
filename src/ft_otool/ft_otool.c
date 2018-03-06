@@ -12,7 +12,7 @@
 
 #include "nm_otool.h"
 
-void			otool(void *ptr, char *av)
+void			otool(void *ptr, char *av, int title)
 {
 	int				magic_number;
 	int				i;
@@ -30,9 +30,9 @@ void			otool(void *ptr, char *av)
 	}
 	magic_number = *(int *)ptr;
 	if (magic_number == (int)MH_MAGIC_64 || magic_number == (int)MH_CIGAM_64)
-		handle_otool_64(ptr, av);
+		handle_otool_64(ptr, av, title);
 	else if (magic_number == (int)MH_MAGIC || magic_number == (int)MH_CIGAM)
-		handle_otool_32(ptr,av);
+		handle_otool_32(ptr, av, title);
 	else if (magic_number == (int)FAT_MAGIC || magic_number == (int)FAT_CIGAM)
 		handle_fat(ptr, av);
 	else if (!ft_strncmp(ptr, ARMAG, SARMAG))
@@ -59,7 +59,7 @@ int				read_otool_args(char *av)
 		return (1);
 	}
 	g_buf_limit = ptr + buf.st_size;
-	otool(ptr, av);
+	otool(ptr, av, 0);
 	if (munmap(ptr, buf.st_size) < 0)
 	{
 		ft_putendl("munmap error");

@@ -52,13 +52,12 @@ char		*ft_itoa_base_and_dup(int val, int base, int output_size)
 }
 
 void		display_section64(long unsigned int addr, unsigned int size,
-		char *ptr, char *av)
+		char *ptr)
 {
 	unsigned int	i;
 	char			*str;
 
 	i = 0;
-	ft_printf("%s:\n", av);
 	ft_printf("%s\n", "Contents of (__TEXT,__text) section");
 	while (i < size)
 	{
@@ -79,7 +78,7 @@ void		display_section64(long unsigned int addr, unsigned int size,
 	write(1, "\n", 1);
 }
 
-int			print_output_otool_64(t_env64 e)
+int			print_output_otool_64(t_env64 e, int title)
 {
 	int				print;
 
@@ -89,8 +88,10 @@ int			print_output_otool_64(t_env64 e)
 			+ sizeof(struct segment_command_64));
 	if ((int)e.sg64->nsects)
 	{
+		if (!title)
+			ft_printf("%s:\n", e.av);
 		display_section64(e.sct64->addr, e.sct64->size, \
-				(char *)e.header + e.sct64->offset, e.av);
+				(char *)e.header + e.sct64->offset);
 		print = 1;
 	}
 	return (print);

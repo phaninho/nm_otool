@@ -39,7 +39,7 @@ void		display_section32(long unsigned int addr, unsigned int size,
 	write(1, "\n", 1);
 }
 
-int			print_output_otool_32(t_env32 e)
+int			print_output_otool_32(t_env32 e, int title)
 {
 	int				print;
 
@@ -49,7 +49,8 @@ int			print_output_otool_32(t_env32 e)
 			+ sizeof(struct segment_command));
 	if ((int)e.sg32->nsects)
 	{
-		ft_printf("%s:\n", e.av);
+		if (!title)
+			ft_printf("%s:\n", e.av);
 		display_section32(e.sct32->addr, e.sct32->size, \
 				(char *)e.header + e.sct32->offset);
 		print = 1;

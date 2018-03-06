@@ -84,7 +84,7 @@ struct							s_env64
 };
 
 void							nm(void *ptr, char *av);
-void							otool(void *ptr, char *av);
+void							otool(void *ptr, char *av, int t);
 int								print_output_32(t_env32 e, void *ptr, int o);
 int								print_output_64(t_env64 e, void *ptr, int o);
 void							al_ord32(int *order,
@@ -103,10 +103,10 @@ char							define_symbol_type_ut32(char *type,
 char							define_symbol_type_ut64(char *type,
 		t_env64 e, t_ut u, int *al_order);
 t_arlst							*offset_ascending_order(t_arlst *lst);
-int								handle_otool_64(void *ptr, char *av);
-int					handle_otool_32(void *ptr, char *av);
-int			print_output_otool_64(t_env64 e);
-int			print_output_otool_32(t_env32 e);
+int								handle_otool_64(void *ptr, char *av, int t);
+int					handle_otool_32(void *ptr, char *av, int t);
+int			print_output_otool_64(t_env64 e, int t);
+int			print_output_otool_32(t_env32 e, int t);
 char		*ft_itoa_base_and_dup(int val, int base, int output_size);
 void		display_otool_addr(long unsigned int addr, int arch);
 
