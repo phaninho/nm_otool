@@ -25,7 +25,9 @@ int			check_display_cond(t_ut u)
 				!(u.str[0] == 'L' && u.str[1] == '_') && \
 				!(u.str[0] == 'l' && u.str[1] == '_') && \
 				!(u.str[0] == 's' && u.str[1] == 't') && \
-				!(u.str[0] == 'f' && u.str[1] == 'u')))
+				!(u.str[0] == 'f' && u.str[1] == 'u') && \
+				!(u.str[0] == 'R' && u.str[1] == '8') && \
+				!(u.str[0] == '$' && u.str[1] == 'l')))
 		return (1);
 	return (0);
 }
