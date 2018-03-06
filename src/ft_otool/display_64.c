@@ -103,6 +103,9 @@ int			print_output_64(t_env64 e, void *ptr, int o)
 	print = 0;
 	(void)ptr;
 	(void)o;
+	e.sg64 = (struct segment_command_64 *)e.lc;
+	e.sct64 = (struct section_64 *)((char *)e.sg64 \
+			+ sizeof(struct segment_command_64));
 	if ((int)e.sg64->nsects)
 	{
 		ft_printf("%s:\n", e.av);

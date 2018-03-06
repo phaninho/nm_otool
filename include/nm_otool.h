@@ -71,7 +71,6 @@ struct							s_env64
 	int							j;
 	int							k;
 	int							len;
-	int							print;
 	char						**segname;
 	char						**sectname;
 	char						*av;
