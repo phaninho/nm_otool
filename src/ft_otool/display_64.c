@@ -12,30 +12,12 @@
 
 #include "nm_otool.h"
 
-int			check_display_cond(t_ut u)
-{
-	if (!ft_strcmp("", u.str) || u.str[0] == '/' || (u.str[0] != '_' && \
-				!(u.str[0] == 'G' && u.str[1] == 'C') && \
-				!(u.str[0] == 'd' && u.str[1] == 'y') && \
-				!(u.str[0] == '-' && u.str[1] == '[') && \
-				!(u.str[0] == '+' && u.str[1] == '[') && \
-				!(u.str[0] == '.' && u.str[1] == 'o') && \
-				!(u.str[0] == 'E' && u.str[1] == 'H') && \
-				!(u.str[0] == 'L' && u.str[1] == 'C') && \
-				!(u.str[0] == 'L' && u.str[1] == '_') && \
-				!(u.str[0] == 'l' && u.str[1] == '_') && \
-				!(u.str[0] == 's' && u.str[1] == 't') && \
-				!(u.str[0] == 'f' && u.str[1] == 'u')))
-		return (1);
-	return (0);
-}
-
-void		display_addr(long unsigned int addr)
+void		display_otool_addr(long unsigned int addr, int arch)
 {
 	int len;
 
 	if ((len = ft_strlen(ft_lltoa(addr, 16))) < 16)
-		len = 16 - len;
+		len = arch - len;
 	while (len-- > 0)
 		ft_putchar('0');
 	ft_printf("%s	", ft_lltoa(addr, 16));
@@ -70,12 +52,13 @@ char		*ft_itoa_base_and_dup(int val, int base, int output_size)
 }
 
 void		display_section64(long unsigned int addr, unsigned int size,
-		char *ptr)
+		char *ptr, char *av)
 {
 	unsigned int	i;
 	char			*str;
 
 	i = 0;
+	ft_printf("%s:\n", av);
 	ft_printf("%s\n", "Contents of (__TEXT,__text) section");
 	while (i < size)
 	{
@@ -83,7 +66,7 @@ void		display_section64(long unsigned int addr, unsigned int size,
 		{
 			if (i != 0)
 				addr += 16;
-			display_addr(addr);
+			display_otool_addr(addr, 16);
 		}
 		str = ft_itoa_base_and_dup(ptr[i], 16, 2);
 		ft_printf("%s ", str);
@@ -106,9 +89,8 @@ int			print_output_otool_64(t_env64 e)
 			+ sizeof(struct segment_command_64));
 	if ((int)e.sg64->nsects)
 	{
-		ft_printf("%s:\n", e.av);
 		display_section64(e.sct64->addr, e.sct64->size, \
-				(char *)e.header + e.sct64->offset);
+				(char *)e.header + e.sct64->offset, e.av);
 		print = 1;
 	}
 	return (print);

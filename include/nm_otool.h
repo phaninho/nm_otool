@@ -57,6 +57,7 @@ struct							s_env32
 	int							len;
 	char						**segname;
 	char						**sectname;
+	char						*av;
 	struct mach_header			*header;
 	struct load_command			*lc;
 	struct symtab_command		*sym;
@@ -103,6 +104,11 @@ char							define_symbol_type_ut64(char *type,
 		t_env64 e, t_ut u, int *al_order);
 t_arlst							*offset_ascending_order(t_arlst *lst);
 int								handle_otool_64(void *ptr, char *av);
+int					handle_otool_32(void *ptr, char *av);
 int			print_output_otool_64(t_env64 e);
+int			print_output_otool_32(t_env32 e);
+char		*ft_itoa_base_and_dup(int val, int base, int output_size);
+void		display_otool_addr(long unsigned int addr, int arch);
+
 
 #endif

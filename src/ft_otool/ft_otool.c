@@ -32,7 +32,7 @@ void			otool(void *ptr, char *av)
 	if (magic_number == (int)MH_MAGIC_64 || magic_number == (int)MH_CIGAM_64)
 		handle_otool_64(ptr, av);
 	else if (magic_number == (int)MH_MAGIC || magic_number == (int)MH_CIGAM)
-		handle_32(ptr, o);
+		handle_otool_32(ptr,av);
 	else if (magic_number == (int)FAT_MAGIC || magic_number == (int)FAT_CIGAM)
 		handle_fat(ptr, av);
 	else if (!ft_strncmp(ptr, ARMAG, SARMAG))
@@ -79,10 +79,6 @@ int				main(int ac, char **av)
 		return (1);
 	}
 	while (++i < ac)
-	{
-		if (ac > 2)
-			ft_printf("\n%s:\n", av[i]);
 		read_otool_args(av[i]);
-	}
 	return (0);
 }

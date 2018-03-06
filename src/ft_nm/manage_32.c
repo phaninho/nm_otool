@@ -84,8 +84,6 @@ int					handle_32(void *ptr, int o)
 			break ;
 		}
 		e.lc = (void *)e.lc + e.lc->cmdsize;
-		if (check_bin_limit(e.lc))
-			return (ft_printf("Corrupted file\n"));
 	}
 	return (0);
 }
