@@ -14,7 +14,9 @@
 
 int			check_display_cond(t_ut u)
 {
-	if (!ft_strcmp("", u.str) || u.str[0] == '/' || (u.str[0] != '_' && \
+	if (!ft_strcmp("", u.str) || !ft_strcmp("strint.c", u.str) || \
+	 			!ft_strcmp("stripe_group.c", u.str) || \
+				u.str[0] == '/' || (u.str[0] != '_' && \
 				!(u.str[0] == 'G' && u.str[1] == 'C') && \
 				!(u.str[0] == 'd' && u.str[1] == 'y') && \
 				!(u.str[0] == '-' && u.str[1] == '[') && \
