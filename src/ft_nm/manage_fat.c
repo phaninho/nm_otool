@@ -35,20 +35,35 @@ int		handle_fat(void *ptr, char *av)
 	int						offset;
 	t_env64					e;
 	int						i;
+	int ppc;
 
+	ppc = 0;
 	fat_header = (struct fat_header *)ptr;
 	arch = (void *)fat_header + sizeof(*fat_header);
-	offset = swap_bin(arch->offset, *(int *)ptr);
 	i = 0;
 	while (i < swap_bin(fat_header->nfat_arch, *(int *)ptr))
 	{
+		if (check_bin_limit(fat_header) || check_bin_limit(arch))
+			return (ft_printf("Corrupted file\n"));
 		offset = swap_bin(arch->offset, *(int *)ptr);
 		e.header = (void *)ptr + offset;
-		if (swap_bin(arch->cputype, *(int *)ptr) == CPU_TYPE_X86_64)
+		if (check_bin_limit(e.header))
+			return (ft_printf("%s is a corrupted file\n", av));
+		if (swap_bin(arch->cputype, *(int *)ptr) == CPU_TYPE_POWERPC || \
+		 swap_bin(arch->cputype, *(int *)ptr) == CPU_TYPE_POWERPC64)
+		{
+			ppc = 1;
+		 	ft_printf("\n%s (for architecture ppc):\n", av);
+		}
+		else if (ppc && swap_bin(arch->cputype, *(int *)ptr) == CPU_TYPE_I386)
+		{
+			nm((void *)ptr + offset, av);
+			if (ppc)
+				ft_printf("\n%s (for architecture i386):\n", av);
+		}
+		else if (swap_bin(arch->cputype, *(int *)ptr) == CPU_TYPE_X86_64)
 			break ;
 		arch = (void *)arch + sizeof(*arch);
-		if (check_bin_limit(arch) || check_bin_limit(e.header))
-			return (ft_printf("%s is a corrupted file\n", av));
 		i++;
 	}
 	nm((void *)ptr + offset, av);

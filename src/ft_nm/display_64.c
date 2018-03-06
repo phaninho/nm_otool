@@ -92,7 +92,7 @@ int			print_output_64(t_env64 e, void *ptr, int o)
 	e.array = ptr + e.sym->symoff;
 	u.strtab = ptr + e.sym->stroff;
 	if (check_bin_limit(e.array) || check_bin_limit(u.strtab))
-		return (1);
+		return (ft_printf("Corrupted file\n"));
 	u.i = -1;
 	while (++u.i < (int)e.sym->nsyms)
 		al_order[u.i] = u.i;
@@ -100,7 +100,8 @@ int			print_output_64(t_env64 e, void *ptr, int o)
 	while (u.i < (int)e.sym->nsyms)
 	{
 		type[u.i] = e.array[u.i].n_type;
-		type[u.i] = define_symbol_type_ut64(type, e, u, al_order);
+		if ((type[u.i] = define_symbol_type_ut64(type, e, u, al_order)) == -1)
+			return (-1);
 		u.i++;
 	}
 	display_loop(e, u, al_order, type);

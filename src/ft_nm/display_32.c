@@ -88,7 +88,7 @@ int				print_output_32(t_env32 e, void *ptr, int o)
 	e.array = ptr + e.sym->symoff;
 	u.strtab = ptr + e.sym->stroff;
 	if (check_bin_limit(e.array) || check_bin_limit(u.strtab))
-		return (1);
+		return (ft_printf("Corrupted file\n"));
 	u.i = -1;
 	while (++u.i < (int)e.sym->nsyms)
 		al_order[u.i] = u.i;

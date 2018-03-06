@@ -25,6 +25,7 @@
 # include <mach-o/nlist.h>
 # include <mach-o/fat.h>
 # include <mach-o/ranlib.h>
+# include <mach/machine.h>
 # include <ar.h>
 
 void							*g_buf_limit;

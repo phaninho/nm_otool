@@ -80,6 +80,8 @@ int					handle_32(void *ptr, int o)
 		if (e.lc->cmd == LC_SYMTAB)
 		{
 			e.sym = (struct symtab_command *)e.lc;
+			if (check_bin_limit(e.sym))
+				return (ft_printf("Corrupted file\n"));
 			print_output_32(e, ptr, o);
 			break ;
 		}
