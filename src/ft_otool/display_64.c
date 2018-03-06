@@ -96,13 +96,11 @@ void		display_section64(long unsigned int addr, unsigned int size,
 	write(1, "\n", 1);
 }
 
-int			print_output_64(t_env64 e, void *ptr, int o)
+int			print_output_otool_64(t_env64 e)
 {
 	int				print;
 
 	print = 0;
-	(void)ptr;
-	(void)o;
 	e.sg64 = (struct segment_command_64 *)e.lc;
 	e.sct64 = (struct section_64 *)((char *)e.sg64 \
 			+ sizeof(struct segment_command_64));

@@ -25,7 +25,7 @@ t_env64				init_env64(char *av)
 	return (e);
 }
 
-int					handle_otool_64(void *ptr, int o, char *av)
+int					handle_otool_64(void *ptr, char *av)
 {
 	t_env64			e;
 
@@ -37,7 +37,7 @@ int					handle_otool_64(void *ptr, int o, char *av)
 	while (e.i++ < (int)e.header->ncmds)
 	{
 		if (e.lc->cmd == LC_SEGMENT_64)
-			if (print_output_64(e, ptr, o))
+			if (print_output_otool_64(e))
 				break ;
 		e.lc = (void *)e.lc + e.lc->cmdsize;
 		if (check_bin_limit(e.lc))
