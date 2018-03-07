@@ -23,7 +23,8 @@ char	define_symbol_type_ut32(char *type, t_env32 e, t_ut u, int *al_order)
 	if ((e.array[u.i].n_type & N_EXT) && type[u.i] != '?')
 		type[u.i] = ft_toupper(type[u.i]);
 	if (u.i > 0)
-		al_ord32(al_order, e.array, u.strtab, u.i);
+		if (al_ord32(al_order, e.array, u.strtab, u.i))
+			return (-1);
 	return (type[u.i]);
 }
 
@@ -38,11 +39,8 @@ char	define_symbol_type_ut64(char *type, t_env64 e, t_ut u, int *al_order)
 	if ((e.array[u.i].n_type & N_EXT) && type[u.i] != '?')
 		type[u.i] = ft_toupper(type[u.i]);
 	if (u.i > 0)
-	{
-		// if (check_bin_limit(e.array) || check_bin_limit((int)e.array + u.strtab))
-		// 	return (-1);
-		al_ord64(al_order, e.array, u.strtab, u.i);
-	}
+		if (al_ord64(al_order, e.array, u.strtab, u.i))
+			return (-1);
 	return (type[u.i]);
 }
 

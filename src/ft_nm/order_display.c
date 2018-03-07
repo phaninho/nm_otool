@@ -68,7 +68,7 @@ int			is_in_alpha_order(char *str, char *cmp, int check_addr)
 	return (0);
 }
 
-void		al_ord32(int *order, struct nlist *array, char *strtab, int last)
+int			al_ord32(int *order, struct nlist *array, char *strtab, int last)
 {
 	int			t;
 	char		*str;
@@ -77,6 +77,8 @@ void		al_ord32(int *order, struct nlist *array, char *strtab, int last)
 
 	t = -1;
 	cmp = NULL;
+	if (check_bin_limit(strtab + array[last].n_un.n_strx) || check_bin_limit(strtab + array[order[t]].n_un.n_strx))
+		return (ft_printf("CORRUPTION DETECTED, SWAT on the way\n"));
 	while (++t < last)
 	{
 		check_addr = 0;
@@ -95,9 +97,10 @@ void		al_ord32(int *order, struct nlist *array, char *strtab, int last)
 		free(cmp);
 	if (str)
 		free(str);
+	return (0);
 }
 
-void		al_ord64(int *order, struct nlist_64 *array, char *strtab, int last)
+int			al_ord64(int *order, struct nlist_64 *array, char *strtab, int last)
 {
 	int			t;
 	char		*str;
@@ -106,6 +109,9 @@ void		al_ord64(int *order, struct nlist_64 *array, char *strtab, int last)
 
 	t = -1;
 	cmp = NULL;
+	if (check_bin_limit(strtab + array[last].n_un.n_strx) || check_bin_limit(strtab + array[order[t]].n_un.n_strx))
+		return (ft_printf("CORRUPTION DETECTED, SWAT on the way\n"));
+
 	while (++t < last)
 	{
 		check_addr = 0;
@@ -124,6 +130,7 @@ void		al_ord64(int *order, struct nlist_64 *array, char *strtab, int last)
 		free(cmp);
 	if (str)
 		free(str);
+	return (0);
 }
 
 t_arlst		*offset_ascending_order(t_arlst *lst)

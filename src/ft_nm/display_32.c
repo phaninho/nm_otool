@@ -96,7 +96,8 @@ int				print_output_32(t_env32 e, void *ptr, int o)
 	while (u.i < (int)e.sym->nsyms)
 	{
 		type[u.i] = e.array[u.i].n_type;
-		type[u.i] = define_symbol_type_ut32(type, e, u, al_order);
+		if ((type[u.i] = define_symbol_type_ut32(type, e, u, al_order)) == -1)
+			return (-1);
 		u.i++;
 	}
 	display_loop32(e, u, al_order, type);

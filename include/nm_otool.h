@@ -88,9 +88,9 @@ void							nm(void *ptr, char *av);
 void							otool(void *ptr, char *av, int t);
 int								print_output_32(t_env32 e, void *ptr, int o);
 int								print_output_64(t_env64 e, void *ptr, int o);
-void							al_ord32(int *order,
+int								al_ord32(int *order,
 		struct nlist *array, char *strtb, int l);
-void							al_ord64(int *order,
+int								al_ord64(int *order,
 		struct nlist_64 *arr, char *strtb, int l);
 int								handle_32(void *ptr, int o);
 int								handle_64(void *ptr, int o);
