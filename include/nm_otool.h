@@ -6,7 +6,7 @@
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/23 15:51:56 by stmartin          #+#    #+#             */
-/*   Updated: 2018/03/05 19:40:14 by stmartin         ###   ########.fr       */
+/*   Updated: 2018/03/07 21:39:29 by stmartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_env32			t_env32;
 typedef struct s_env64			t_env64;
 typedef struct s_ut				t_ut;
 typedef struct s_arlst			t_arlst;
+typedef struct s_fat			t_fat;
 
 struct							s_ut
 {
@@ -84,6 +85,17 @@ struct							s_env64
 	struct nlist_64				*array;
 };
 
+struct							s_fat
+{
+	struct fat_header			*fat_header;
+	struct fat_arch				*arch;
+	int							offset;
+	int							i;
+	int							ppc;
+};
+
+int								swap_bin(int n, unsigned int magic_number);
+int								free_var(char *cmp, char *str);
 void							nm(void *ptr, char *av);
 void							otool(void *ptr, char *av, int t);
 int								print_output_32(t_env32 e, void *ptr, int o);
@@ -105,11 +117,12 @@ char							define_symbol_type_ut64(char *type,
 		t_env64 e, t_ut u, int *al_order);
 t_arlst							*offset_ascending_order(t_arlst *lst);
 int								handle_otool_64(void *ptr, char *av, int t);
-int					handle_otool_32(void *ptr, char *av, int t);
-int			print_output_otool_64(t_env64 e, int t);
-int			print_output_otool_32(t_env32 e, int t);
-char		*ft_itoa_base_and_dup(int val, int base, int output_size);
-void		display_otool_addr(long unsigned int addr, int arch);
-
+int								handle_otool_32(void *ptr, char *av, int t);
+int								print_output_otool_64(t_env64 e, int t);
+int								print_output_otool_32(t_env32 e, int t);
+char							*ft_itoa_base_and_dup(int val, int base,
+		int output_size);
+void							display_otool_addr(long unsigned int addr,
+		int arch);
 
 #endif

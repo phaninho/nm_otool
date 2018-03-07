@@ -6,7 +6,7 @@
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 11:12:10 by stmartin          #+#    #+#             */
-/*   Updated: 2018/03/04 00:48:56 by stmartin         ###   ########.fr       */
+/*   Updated: 2018/03/07 18:40:06 by stmartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ int			al_ord32(int *order, struct nlist *array, char *strtab, int last)
 
 	t = -1;
 	cmp = NULL;
-	if (check_bin_limit(strtab + array[last].n_un.n_strx) || check_bin_limit(strtab + array[order[t]].n_un.n_strx))
+	if (check_bin_limit(strtab + array[last].n_un.n_strx) || \
+			check_bin_limit(strtab + array[order[t]].n_un.n_strx))
 		return (ft_printf("CORRUPTION DETECTED, SWAT on the way\n"));
 	while (++t < last)
 	{
@@ -93,11 +94,7 @@ int			al_ord32(int *order, struct nlist *array, char *strtab, int last)
 		if (is_in_alpha_order(str, cmp, check_addr))
 			ft_swap(&order[t], &order[last]);
 	}
-	if (cmp)
-		free(cmp);
-	if (str)
-		free(str);
-	return (0);
+	return (free_var(cmp, str));
 }
 
 int			al_ord64(int *order, struct nlist_64 *array, char *strtab, int last)
@@ -109,9 +106,9 @@ int			al_ord64(int *order, struct nlist_64 *array, char *strtab, int last)
 
 	t = -1;
 	cmp = NULL;
-	if (check_bin_limit(strtab + array[last].n_un.n_strx) || check_bin_limit(strtab + array[order[t]].n_un.n_strx))
+	if (check_bin_limit(strtab + array[last].n_un.n_strx) || \
+	check_bin_limit(strtab + array[order[t]].n_un.n_strx))
 		return (ft_printf("CORRUPTION DETECTED, SWAT on the way\n"));
-
 	while (++t < last)
 	{
 		check_addr = 0;
@@ -126,11 +123,7 @@ int			al_ord64(int *order, struct nlist_64 *array, char *strtab, int last)
 		if (is_in_alpha_order(str, cmp, check_addr))
 			ft_swap(&order[t], &order[last]);
 	}
-	if (cmp)
-		free(cmp);
-	if (str)
-		free(str);
-	return (0);
+	return (free_var(cmp, str));
 }
 
 t_arlst		*offset_ascending_order(t_arlst *lst)

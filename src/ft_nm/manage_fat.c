@@ -6,7 +6,7 @@
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/04 00:18:22 by stmartin          #+#    #+#             */
-/*   Updated: 2018/03/04 00:18:24 by stmartin         ###   ########.fr       */
+/*   Updated: 2018/03/07 21:22:50 by stmartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,50 +22,51 @@ int		check_bin_limit(void *ptr)
 int		swap_bin(int n, unsigned int magic_number)
 {
 	if (magic_number == FAT_MAGIC || magic_number == MH_MAGIC || \
-		magic_number == MH_MAGIC_64)
+			magic_number == MH_MAGIC_64)
 		return (n);
 	return (((n >> 24) & 0xff) | ((n << 8) & 0xff0000) | ((n >> 8) & 0xff00) | \
-	((n << 24) & 0xff000000));
+			((n << 24) & 0xff000000));
+}
+
+void	init_fat(t_fat *f, void *ptr)
+{
+	f->ppc = 0;
+	f->fat_header = (struct fat_header *)ptr;
+	f->arch = (void *)f->fat_header + sizeof(*f->fat_header);
+	f->i = -1;
+}
+
+void	new_value(t_env64 *e, t_fat *f, void *ptr)
+{
+	f->offset = swap_bin(f->arch->offset, *(int *)ptr);
+	e->header = (void *)ptr + f->offset;
 }
 
 int		handle_fat(void *ptr, char *av)
 {
-	struct fat_header		*fat_header;
-	struct fat_arch			*arch;
-	int						offset;
+	t_fat					f;
 	t_env64					e;
-	int						i;
-	int ppc;
 
-	ppc = 0;
-	fat_header = (struct fat_header *)ptr;
-	arch = (void *)fat_header + sizeof(*fat_header);
-	i = 0;
-	while (i < swap_bin(fat_header->nfat_arch, *(int *)ptr))
+	init_fat(&f, ptr);
+	while (++f.i < swap_bin(f.fat_header->nfat_arch, *(int *)ptr))
 	{
-		if (check_bin_limit(fat_header) || check_bin_limit(arch))
+		if (check_bin_limit(f.fat_header) || check_bin_limit(f.arch))
 			return (ft_printf("Corrupted file\n"));
-		offset = swap_bin(arch->offset, *(int *)ptr);
-		e.header = (void *)ptr + offset;
+		new_value(&e, &f, ptr);
 		if (check_bin_limit(e.header))
 			return (ft_printf("%s is a corrupted file\n", av));
-		if (swap_bin(arch->cputype, *(int *)ptr) == CPU_TYPE_POWERPC || \
-		 swap_bin(arch->cputype, *(int *)ptr) == CPU_TYPE_POWERPC64)
+		f.ppc = (swap_bin(f.arch->cputype, *(int *)ptr) == CPU_TYPE_POWERPC || \
+		swap_bin(f.arch->cputype, *(int *)ptr) == CPU_TYPE_POWERPC64) ? 1 : 0;
+		ft_printf(f.ppc == 1 ? "\n%s (for architecture ppc):\n" : "", av);
+		if (f.ppc && swap_bin(f.arch->cputype, *(int *)ptr) == CPU_TYPE_I386)
 		{
-			ppc = 1;
-		 	ft_printf("\n%s (for architecture ppc):\n", av);
+			nm((void *)ptr + f.offset, av);
+			ft_printf("\n%s (for architecture i386):\n", av);
 		}
-		else if (ppc && swap_bin(arch->cputype, *(int *)ptr) == CPU_TYPE_I386)
-		{
-			nm((void *)ptr + offset, av);
-			if (ppc)
-				ft_printf("\n%s (for architecture i386):\n", av);
-		}
-		else if (swap_bin(arch->cputype, *(int *)ptr) == CPU_TYPE_X86_64)
+		else if (swap_bin(f.arch->cputype, *(int *)ptr) == CPU_TYPE_X86_64)
 			break ;
-		arch = (void *)arch + sizeof(*arch);
-		i++;
+		f.arch = (void *)f.arch + sizeof(*f.arch);
 	}
-	nm((void *)ptr + offset, av);
+	nm((void *)ptr + f.offset, av);
 	return (0);
 }

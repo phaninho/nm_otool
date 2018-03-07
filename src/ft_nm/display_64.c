@@ -6,7 +6,7 @@
 /*   By: stmartin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/28 14:34:05 by stmartin          #+#    #+#             */
-/*   Updated: 2018/03/04 00:31:06 by stmartin         ###   ########.fr       */
+/*   Updated: 2018/03/07 18:39:10 by stmartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int			check_display_cond(t_ut u)
 {
 	if (!ft_strcmp("", u.str) || !ft_strcmp("strint.c", u.str) || \
-	 			!ft_strcmp("stripe_group.c", u.str) || \
+				!ft_strcmp("stripe_group.c", u.str) || \
 				u.str[0] == '/' || (u.str[0] != '_' && \
 				!(u.str[0] == 'G' && u.str[1] == 'C') && \
 				!(u.str[0] == 'd' && u.str[1] == 'y') && \

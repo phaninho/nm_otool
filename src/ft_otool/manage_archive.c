@@ -78,7 +78,7 @@ int			handle_archive(void *ptr, char *av)
 	char			*offset;
 	struct ranlib	*ran;
 	t_arlst			*lst;
-(void)av;
+
 	lst = NULL;
 	len = get_arch_len((char *)ptr);
 	offset = (void *)ptr + sizeof(struct ar_hdr) + len + SARMAG;

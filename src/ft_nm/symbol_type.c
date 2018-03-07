@@ -12,6 +12,15 @@
 
 #include "nm_otool.h"
 
+int		free_var(char *cmp, char *str)
+{
+	if (str)
+		free(str);
+	if (cmp)
+		free(cmp);
+	return (0);
+}
+
 char	define_symbol_type_ut32(char *type, t_env32 e, t_ut u, int *al_order)
 {
 	if ((type[u.i] & N_STAB))
