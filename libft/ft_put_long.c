@@ -12,7 +12,7 @@
 
 #include "./includes/libft.h"
 
-void	ft_put_long(long n)
+void	ft_put_long(__int64_t n)
 {
 	if (n == -9223372036854775807 - 1)
 	{
