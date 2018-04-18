@@ -14,7 +14,7 @@
 
 void	percent_o_up(va_list pa, t_printf *print)
 {
-	long	o;
+	__int64_t	o;
 
 	o = va_arg(pa, long);
 	if (print->precision_zero > 0 || print->precision_space > 0)

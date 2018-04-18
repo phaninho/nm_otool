@@ -12,7 +12,7 @@
 
 #include "./includes/libft.h"
 
-void	ft_put_ulong(unsigned long n)
+void	ft_put_ulong(unsigned long long n)
 {
 	if (n == 18446744073709551615UL)
 	{
